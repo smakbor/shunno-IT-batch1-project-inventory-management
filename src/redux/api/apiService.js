@@ -1,10 +1,11 @@
 //External Lib Import
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const SERVER_URL = process.env.REACT_APP_API_SERVER_URL || 'http://localhost:8080';
-const API_PREFIX_PATH = process.env.REACT_APP_API_PREFIX_PATH || 'api/v1';
+//constant env variable
+const SERVER_URL = process.env.REACT_APP_API_SERVER_URL;
+const API_PREFIX_PATH = process.env.REACT_APP_API_PREFIX_PATH;
 
-const baseQuery = fetchBaseQuery({
+const baseFetchBaseQuery = fetchBaseQuery({
     baseUrl: SERVER_URL + API_PREFIX_PATH,
     prepareHeaders: (headers, { getState }) => {
         const {
@@ -20,11 +21,33 @@ const baseQuery = fetchBaseQuery({
 export const apiService = createApi({
     reducerPath: API_PREFIX_PATH,
     baseQuery: async (args, api, extraOptions) => {
-        let result = await baseQuery(args, api, extraOptions);
+        // api.dispatch(setLoading(true));
 
-        if (result?.error?.status === 401) {
+        const { error, data } = await baseFetchBaseQuery(args, api, extraOptions);
+
+        if (error) {
+            // api.dispatch(setLoading(false));
+
+            if (error.status === 401) {
+                // api.dispatch(setLogout());
+                // ToastMessage.errorMessage(error.data?.message);
+            } else if (error.status === 404 || error.status === 400) {
+                //ToastMessage.errorMessage(error.data?.message);
+            } else {
+                // ToastMessage.errorMessage('Sorry, Something went wrong');
+            }
+            return { error: { status: error.status, data: error.data } };
         }
-        return result;
+
+        if (data) {
+            // api.dispatch(setLoading(false));
+
+            if (data?.message) {
+                //  ToastMessage.successMessage(data.message);
+                delete data.message;
+            }
+            return { data };
+        }
     },
     tagTypes: [],
     endpoints: (builder) => ({}),

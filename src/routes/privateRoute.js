@@ -10,21 +10,23 @@ const privateRoutes = [
     {
         path: '/dashboard',
         element: <LazyLoad component={UserRolePage} />,
-        roles: ['STAFF'],
+        roles: ['ALL'],
         routePermission: null,
     },
     {
         path: '/user-role',
         element: <LazyLoad component={UserRolePage} />,
-        roles: ['STAFF'],
+        roles: ['ALL'],
         routePermission: null,
     },
     {
         path: '/permissions',
         element: <LazyLoad component={PermissionsPage} />,
-        roles: ['SHUNNOIT_SUPER_ADMIN', 'SHUNNOIT_AGENT_ADMIN'],
+        roles: ['ALL'],
         routePermission: 'PERMISSIONS',
     },
 ];
 
 export default privateRoutes;
+
+//['SHUNNOIT_SUPER_ADMIN', 'SHUNNOIT_AGENT_ADMIN']

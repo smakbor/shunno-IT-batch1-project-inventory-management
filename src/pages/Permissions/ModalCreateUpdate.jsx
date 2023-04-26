@@ -4,11 +4,12 @@ import { Card, Button, Modal, Spinner } from 'react-bootstrap';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
-import { FormInput, VerticalForm } from '../../components';
-import removeEmptyObj from '../../helpers/removeEmptyObj';
+import classNames from 'classnames';
 
 //api sevices
 import { useRoleCreateMutation, useRoleUpdateMutation } from '../../redux/services/roleService';
+import { FormInput, VerticalForm } from '../../components';
+import removeEmptyObj from '../../helpers/removeEmptyObj';
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
@@ -44,7 +45,7 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
     }, [isSuccess, updateSucess]);
 
     return (
-        <Card>
+        <Card className={classNames('', { 'd-none': !modal })}>
             <Card.Body>
                 <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false}>
                     <Modal.Header onHide={toggle} closeButton>
