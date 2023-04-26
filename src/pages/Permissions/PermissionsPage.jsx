@@ -14,7 +14,7 @@ import PermissionsTable from './PermissionsTable';
 //api services
 import { useRoleDropDownQuery } from '../../redux/services/roleService';
 
-const PermissionsPage = (): React$Element<React$FragmentType> => {
+const PermissionsPage = () => {
     const { t } = useTranslation();
     const { data, isLoading, isError } = useRoleDropDownQuery();
 
@@ -69,7 +69,6 @@ const PermissionsPage = (): React$Element<React$FragmentType> => {
                                             );
                                         })}
                                     </Nav>
-
                                     <Tab.Content>
                                         {data?.map((tab, index) => {
                                             return (

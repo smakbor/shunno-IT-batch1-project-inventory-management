@@ -130,7 +130,7 @@ const UserRolePage = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('User Role'), path: '/user-role', active: true }]}
+                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
                     title={t('User Role')}
                 />
                 <LoadingData />

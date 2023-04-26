@@ -10,10 +10,10 @@ import settingReducer from './features/settingReducer';
 
 const store = configureStore({
     reducer: {
-        [apiService.reducerPath]: apiService.reducer,
         auth: authReducer,
         layout: layoutReducer,
         setting: settingReducer,
+        [apiService.reducerPath]: apiService.reducer,
     },
     devTools: process.env.NODE_ENV !== 'production',
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiService.middleware),
