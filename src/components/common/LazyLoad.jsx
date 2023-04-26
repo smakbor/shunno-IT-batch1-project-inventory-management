@@ -1,4 +1,4 @@
-//External Lib Import
+//external lib import
 import { Suspense } from 'react';
 
 const LazyLoad = ({ component: Component }) => {

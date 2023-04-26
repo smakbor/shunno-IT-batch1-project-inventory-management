@@ -1,4 +1,4 @@
-//Internal Lib Import
+//internal lib import
 import { apiService } from '../api/apiService';
 import { profileService } from './profileService';
 

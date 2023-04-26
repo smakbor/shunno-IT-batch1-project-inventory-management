@@ -1,4 +1,4 @@
-//External Lib Import
+//external lib import
 import Swal from 'sweetalert2';
 
 class AleartMessage {

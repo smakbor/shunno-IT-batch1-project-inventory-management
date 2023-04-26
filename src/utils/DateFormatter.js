@@ -1,4 +1,4 @@
-//External Lib Import
+//external lib import
 import React from 'react';
 import Moment from 'react-moment';
 

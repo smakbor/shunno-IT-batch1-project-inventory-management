@@ -1,7 +1,7 @@
-//External Lib Import
+//external lib import
 import { Card, Col, Row } from 'react-bootstrap';
 
-//Internal Lib Import
+//internal lib import
 import LoaderImg from '../../assets/images/load.svg';
 
 const LoadingData = () => {

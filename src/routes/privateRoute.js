@@ -1,7 +1,7 @@
-//External Lib Import
+//external lib import
 import { lazy } from 'react';
 
-//Internal Lib Import
+//internal lib import
 import LazyLoad from '../components/common/LazyLoad.jsx';
 import Customers from '../pages/Contacts/Customers/Customers.jsx';
 const UserRolePage = lazy(() => import('../pages/Permissions/UserRolePage'));

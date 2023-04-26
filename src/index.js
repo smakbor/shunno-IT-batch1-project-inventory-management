@@ -1,10 +1,10 @@
-//External Lib Import
+//external lib import
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
-//Internal Lib Import
+//internal lib import
 import App from './App';
 import ApiLoader from './components/common/ApiLoader';
 import CustomLoader from './components/common/CustomLoader';

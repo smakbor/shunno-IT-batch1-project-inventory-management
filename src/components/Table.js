@@ -1,4 +1,4 @@
-// @flow
+//external lib import
 import React, { useRef, useEffect, forwardRef } from 'react';
 import {
     useTable,
@@ -10,12 +10,16 @@ import {
     useExpanded,
 } from 'react-table';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
+//internal lib import
 // components
 import Pagination from './Pagination';
 
 // Define a default UI for filtering
 const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, searchBoxClass }) => {
+    const { t } = useTranslation();
+
     const count = preGlobalFilteredRows.length;
     const [value, setValue] = React.useState(globalFilter);
     const onChange = useAsyncDebounce((value) => {
@@ -25,14 +29,14 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, se
     return (
         <div className={classNames(searchBoxClass)}>
             <span className="d-flex align-items-center">
-                Search :{' '}
+                {t('search')} :{' '}
                 <input
                     value={value || ''}
                     onChange={(e) => {
                         setValue(e.target.value);
                         onChange(e.target.value);
                     }}
-                    placeholder={`${count} records...`}
+                    placeholder={`${count} ${t('records...')}`}
                     className="form-control w-auto ms-1"
                 />
             </span>
