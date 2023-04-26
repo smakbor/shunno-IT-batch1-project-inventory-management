@@ -7,11 +7,15 @@ import { initReactI18next } from 'react-i18next';
 import store from '../redux/store';
 
 import translationBn from './bn/translation.json';
+import translationEn from './en/translation.json';
 
 //translations
 const resources = {
     bn: {
         translation: translationBn,
+    },
+    en: {
+        translation: translationEn,
     },
 };
 
