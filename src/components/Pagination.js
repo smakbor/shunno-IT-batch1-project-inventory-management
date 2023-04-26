@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 type PaginationProps = {
     tableProps: any,
@@ -12,6 +13,8 @@ type PaginationProps = {
 };
 
 const Pagination = ({ tableProps, sizePerPageList }: PaginationProps): React$Element<any> => {
+    const { t } = useTranslation();
+
     /**
      * pagination count , index
      */
@@ -83,7 +86,7 @@ const Pagination = ({ tableProps, sizePerPageList }: PaginationProps): React$Ele
         <div className="d-lg-flex align-items-center text-center pb-1">
             {sizePerPageList.length > 0 && (
                 <div className="d-inline-block me-3">
-                    <label className="me-1">Display :</label>
+                    <label className="me-1">{t('display')} :</label>
                     <select
                         value={tableProps.state.pageSize}
                         onChange={(e) => {
@@ -102,14 +105,14 @@ const Pagination = ({ tableProps, sizePerPageList }: PaginationProps): React$Ele
             )}
 
             <span className="me-3">
-                Page{' '}
+                {t('page')}{' '}
                 <strong>
                     {pageIndex + 1} of {tableProps.pageOptions.length}
                 </strong>{' '}
             </span>
 
             <span className="d-inline-block align-items-center text-sm-start text-center my-sm-0 my-2">
-                <label>Go to page : </label>
+                <label>{t('go to page')} : </label>
                 <input
                     type="number"
                     value={pageIndex + 1}
@@ -133,7 +136,7 @@ const Pagination = ({ tableProps, sizePerPageList }: PaginationProps): React$Ele
                         if (activePage === 1) return;
                         changePage(activePage - 1);
                     }}>
-                    <a to="#" className="page-link" role='button'>
+                    <a to="#" className="page-link" role="button">
                         <i className="mdi mdi-chevron-left"></i>
                     </a>
                 </li>
@@ -141,7 +144,7 @@ const Pagination = ({ tableProps, sizePerPageList }: PaginationProps): React$Ele
                     return array[index - 1] + 1 < page ? (
                         <React.Fragment key={page}>
                             <li className="page-item disabled d-none d-xl-inline-block">
-                                <a to="#" className="page-link" role='button'>
+                                <a to="#" className="page-link" role="button">
                                     ...
                                 </a>
                             </li>
@@ -150,7 +153,7 @@ const Pagination = ({ tableProps, sizePerPageList }: PaginationProps): React$Ele
                                     active: activePage === page,
                                 })}
                                 onClick={(e) => changePage(page)}>
-                                <a to="#" className="page-link" role='button'>
+                                <a to="#" className="page-link" role="button">
                                     {page}
                                 </a>
                             </li>
@@ -162,7 +165,7 @@ const Pagination = ({ tableProps, sizePerPageList }: PaginationProps): React$Ele
                                 active: activePage === page,
                             })}
                             onClick={(e) => changePage(page)}>
-                            <a to="#" className="page-link" role='button'>
+                            <a to="#" className="page-link" role="button">
                                 {page}
                             </a>
                         </li>
@@ -177,7 +180,7 @@ const Pagination = ({ tableProps, sizePerPageList }: PaginationProps): React$Ele
                         if (activePage === tableProps.pageCount) return;
                         changePage(activePage + 1);
                     }}>
-                    <a to="#" className="page-link" role='button'>
+                    <a to="#" className="page-link" role="button">
                         <i className="mdi mdi-chevron-right"></i>
                     </a>
                 </li>

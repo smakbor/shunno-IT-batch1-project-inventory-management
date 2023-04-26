@@ -1,4 +1,4 @@
-//External Lib Import
+//external lib import
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 //constant env variable

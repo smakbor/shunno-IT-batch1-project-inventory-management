@@ -1,8 +1,8 @@
-//External Lib Import
+//external lib import
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-//Internal Lib Import
+//internal lib import
 import privateRoutes from '../privateRoute';
 import { setLogin, setLogout } from '../../redux/features/authReducer';
 import { useEffect } from 'react';

@@ -1,4 +1,4 @@
-//External Lib Import
+//external lib import
 import { useEffect } from 'react';
 
 import { Button, Alert, Row, Col } from 'react-bootstrap';
@@ -8,7 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
-//Internal Lib Import
+//internal lib import
 import { VerticalForm, FormInput } from '../../components';
 import AccountLayout from './AccountLayout';
 import { useLoginMutation } from '../../redux/services/authService';

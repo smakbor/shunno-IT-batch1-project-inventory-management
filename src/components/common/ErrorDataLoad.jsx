@@ -1,7 +1,7 @@
-//External Lib Import
+//external lib import
 import { Card, Col, Row } from 'react-bootstrap';
 
-//Internal Lib Import
+//internal lib import
 import ErrorImg from '../../assets/images/error-data.svg';
 
 const ErrorDataLoad = () => {

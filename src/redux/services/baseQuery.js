@@ -1,7 +1,7 @@
-//External Lib Import
+//external lib import
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-//Internal Lib Import
+//internal lib import
 import ToastMessage from '../../helpers/ToastMessage';
 import { setLogin, setLogout } from '../features/authReducer';
 import { setLoading } from '../features/settingReducer';

@@ -1,14 +1,14 @@
-//External Lib Import
+//external lib import
 import { Row, Col, Card, Tab, Nav } from 'react-bootstrap';
 
-//Internal Lib Import
+//internal lib import
 import PageTitle from '../../components/PageTitle';
 import LoadingData from '../../components/common/LoadingData';
 import ErrorDataLoad from '../../components/common/ErrorDataLoad';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
-//External Lib Import
+//external lib import
 import PermissionsTable from './PermissionsTable';
 
 //api services
@@ -50,12 +50,12 @@ const PermissionsPage = () => {
                     <Col>
                         <Card>
                             <Card.Body>
-                                <Tab.Container defaultActiveKey={data?.[0]?.name}>
+                                <Tab.Container defaultActiveKey={data?.[0]?.label}>
                                     <Nav variant="pills" className="no-borderd" as="ul">
                                         {data?.map((tab, index) => {
                                             return (
                                                 <Nav.Item key={index}>
-                                                    <Nav.Link to="#" eventKey={tab?.name}>
+                                                    <Nav.Link to="#" eventKey={tab?.label}>
                                                         <i
                                                             className={classNames(
                                                                 tab?.icon,
@@ -63,7 +63,7 @@ const PermissionsPage = () => {
                                                                 'd-block',
                                                                 'me-1'
                                                             )}></i>
-                                                        <span className="d-none d-md-block">{tab?.name}</span>
+                                                        <span className="d-none d-md-block">{tab?.label}</span>
                                                     </Nav.Link>
                                                 </Nav.Item>
                                             );
@@ -72,7 +72,7 @@ const PermissionsPage = () => {
                                     <Tab.Content>
                                         {data?.map((tab, index) => {
                                             return (
-                                                <Tab.Pane eventKey={tab?.name} id={tab?._id} key={index}>
+                                                <Tab.Pane eventKey={tab?.label} id={tab?.value} key={index}>
                                                     <PermissionsTable roleItem={tab} />
                                                 </Tab.Pane>
                                             );

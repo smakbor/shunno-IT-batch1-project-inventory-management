@@ -1,7 +1,7 @@
-//External Lib Import
+//external lib import
 import { configureStore } from '@reduxjs/toolkit';
 
-//Internal Lib Import
+//internal lib import
 import { apiService } from './api/apiService';
 
 import authReducer from './features/authReducer';

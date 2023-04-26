@@ -1,4 +1,4 @@
-//External Lib Import
+//external lib import
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

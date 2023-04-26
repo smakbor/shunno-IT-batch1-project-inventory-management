@@ -1,4 +1,4 @@
-//External Lib Import
+//external lib import
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Spinner, Table } from 'react-bootstrap';
@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-//Internal Lib Import
+//internal lib import
 import { FormInput } from '../../components';
 
 //api services
