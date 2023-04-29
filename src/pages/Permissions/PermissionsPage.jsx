@@ -51,7 +51,7 @@ const PermissionsPage = () => {
                         <Card>
                             <Card.Body>
                                 <Tab.Container defaultActiveKey={data?.[0]?.label}>
-                                    <Nav variant="pills" className="no-borderd" as="ul">
+                                    <Nav variant="pills" className="no-borderd mb-2" as="ul">
                                         {data?.map((tab, index) => {
                                             return (
                                                 <Nav.Item key={index}>

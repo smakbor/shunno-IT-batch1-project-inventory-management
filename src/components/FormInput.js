@@ -134,7 +134,7 @@ const FormInput = ({
                                 </>
                             ) : (
                                 <>
-                                    {type === 'checkbox' || type === 'radio' ? (
+                                    {(type === 'checkbox' || type === 'radio') ? (
                                         <>
                                             <Form.Group className={containerClass}>
                                                 <Form.Check
