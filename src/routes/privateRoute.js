@@ -6,7 +6,7 @@ import LazyLoad from '../components/common/LazyLoad.jsx';
 import Customers from '../pages/Contacts/Customers/Customers.jsx';
 const UserRolePage = lazy(() => import('../pages/Permissions/UserRolePage'));
 const PermissionsPage = lazy(() => import('../pages/Permissions/PermissionsPage'));
-
+const CategoryPage = lazy(() => import('../pages/products/category/CategoryPage'))
 const privateRoutes = [
     {
         path: '/dashboard',
@@ -29,6 +29,12 @@ const privateRoutes = [
     {
         path: '/customers',
         element: <LazyLoad component={Customers} />,
+        roles: ['ALL'],
+        routePermission: 'PERMISSIONS',
+    },
+    {
+        path: '/products/categories',
+        element: <LazyLoad component={CategoryPage} />,
         roles: ['ALL'],
         routePermission: 'PERMISSIONS',
     },
