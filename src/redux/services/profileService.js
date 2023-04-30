@@ -1,4 +1,4 @@
-//Internal Lib Import
+//internal lib import
 import { apiService } from '../api/apiService';
 
 export const profileService = apiService.injectEndpoints({

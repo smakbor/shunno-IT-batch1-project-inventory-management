@@ -1,26 +1,26 @@
-//external lib import
-import React, { useState } from 'react';
+//External Lib Import
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
+
+//Internal Lib Import
+import PageTitle from '../../../components/PageTitle';
+import Table from '../../../components/Table';
+import exportFromJson from '../../../utils/exportFromJson';
 import { GrDocumentCsv } from 'react-icons/gr';
 import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
-
-//internal lib import
-import PageTitle from '../../components/PageTitle';
-import Table from '../../components/Table';
-import exportFromJson from '../../utils/exportFromJson';
-import LoadingData from '../../components/common/LoadingData';
-import ErrorDataLoad from '../../components/common/ErrorDataLoad';
-import DateFormatter from '../../utils/DateFormatter';
+import LoadingData from '../../../components/common/LoadingData';
+import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
+import DateFormatter from '../../../utils/DateFormatter';
 
 //api services
-import { useRoleDeleteMutation, useRoleListQuery } from '../../redux/services/roleService';
-import AleartMessage from '../../utils/AleartMessage';
+import { useRoleDeleteMutation, useRoleListQuery } from '../../../redux/services/roleService';
+import AleartMessage from '../../../utils/AleartMessage';
 import ModalCreateUpdate from './ModalCreateUpdate';
 import { useTranslation } from 'react-i18next';
 
 // main component
-const UserRolePage = () => {
+const Customers = () => {
     const { t } = useTranslation();
     const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
 
@@ -59,7 +59,7 @@ const UserRolePage = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original.id, roleDelete)}>
+                    onClick={() => AleartMessage.Delete(row?.original._id, roleDelete)}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
@@ -69,40 +69,40 @@ const UserRolePage = () => {
     // get all columns
     const columns = [
         {
-            Header: '#',
+            Header: 'ID',
             accessor: 'sl',
             sort: true,
             Cell: ({ row }) => row.index + 1,
             classes: 'table-user',
         },
         {
-            Header: t('user role'),
-            accessor: 'userRole',
+            Header: 'User Role',
+            accessor: 'UserRole',
             sort: true,
-            Cell: ({ row }) => row.original.name,
+            Cell: ({ row }) => row.original.label,
             classes: 'table-user',
         },
         {
-            Header: t('status'),
-            accessor: 'status',
+            Header: 'Status',
+            accessor: 'Status',
             sort: true,
             Cell: ({ row }) =>
                 row.original.status ? (
-                    <div className="badge bg-success">{t('active')}</div>
+                    <div className="badge bg-success">Active</div>
                 ) : (
-                    <div className="badge bg-danger">{t('inactive')}</div>
+                    <div className="badge bg-danger">Deactive</div>
                 ),
             classes: 'table-user',
         },
         {
-            Header: t('created date'),
+            Header: 'Created Date',
             accessor: 'createdAt',
             sort: true,
             Cell: ({ row }) => DateFormatter(row?.original?.createdAt),
             classes: 'table-user',
         },
         {
-            Header: t('action'),
+            Header: 'Action',
             accessor: 'action',
             sort: false,
             classes: 'table-action',
@@ -113,15 +113,15 @@ const UserRolePage = () => {
     // get pagelist to display
     const sizePerPageList = [
         {
-            text: t('5'),
+            text: '5',
             value: 5,
         },
         {
-            text: t('10'),
+            text: '10',
             value: 10,
         },
         {
-            text: t('50'),
+            text: '50',
             value: 50,
         },
     ];
@@ -130,8 +130,8 @@ const UserRolePage = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('User Role'), path: '/user-role', active: true }]}
+                    title={t('User Role')}
                 />
                 <LoadingData />
             </>
@@ -140,8 +140,8 @@ const UserRolePage = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('User Role'), path: '/user-role', active: true }]}
+                    title={t('User Role')}
                 />
                 <ErrorDataLoad />
             </>
@@ -150,8 +150,8 @@ const UserRolePage = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('User Role'), path: '/user-role', active: true }]}
+                    title={t('User Role')}
                 />
 
                 <Row>
@@ -161,7 +161,7 @@ const UserRolePage = () => {
                                 <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add user role')}
+                                            <i className="mdi mdi-plus-circle me-2"></i> {t('Add User Role')}
                                         </Button>
                                     </Col>
 
@@ -172,8 +172,7 @@ const UserRolePage = () => {
                                             </Button>
 
                                             <Button variant="light" className="mb-2 me-1">
-                                                <BiImport />
-                                                {t('import')}
+                                                <BiImport /> {t('Import')}
                                             </Button>
 
                                             <Button
@@ -181,13 +180,13 @@ const UserRolePage = () => {
                                                 className="mb-2 me-1"
                                                 onClick={() => exportFromJson([{ name: 'f' }], 'roles', 'xls')}>
                                                 <SiMicrosoftexcel />
-                                                {t('export')}
+                                                {t('Export')}
                                             </Button>
                                             <Button
                                                 variant="light"
                                                 className="mb-2 me-1"
                                                 onClick={() => exportFromJson([{ name: 'f' }], 'roles', 'csv')}>
-                                                <GrDocumentCsv /> {t('export')}
+                                                <GrDocumentCsv /> {t('Export')}
                                             </Button>
                                         </div>
                                     </Col>
@@ -216,4 +215,4 @@ const UserRolePage = () => {
     }
 };
 
-export default UserRolePage;
+export default Customers;

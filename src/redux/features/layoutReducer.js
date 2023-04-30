@@ -1,7 +1,7 @@
-//External Lib Import
+//external lib import
 import { createSlice } from '@reduxjs/toolkit';
 
-//Internal Lib Import
+//internal lib import
 import * as layoutConstants from '../../constants/layout';
 import SessionHelper from '../../helpers/SessionHelper';
 

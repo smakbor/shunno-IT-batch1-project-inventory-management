@@ -1,4 +1,4 @@
-//External Lib Import
+//external lib import
 import { isRejectedWithValue } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import ToastMessage from '../../helpers/ToastMessage';

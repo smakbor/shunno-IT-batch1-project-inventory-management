@@ -1,4 +1,4 @@
-//Internal Lib Import
+//internal lib import
 import { apiService } from '../api/apiService';
 import { profileService } from './profileService';
 
@@ -6,19 +6,19 @@ export const roleService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         roleList: builder.query({
             query: () => ({
-                url: `category/categoryList`,
+                url: `role/roleList`,
                 method: 'GET',
             }),
         }),
         roleDropDown: builder.query({
             query: () => ({
-                url: `category/categoryDropDown`,
+                url: `role/roleDropDown`,
                 method: 'GET',
             }),
         }),
         roleCreate: builder.mutation({
             query: (postBody) => ({
-                url: `category/categoryCreate`,
+                url: `role/roleCreate`,
                 method: 'POST',
                 body: postBody,
             }),
@@ -35,13 +35,13 @@ export const roleService = apiService.injectEndpoints({
         }),
         roleDetails: builder.query({
             query: (id) => ({
-                url: `category/categoryDetails/${id}`,
+                url: `role/roleDetails/${id}`,
                 method: 'GET',
             }),
         }),
         roleUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
-                url: `category/categoryUpdate/${id}`,
+                url: `role/roleUpdate/${id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
@@ -66,7 +66,7 @@ export const roleService = apiService.injectEndpoints({
         }),
         roleDelete: builder.mutation({
             query: (id) => ({
-                url: `category/categoryDelete/${id}`,
+                url: `role/roleDelete/${id}`,
                 method: 'DELETE',
             }),
         }),

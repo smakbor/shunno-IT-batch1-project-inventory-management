@@ -1,7 +1,7 @@
-//External Lib Import
+//external lib import
 import { lazy } from 'react';
 
-//Internal Lib Import
+//internal lib import
 import LazyLoad from '../components/common/LazyLoad';
 
 // auth
