@@ -1,18 +1,18 @@
 //internal lib import
-import { object } from 'joi';
+
 import { apiService } from '../api/apiService';
 
-export const subCategoryService = apiService.injectEndpoints({
+export const manufacturerService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getSubCategories: builder.query({
+        getManufacturers: builder.query({
             query: () => ({
-                url: `categories/subcategories`,
+                url: `manufacturers`,
                 method: 'GET',
             }),
         }),
-        subCategoryCreate: builder.mutation({
+        manufacturerCreate: builder.mutation({
             query: (postBody) => ({
-                url: `categories/subcategories`,
+                url: `manufacturers`,
                 method: 'POST',
                 body: postBody,
             }),
@@ -20,7 +20,7 @@ export const subCategoryService = apiService.injectEndpoints({
                 try {
                     const { data } = await queryFulfilled;
                     dispatch(
-                        apiService.util.updateQueryData('getSubCategories', undefined, (draft) => {
+                        apiService.util.updateQueryData('manufacturers', undefined, (draft) => {
                             draft.data.push(data.data);
                         })
                     );
@@ -30,19 +30,18 @@ export const subCategoryService = apiService.injectEndpoints({
             },
         }),
 
-        subCategoryUpdate: builder.mutation({
+        manufacturerUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
-                url: `categories/subcategories/${id}`,
+                url: `manufacturers/${id}`,
                 method: 'PUT',
                 body: postBody,
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
-                console.log(postBody);
                 try {
                     const { data } = await queryFulfilled;
-
+                    console.log(data.data);
                     dispatch(
-                        apiService.util.updateQueryData('getSubCategories', undefined, (draft) => {
+                        apiService.util.updateQueryData('manufacturers', undefined, (draft) => {
                             const findIndex = draft.data.findIndex((item) => item._id === id);
                             draft.data[findIndex] = postBody;
                         })
@@ -52,14 +51,14 @@ export const subCategoryService = apiService.injectEndpoints({
                 }
             },
         }),
-        subCategoryDelete: builder.mutation({
+        manufacturerDelete: builder.mutation({
             query: (id) => ({
-                url: `categories/subcategories/${id}`,
+                url: `manufacturers/${id}`,
                 method: 'DELETE',
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getSubCategories', undefined, (draft) => {
+                    apiService.util.updateQueryData('manufacturers', undefined, (draft) => {
                         draft.data = draft.data.filter((item) => item._id !== id);
                     })
                 );
@@ -73,8 +72,8 @@ export const subCategoryService = apiService.injectEndpoints({
     }),
 });
 export const {
-    useGetSubCategoriesQuery,
-    useSubCategoryCreateMutation,
-    useSubCategoryUpdateMutation,
-    useSubCategoryDeleteMutation,
-} = subCategoryService;
+    useGetManufacturersQuery,
+    useManufacturerDeleteMutation,
+    useManufacturerCreateMutation,
+    useManufacturerUpdateMutation,
+} = manufacturerService;

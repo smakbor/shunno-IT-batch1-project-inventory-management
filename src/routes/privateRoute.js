@@ -4,9 +4,10 @@ import { lazy } from 'react';
 //internal lib import
 import LazyLoad from '../components/common/LazyLoad.jsx';
 import Customers from '../pages/Contacts/Customers/Customers.jsx';
+import Manufacturer from '../pages/products/manufacturer/Manufacturer.jsx';
 const UserRolePage = lazy(() => import('../pages/Permissions/UserRolePage'));
 const PermissionsPage = lazy(() => import('../pages/Permissions/PermissionsPage'));
-const CategoryPage = lazy(() => import('../pages/products/category/CategoryPage'))
+const CategoryPage = lazy(() => import('../pages/products/category/CategoryPage'));
 const privateRoutes = [
     {
         path: '/dashboard',
@@ -38,6 +39,12 @@ const privateRoutes = [
         roles: ['ALL'],
         routePermission: 'PERMISSIONS',
     },
+    // {
+    //     path: '/products/manufacturers',
+    //     element: <LazyLoad component={Manufacturer} />,
+    //     roles: ['ALL'],
+    //     routePermission: 'PERMISSIONS',
+    // },
 ];
 
 export default privateRoutes;

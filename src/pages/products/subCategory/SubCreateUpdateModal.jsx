@@ -5,35 +5,39 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import Select from 'react-select';
 
 //internal lib import
 import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 //api services
-import { useCategoryCreateMutation, useCategoryUpdateMutation } from '../../../redux/services/categoryService'
 
-const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
+import { useSubCategoryCreateMutation, useSubCategoryUpdateMutation } from '../../../redux/services/subCategory';
+
+const SubCategoryCreateUpdateModal = ({
+    subCategoryModal,
+    setSubCategoryModal,
+    subCategoryModalToggle,
+    subCategoryEditData,
+    subCategoryDefaultValues,
+}) => {
     const { t } = useTranslation();
-    const [categoryCreate, { isLoading, isSuccess }] = useCategoryCreateMutation();
-    const [categoryUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCategoryUpdateMutation();
+    const [subCategoryCreate, { isLoading, isSuccess }] = useSubCategoryCreateMutation();
+    const [subCategoryUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useSubCategoryUpdateMutation();
 
     /*
      * form validation schema
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter category name')).min(3, t('minimum containing 3 letter')),
+            name: yup.string().required(t('please enter sub category name')).min(3, t('minimum containing 3 letter')),
             isEcom: yup.boolean().required(),
         })
     );
 
-    const statusOptions = [{ 'label': "Active", 'value': "ACTIVE" }, { 'label': "Inactive", 'value': "INACTIVE" }]
-
     //slugify
 
-    const slugify = str =>
+    const slugify = (str) =>
         str
             .toLowerCase()
             .trim()
@@ -44,53 +48,59 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
     /*
      * handle form submission
      */
-    const onSubmit = (formData) => {
-        const data = {}
-        data.name = formData.name
-        data.slug = slugify(formData.name)
-        data.isEcom = formData.isEcom
-        data.status = formData.status
 
-        if (!editData) {
-            categoryCreate(removeEmptyObj(data));
+    const onSubmit = (formData) => {
+        const data = {};
+        data.name = formData.name;
+        data.slug = slugify(formData.name);
+        data.isEcom = formData.isEcom;
+        data.status = formData.status;
+        data.categoryID = subCategoryDefaultValues.categoryID;
+
+        if (!subCategoryEditData) {
+            subCategoryCreate(removeEmptyObj(data));
         } else {
             const postBody = removeEmptyObj(data);
-            postBody.slug = slugify(postBody.name)
-            categoryUpdate({ id: editData._id, postBody });
+            postBody.slug = slugify(postBody.name);
+            subCategoryUpdate({ id: subCategoryEditData, postBody });
         }
     };
 
     useEffect(() => {
         if (isSuccess || updateSuccess) {
-            setModal(false);
+            setSubCategoryModal(false);
         }
     }, [isSuccess, updateSuccess]);
 
     return (
-        <Card className={classNames('', { 'd-none': !modal })}>
+        <Card className={classNames('', { 'd-none': !subCategoryModal })}>
             <Card.Body>
-                <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false}>
-                    <Modal.Header onHide={toggle} closeButton>
-                        <h4 className="modal-title">{editData ? t('update category') : t('create category')}</h4>
+                <Modal show={subCategoryModal} onHide={subCategoryModalToggle} backdrop="statica" keyboard={false}>
+                    <Modal.Header onHide={subCategoryModalToggle} closeButton>
+                        <h4 className="modal-title">
+                            {subCategoryEditData ? t('update sub category') : t('create sub category')}
+                        </h4>
                     </Modal.Header>
 
                     <Modal.Body>
-                        <VerticalForm onSubmit={onSubmit} resolver={schemaResolver} defaultValues={defaultValues}>
+                        <VerticalForm
+                            onSubmit={onSubmit}
+                            resolver={schemaResolver}
+                            defaultValues={subCategoryDefaultValues}>
                             <FormInput
-                                label={t('category name')}
+                                label={t('sub category name')}
                                 type="text"
                                 name="name"
-                                placeholder={t('please enter category name')}
+                                placeholder={t('please enter sub category name')}
                                 containerClass={'mb-3'}
                                 col={'col-12'}
                             />
                             <FormInput
-                                name='status'
-                                type='select'
-                                label='status'
+                                name="status"
+                                type="select"
+                                label="status"
                                 col={'col-12'}
-                                containerClass={'mb-3'}
-                            >
+                                containerClass={'mb-3'}>
                                 <option value="ACTIVE">Active</option>
                                 <option value="INACTIVE">Inactive</option>
                             </FormInput>
@@ -100,11 +110,10 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
                                 type="checkbox"
                                 name="isEcom"
                                 containerClass={'mb-3 text-muted'}
-
                             />
                             <div className="mb-3 text-end">
                                 <Button variant="primary" type="submit">
-                                    {editData ? t('update category') : t('create category')}
+                                    {subCategoryEditData ? t('update sub category') : t('create sub category')}
                                     &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
                                 </Button>
                             </div>
@@ -116,4 +125,4 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
     );
 };
 
-export default ModalCreateUpdate;
+export default SubCategoryCreateUpdateModal;

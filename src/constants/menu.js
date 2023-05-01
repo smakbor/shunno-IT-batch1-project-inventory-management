@@ -1,7 +1,7 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 const MENU_ITEMS = () => {
-    const { t } = useTranslation()
+    const { t } = useTranslation();
     return [
         { key: 'Permissions', label: 'Permissions', isTitle: true },
         {
@@ -52,7 +52,7 @@ const MENU_ITEMS = () => {
                 {
                     key: 'manufacturer',
                     label: t('manufacturer'),
-                    url: '/manufacturer',
+                    url: '/products/manufacturers',
                     parentKey: 'Products',
                 },
                 {
@@ -74,18 +74,16 @@ const MENU_ITEMS = () => {
             label: t('suppliers'),
             isTitle: false,
             icon: 'uil-briefcase',
-            url: '/suppliers'
-
+            url: '/suppliers',
         },
         {
             key: 'Customers',
             label: t('customers'),
             isTitle: false,
             icon: 'uil-users-alt',
-            url: '/customers'
-
+            url: '/customers',
         },
     ];
-}
+};
 
 export default MENU_ITEMS;
