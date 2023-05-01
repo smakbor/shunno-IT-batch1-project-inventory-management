@@ -3,13 +3,8 @@ import { lazy } from 'react';
 
 //internal lib import
 import LazyLoad from '../components/common/LazyLoad.jsx';
-<<<<<<< HEAD
-import Customers from '../pages/Contacts/Customers/Customers.jsx';
-import Manufacturer from '../pages/products/manufacturer/Manufacturer.jsx';
-=======
 const Customers = lazy(() => import('../pages/Contacts/Customers/Customers.jsx'));
 const UnitPage = lazy(() => import('../pages/products/unit/UnitPage.jsx'));
->>>>>>> 249bd6d54819f0519724a4a2cf33f62e7df3e17e
 const UserRolePage = lazy(() => import('../pages/Permissions/UserRolePage'));
 const PermissionsPage = lazy(() => import('../pages/Permissions/PermissionsPage'));
 const CategoryPage = lazy(() => import('../pages/products/category/CategoryPage'));
@@ -44,22 +39,12 @@ const privateRoutes = [
         roles: ['ALL'],
         routePermission: 'PERMISSIONS',
     },
-<<<<<<< HEAD
-    // {
-    //     path: '/products/manufacturers',
-    //     element: <LazyLoad component={Manufacturer} />,
-    //     roles: ['ALL'],
-    //     routePermission: 'PERMISSIONS',
-    // },
-=======
     {
         path: '/products/units',
         element: <LazyLoad component={UnitPage} />,
         roles: ['ALL'],
         routePermission: 'PERMISSIONS',
     },
-
->>>>>>> 249bd6d54819f0519724a4a2cf33f62e7df3e17e
 ];
 
 export default privateRoutes;

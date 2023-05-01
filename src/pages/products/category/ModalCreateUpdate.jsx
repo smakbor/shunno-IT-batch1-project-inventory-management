@@ -30,7 +30,6 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
         })
     );
 
-<<<<<<< HEAD
     //slugify
 
     const slugify = (str) =>
@@ -40,8 +39,6 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
             .replace(/[^\w\s-]/g, '')
             .replace(/[\s_-]+/g, '_')
             .replace(/^-+|-+$/g, '');
-=======
->>>>>>> 249bd6d54819f0519724a4a2cf33f62e7df3e17e
 
     /*
      * handle form submission
@@ -88,23 +85,12 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
                                 col={'col-12'}
                             />
                             <FormInput
-<<<<<<< HEAD
                                 name="status"
                                 type="select"
-                                label="status"
+                                label={t('status')}
+                                defaultValue="ACTIVE"
                                 col={'col-12'}
                                 containerClass={'mb-3'}>
-=======
-                                name='status'
-                                type='select'
-                                label={t('status')}
-                                defaultValue='ACTIVE'
-                                col={'col-12'}
-                                containerClass={'mb-3'}
-
-                            >
-
->>>>>>> 249bd6d54819f0519724a4a2cf33f62e7df3e17e
                                 <option value="ACTIVE">Active</option>
                                 <option value="INACTIVE">Inactive</option>
                             </FormInput>
