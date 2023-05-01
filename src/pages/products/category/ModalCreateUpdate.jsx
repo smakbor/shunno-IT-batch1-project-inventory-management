@@ -10,7 +10,7 @@ import Select from 'react-select';
 //internal lib import
 import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
-
+import slugify from '../../../helpers/slugify';
 //api services
 import { useCategoryCreateMutation, useCategoryUpdateMutation } from '../../../redux/services/categoryService'
 
@@ -29,24 +29,6 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
             isEcom: yup.boolean().required(),
         })
     );
-
-    //slugify
-    function slugify(text) {
-        // Replace non-alphanumeric characters with a space
-        text = text.replace(/[^a-z0-9\u0980-\u09FF]+/gi, ' ');
-
-        // Convert to lowercase
-        text = text.toLowerCase();
-
-        // Replace spaces with hyphens
-        text = text.replace(/\s+/g, '-');
-
-        // Remove leading and trailing hyphens
-        text = text.replace(/^-+/, '').replace(/-+$/, '');
-
-        return text;
-    }
-
 
 
     /*
