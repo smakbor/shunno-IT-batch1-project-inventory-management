@@ -1,4 +1,5 @@
 //internal lib import
+import { object } from 'joi';
 import { apiService } from '../api/apiService';
 
 export const categoryService = apiService.injectEndpoints({
@@ -18,11 +19,9 @@ export const categoryService = apiService.injectEndpoints({
             async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
-                    console.log(data);
-
                     dispatch(
                         apiService.util.updateQueryData('getCategories', undefined, (draft) => {
-                            draft.push(data.data);
+                            draft.data.push(data.data);
                         })
                     );
                 } catch (e) {
@@ -37,18 +36,19 @@ export const categoryService = apiService.injectEndpoints({
                 method: 'PUT',
                 body: postBody,
             }),
-
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
-                const response = await queryFulfilled;
-
                 try {
+                    const { data } = await queryFulfilled;
+                    console.log(data.data);
                     dispatch(
                         apiService.util.updateQueryData('getCategories', undefined, (draft) => {
-                            const findIndex = draft.findIndex((role) => role._id === id);
-                            Object.keys(postBody).map((key) => (draft[findIndex].key = postBody[key]));
+                            const findIndex = draft.data.findIndex((item) => item._id === id);
+                            draft.data[findIndex] = postBody;
                         })
                     );
-                } catch {}
+                } catch (e) {
+                    console.log(e);
+                }
             },
         }),
         categoryDelete: builder.mutation({
@@ -56,7 +56,7 @@ export const categoryService = apiService.injectEndpoints({
                 url: `categories/${id}`,
                 method: 'DELETE',
             }),
-            async onQueryStarted(id, { dispatch, queryFulfilled }) {
+            async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getCategories', undefined, (draft) => {
                         draft.data = draft.data.filter((item) => item._id !== id);
