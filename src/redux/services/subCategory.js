@@ -1,17 +1,17 @@
 //internal lib import
 import { apiService } from '../api/apiService';
 
-export const categoryService = apiService.injectEndpoints({
+export const subCategoryService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getCategories: builder.query({
+        getSubCategories: builder.query({
             query: () => ({
-                url: `categories`,
+                url: `categories/subcategories`,
                 method: 'GET',
             }),
         }),
-        categoryCreate: builder.mutation({
+        subCategoryCreate: builder.mutation({
             query: (postBody) => ({
-                url: `categories`,
+                url: `categories/subcategories`,
                 method: 'POST',
                 body: postBody,
             }),
@@ -21,7 +21,7 @@ export const categoryService = apiService.injectEndpoints({
                     console.log(data);
 
                     dispatch(
-                        apiService.util.updateQueryData('getCategories', undefined, (draft) => {
+                        apiService.util.updateQueryData('getSubCategories', undefined, (draft) => {
                             draft.push(data.data);
                         })
                     );
@@ -31,9 +31,9 @@ export const categoryService = apiService.injectEndpoints({
             },
         }),
 
-        categoryUpdate: builder.mutation({
+        subCategoryUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
-                url: `categories/${id}`,
+                url: `categories/subcategories/${id}`,
                 method: 'PUT',
                 body: postBody,
             }),
@@ -51,9 +51,9 @@ export const categoryService = apiService.injectEndpoints({
                 } catch {}
             },
         }),
-        categoryDelete: builder.mutation({
+        subCategoryDelete: builder.mutation({
             query: (id) => ({
-                url: `categories/${id}`,
+                url: `categories/subcategories/${id}`,
                 method: 'DELETE',
             }),
             async onQueryStarted(id, { dispatch, queryFulfilled }) {
@@ -72,8 +72,8 @@ export const categoryService = apiService.injectEndpoints({
     }),
 });
 export const {
-    useGetCategoriesQuery,
-    useCategoryDeleteMutation,
-    useCategoryCreateMutation,
-    useCategoryUpdateMutation,
-} = categoryService;
+    useGetSubCategoriesQuery,
+    useSubCategoryCreateMutation,
+    useSubCategoryUpdateMutation,
+    useSubCategoryDeleteMutation,
+} = subCategoryService;

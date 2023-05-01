@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 //constant env variable
 const SERVER_URL = process.env.REACT_APP_API_SERVER_URL;
 const API_PREFIX_PATH = process.env.REACT_APP_API_PREFIX_PATH;
-
+console.log(SERVER_URL);
 const baseFetchBaseQuery = fetchBaseQuery({
     baseUrl: SERVER_URL + API_PREFIX_PATH,
     prepareHeaders: (headers, { getState }) => {

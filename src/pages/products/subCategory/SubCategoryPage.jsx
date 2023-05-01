@@ -16,10 +16,8 @@ import DateFormatter from '../../../utils/DateFormatter';
 
 //api services
 import { useCategoryDeleteMutation, useGetCategoriesQuery } from '../../../redux/services/categoryService';
-
 import AleartMessage from '../../../utils/AleartMessage';
 import ModalCreateUpdate from './ModalCreateUpdate';
-import { useGetSubCategoriesQuery } from '../../../redux/services/subCategory';
 
 // main component
 const CategoryPage = () => {
@@ -30,7 +28,7 @@ const CategoryPage = () => {
     const [editData, setEditData] = useState(false);
     const [categoryDelete] = useCategoryDeleteMutation();
     const { data, isLoading, isError } = useGetCategoriesQuery();
-    const { data: subCategory, isLoading: loading, isError: error } = useGetSubCategoriesQuery();
+    console.log(data);
 
     /**
      * Show/hide the modal
@@ -98,7 +96,7 @@ const CategoryPage = () => {
             classes: 'table-user',
         },
         {
-            Header: t('sub category'),
+            Header: t('created date'),
             accessor: 'createdAt',
             sort: true,
             Cell: ({ row }) => DateFormatter(row?.original?.createdAt),
