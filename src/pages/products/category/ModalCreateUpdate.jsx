@@ -25,19 +25,29 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
     const schemaResolver = yupResolver(
         yup.object().shape({
             name: yup.string().required(t('please enter category name')).min(3, t('minimum containing 3 letter')),
+            status: yup.string().required(t('please select status')),
             isEcom: yup.boolean().required(),
         })
     );
 
     //slugify
+    function slugify(text) {
+        // Replace non-alphanumeric characters with a space
+        text = text.replace(/[^a-z0-9\u0980-\u09FF]+/gi, ' ');
 
-    const slugify = str =>
-        str
-            .toLowerCase()
-            .trim()
-            .replace(/[^\w\s-]/g, '')
-            .replace(/[\s_-]+/g, '_')
-            .replace(/^-+|-+$/g, '');
+        // Convert to lowercase
+        text = text.toLowerCase();
+
+        // Replace spaces with hyphens
+        text = text.replace(/\s+/g, '-');
+
+        // Remove leading and trailing hyphens
+        text = text.replace(/^-+/, '').replace(/-+$/, '');
+
+        return text;
+    }
+
+
 
     /*
      * handle form submission
@@ -85,10 +95,13 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
                             <FormInput
                                 name='status'
                                 type='select'
-                                label='status'
+                                label={t('status')}
+                                defaultValue='ACTIVE'
                                 col={'col-12'}
                                 containerClass={'mb-3'}
+
                             >
+
                                 <option value="ACTIVE">Active</option>
                                 <option value="INACTIVE">Inactive</option>
                             </FormInput>
