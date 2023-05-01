@@ -46,7 +46,7 @@ const MENU_ITEMS = () => {
                 {
                     key: 'unit',
                     label: t('unit'),
-                    url: '/unit',
+                    url: 'products/units',
                     parentKey: 'Products',
                 },
                 {
