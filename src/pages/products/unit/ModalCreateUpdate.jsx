@@ -10,56 +10,39 @@ import Select from 'react-select';
 //internal lib import
 import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
-import slugify from '../../../helpers/slugify';
+
 //api services
-import { useCategoryCreateMutation, useCategoryUpdateMutation } from '../../../redux/services/categoryService';
+import { useUnitCreateMutation, useUnitUpdateMutation } from '../../../redux/services/unitService'
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
-    const [categoryCreate, { isLoading, isSuccess }] = useCategoryCreateMutation();
-    const [categoryUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCategoryUpdateMutation();
+    const [unitCreate, { isLoading, isSuccess }] = useUnitCreateMutation();
+    const [unitUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useUnitUpdateMutation();
 
     /*
      * form validation schema
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter category name')).min(3, t('minimum containing 3 letter')),
-            status: yup.string().required(t('please select status')),
-            isEcom: yup.boolean().required(),
+            name: yup.string().required(t('please enter unit name')).min(2, t('minimum containing 2 letters')),
+            status: yup.string().required(t('please select status'))
         })
     );
 
-<<<<<<< HEAD
-    //slugify
-
-    const slugify = (str) =>
-        str
-            .toLowerCase()
-            .trim()
-            .replace(/[^\w\s-]/g, '')
-            .replace(/[\s_-]+/g, '_')
-            .replace(/^-+|-+$/g, '');
-=======
->>>>>>> 249bd6d54819f0519724a4a2cf33f62e7df3e17e
 
     /*
      * handle form submission
      */
-
     const onSubmit = (formData) => {
-        const data = {};
-        data.name = formData.name;
-        data.slug = slugify(formData.name);
-        data.isEcom = formData.isEcom;
-        data.status = formData.status;
+        const data = {}
+        data.name = formData.name
+        data.status = formData.status
 
         if (!editData) {
-            categoryCreate(removeEmptyObj(data));
+            unitCreate(removeEmptyObj(data));
         } else {
             const postBody = removeEmptyObj(data);
-            postBody.slug = slugify(postBody.name);
-            categoryUpdate({ id: editData._id, postBody });
+            unitUpdate({ id: editData._id, postBody });
         }
     };
 
@@ -74,27 +57,20 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
             <Card.Body>
                 <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false}>
                     <Modal.Header onHide={toggle} closeButton>
-                        <h4 className="modal-title">{editData ? t('update category') : t('create category')}</h4>
+                        <h4 className="modal-title">{editData ? t('edit unit') : t('add unit')}</h4>
                     </Modal.Header>
 
                     <Modal.Body>
                         <VerticalForm onSubmit={onSubmit} resolver={schemaResolver} defaultValues={defaultValues}>
                             <FormInput
-                                label={t('category name')}
+                                label={t('unit name')}
                                 type="text"
                                 name="name"
-                                placeholder={t('please enter category name')}
+                                placeholder={t('please enter unit name')}
                                 containerClass={'mb-3'}
                                 col={'col-12'}
                             />
                             <FormInput
-<<<<<<< HEAD
-                                name="status"
-                                type="select"
-                                label="status"
-                                col={'col-12'}
-                                containerClass={'mb-3'}>
-=======
                                 name='status'
                                 type='select'
                                 label={t('status')}
@@ -104,20 +80,13 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
 
                             >
 
->>>>>>> 249bd6d54819f0519724a4a2cf33f62e7df3e17e
                                 <option value="ACTIVE">Active</option>
                                 <option value="INACTIVE">Inactive</option>
                             </FormInput>
 
-                            <FormInput
-                                label={t('has e-commerce')}
-                                type="checkbox"
-                                name="isEcom"
-                                containerClass={'mb-3 text-muted'}
-                            />
                             <div className="mb-3 text-end">
                                 <Button variant="primary" type="submit">
-                                    {editData ? t('update category') : t('create category')}
+                                    {editData ? t('update unit') : t('add unit')}
                                     &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
                                 </Button>
                             </div>

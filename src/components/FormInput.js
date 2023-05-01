@@ -111,6 +111,7 @@ const FormInput = ({
 
                                         <Form.Select
                                             type={type}
+                                            placeholder={placeholder}
                                             label={label}
                                             name={name}
                                             id={name}

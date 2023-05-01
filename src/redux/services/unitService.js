@@ -1,17 +1,18 @@
 //internal lib import
+
 import { apiService } from '../api/apiService';
 
-export const categoryService = apiService.injectEndpoints({
+export const unitService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getCategories: builder.query({
+        getUnits: builder.query({
             query: () => ({
-                url: `categories`,
+                url: `units`,
                 method: 'GET',
             }),
         }),
-        categoryCreate: builder.mutation({
+        unitCreate: builder.mutation({
             query: (postBody) => ({
-                url: `categories`,
+                url: `units`,
                 method: 'POST',
                 body: postBody,
             }),
@@ -19,7 +20,7 @@ export const categoryService = apiService.injectEndpoints({
                 try {
                     const { data } = await queryFulfilled;
                     dispatch(
-                        apiService.util.updateQueryData('getCategories', undefined, (draft) => {
+                        apiService.util.updateQueryData('getUnits', undefined, (draft) => {
                             draft.data.push(data.data);
                         })
                     );
@@ -29,9 +30,9 @@ export const categoryService = apiService.injectEndpoints({
             },
         }),
 
-        categoryUpdate: builder.mutation({
+        unitUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
-                url: `categories/${id}`,
+                url: `units/${id}`,
                 method: 'PUT',
                 body: postBody,
             }),
@@ -39,7 +40,7 @@ export const categoryService = apiService.injectEndpoints({
                 try {
                     const { data } = await queryFulfilled;
                     dispatch(
-                        apiService.util.updateQueryData('getCategories', undefined, (draft) => {
+                        apiService.util.updateQueryData('getUnits', undefined, (draft) => {
                             const findIndex = draft.data.findIndex((item) => item._id === id);
                             draft.data[findIndex] = postBody;
                         })
@@ -49,14 +50,14 @@ export const categoryService = apiService.injectEndpoints({
                 }
             },
         }),
-        categoryDelete: builder.mutation({
+        unitDelete: builder.mutation({
             query: (id) => ({
-                url: `categories/${id}`,
+                url: `units/${id}`,
                 method: 'DELETE',
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getCategories', undefined, (draft) => {
+                    apiService.util.updateQueryData('getUnits', undefined, (draft) => {
                         draft.data = draft.data.filter((item) => item._id !== id);
                     })
                 );
@@ -70,8 +71,8 @@ export const categoryService = apiService.injectEndpoints({
     }),
 });
 export const {
-    useGetCategoriesQuery,
-    useCategoryDeleteMutation,
-    useCategoryCreateMutation,
-    useCategoryUpdateMutation,
-} = categoryService;
+    useGetUnitsQuery,
+    useUnitDeleteMutation,
+    useUnitCreateMutation,
+    useUnitUpdateMutation,
+} = unitService;
