@@ -36,7 +36,7 @@ const CategoryPage = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: '' });
+        setDefaultValues({ name: '', status: true });
         setModal(!modal);
     };
 
@@ -89,7 +89,7 @@ const CategoryPage = () => {
             accessor: 'status',
             sort: true,
             Cell: ({ row }) =>
-                row.original.status ? (
+                row.original.status === 'ACTIVE' ? (
                     <div className="badge bg-success">{t('active')}</div>
                 ) : (
                     <div className="badge bg-danger">{t('inactive')}</div>

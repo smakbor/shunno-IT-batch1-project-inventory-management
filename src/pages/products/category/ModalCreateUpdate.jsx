@@ -29,8 +29,6 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
         })
     );
 
-    const statusOptions = [{ 'label': "Active", 'value': "ACTIVE" }, { 'label': "Inactive", 'value': "INACTIVE" }]
-
     //slugify
 
     const slugify = str =>
