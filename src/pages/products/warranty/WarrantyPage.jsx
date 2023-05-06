@@ -7,31 +7,30 @@ import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 
 //internal lib import
-import PageTitle from '../../components/PageTitle';
-import Table from '../../components/Table';
-import exportFromJson from '../../utils/exportFromJson';
-import LoadingData from '../../components/common/LoadingData';
-import ErrorDataLoad from '../../components/common/ErrorDataLoad';
-import AleartMessage from '../../utils/AleartMessage';
+import PageTitle from '../../../components/PageTitle';
+import Table from '../../../components/Table';
+import exportFromJson from '../../../utils/exportFromJson';
+import LoadingData from '../../../components/common/LoadingData';
+import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
+import AleartMessage from '../../../utils/AleartMessage';
+import ModalCreateUpdate from './ModalCreateUpdate';
 
 //api services
-
-
-
-import { useGetSuppliersQuery, useSupplierDeleteMutation } from '../../redux/services/suppliersService';
-import SupplierCreateUpdateModal from './SupplierCreateUpdateModal';
+import {
+    useGetWarrantiesQuery,
+    useWarrantyDeleteMutation,
+} from '../../../redux/services/warrantyService';
 
 // main component
-const Suppliers = () => {
+const WarrantyPage = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
+    const [defaultValues, setDefaultValues] = useState({});
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-
-    const [supplierDelete] = useSupplierDeleteMutation();
-
-    const { data, isLoading, isError } = useGetSuppliersQuery();
+    const [warrantyDelete] = useWarrantyDeleteMutation();
+    const { data, isLoading, isError } = useGetWarrantiesQuery();
+    console.log(data)
 
     /**
      * Show/hide the modal
@@ -39,7 +38,7 @@ const Suppliers = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({});
+        setDefaultValues({ name: '', status: true });
         setModal(!modal);
     };
 
@@ -51,15 +50,8 @@ const Suppliers = () => {
     const ActionColumn = ({ row }) => {
         const edit = () => {
             toggle();
-            let dValues = { ...row?.original };
-
-            dValues.referenceName = row?.original.reference.name;
-            dValues.referenceMobile = row?.original.reference.mobile;
-            dValues.referenceNid = row?.original.reference.nid;
-            dValues.referenceRelation = row?.original.reference.relation;
-            dValues.referenceAddress = row?.original.reference.address;
-            setEditData(dValues);
-            setDefaultValues(dValues);
+            setEditData(row?.original);
+            setDefaultValues(row?.original);
         };
 
         return (
@@ -70,63 +62,41 @@ const Suppliers = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, supplierDelete)}>
+                    onClick={() => AleartMessage.Delete(row?.original._id, warrantyDelete)}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
         );
     };
+
     // get all columns
     const columns = [
         {
             Header: '#',
             accessor: 'sl',
-            sort: true,
+            sort: false,
             Cell: ({ row }) => row.index + 1,
             classes: 'table-user',
         },
         {
-            Header: t('company name'),
-            accessor: 'company',
-            sort: true,
-            Cell: ({ row }) => row.original.company,
-            classes: 'table-user',
-        },
-        {
-            Header: t('name'),
+            Header: t('warranty name'),
             accessor: 'name',
             sort: true,
-            Cell: ({ row }) =>
-                row.original.name,
+            Cell: ({ row }) => row.original.name,
             classes: 'table-user',
         },
         {
-            Header: t('address'),
-            accessor: 'address',
-            sort: true,
-            Cell: ({ row }) => {
-                const splitAddress = row.original.address.split(",")
-                return splitAddress.map((item, i) => <p className='mb-0' key={i}>{item}{i !== splitAddress.length - 1 ? ',' : ''}</p>)
-            },
-            classes: 'table-user',
-        },
-        {
-            Header: t('mobile'),
-            accessor: 'mobile',
+            Header: t('status'),
+            accessor: 'status',
             sort: true,
             Cell: ({ row }) =>
-                row.original.mobile,
+                row.original.status === 'ACTIVE' ? (
+                    <div className="badge bg-success">{t('active')}</div>
+                ) : (
+                    <div className="badge bg-danger">{t('inactive')}</div>
+                ),
             classes: 'table-user',
         },
-        {
-            Header: t('due'),
-            accessor: 'due',
-            sort: true,
-            Cell: ({ row }) =>
-                row.original.due,
-            classes: 'table-user',
-        },
-
         {
             Header: t('action'),
             accessor: 'action',
@@ -156,8 +126,8 @@ const Suppliers = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('suppliers'), path: '/user-role', active: true }]}
-                    title={t('suppliers')}
+                    breadCrumbItems={[{ label: t('warranty'), path: '/products/warranty', active: true }]}
+                    title={t('user role')}
                 />
                 <LoadingData />
             </>
@@ -166,8 +136,8 @@ const Suppliers = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('suppliers'), path: '/user-role', active: true }]}
-                    title={t('suppliers')}
+                    breadCrumbItems={[{ label: t('warranty'), path: '/products/warranty', active: true }]}
+                    title={t('user role')}
                 />
                 <ErrorDataLoad />
             </>
@@ -187,7 +157,7 @@ const Suppliers = () => {
                                 <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add supplier')}
+                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add warranty')}
                                         </Button>
                                     </Col>
 
@@ -236,11 +206,10 @@ const Suppliers = () => {
                         </Card>
                     </Col>
                 </Row>
-                {/* <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} /> */}
-                <SupplierCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }
 };
 
-export default Suppliers;
+export default WarrantyPage;

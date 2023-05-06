@@ -14,15 +14,15 @@ import removeEmptyObj from '../../helpers/removeEmptyObj';
 //api services
 
 import {
-    useManufacturerCreateMutation,
-    useManufacturerUpdateMutation,
-} from '../../redux/services/manufacturerService';
+    useSupplierCreateMutation,
+    useSupplierUpdateMutation,
+} from '../../redux/services/suppliersService';
 
 const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
-    const { t } = useTranslation();
 
-    const [manufacturerCreate, { isLoading, isSuccess }] = useManufacturerCreateMutation();
-    const [manufacturerUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useManufacturerUpdateMutation();
+    const { t } = useTranslation();
+    const [supplierCreate, { isLoading, isSuccess }] = useSupplierCreateMutation();
+    const [supplierUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useSupplierUpdateMutation();
 
     /*
      * form validation schema
@@ -30,48 +30,35 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, editData, defa
     const schemaResolver = yupResolver(
         yup.object().shape({
             name: yup.string().required(t('please enter manufacturer name')).min(3, t('minimum containing 3 letter')),
-            isEcom: yup.boolean().required(),
+
         })
     );
 
-    //slugify
-
-
-    /*
-     * handle form submission
-     */
-    // {
-    //     "name": "Nahid",
-    //     "mobile": "01717487771",
-    //     "email": "arifulislamnahid98@gmail.com",
-    //     "fatherName":"Mr X",
-    //     "company":"Nahid Trading",
-    //     "address": "Kusthia",
-    //     "remarks":"Relative Supplier",
-    //     "thana":"Kusthia Sadar",
-    //     "district":"Kushtia",
-    //     "nid": "65165416352",
-    //     "reference": {
-    //         "name": "comok",
-    //         "mobile": "01725785177",
-    //         "address": "Bic",
-    //         "nid":"564319653165",
-    //         "relation":"Brother"
-
-    //     },
-    //     "due": 80,
-    //     "storeID":"602e42e46ebade5b1c7cf45f"
-    // }
     const onSubmit = (formData) => {
-        const data = {};
-        data.name = formData.name;
-        data.status = formData.status;
-
+        let updatedData = {}
+        updatedData.name = formData?.name;
+        updatedData.mobile = formData?.mobile;
+        updatedData.email = formData?.email;
+        updatedData.fatherName = formData?.fatherName;
+        updatedData.company = formData?.company;
+        updatedData.address = formData?.address;
+        updatedData.remarks = formData?.remarks;
+        updatedData.thana = formData?.thana;
+        updatedData.district = formData?.district;
+        updatedData.nid = formData?.nid;
+        updatedData.reference = {}
+        updatedData.reference.name = formData?.referenceName;
+        updatedData.reference.mobile = formData?.referenceMobile;
+        updatedData.reference.address = formData?.referenceAddress;
+        updatedData.reference.nid = formData?.referenceNid;
+        updatedData.reference.relation = formData?.referenceRelation;
+        updatedData.due = formData?.due;
+        updatedData.storeID = "602e42e46ebade5b1c7cf45f"
         if (!editData) {
-            manufacturerCreate(removeEmptyObj(data));
+            supplierCreate(removeEmptyObj(updatedData));
         } else {
-            const postBody = removeEmptyObj(data);
-            manufacturerUpdate({ id: editData._id, postBody });
+            const postBody = removeEmptyObj(updatedData);
+            supplierUpdate({ id: editData._id, postBody });
         }
     };
 
@@ -84,36 +71,147 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, editData, defa
     return (
         <Card className={classNames('', { 'd-none': !modal })}>
             <Card.Body>
-                <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false}>
+                <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false} size='xl'>
                     <Modal.Header onHide={toggle} closeButton>
                         <h4 className="modal-title">
-                            {editData ? t('update manufacturer') : t('create manufacturer')}
+                            {editData ? t('update supplier') : t('add supplier')}
                         </h4>
                     </Modal.Header>
 
                     <Modal.Body>
                         <VerticalForm onSubmit={onSubmit} resolver={schemaResolver} defaultValues={defaultValues}>
                             <FormInput
-                                label={t('manufacturer name')}
+                                label={t('company name')}
                                 type="text"
-                                name="name"
-                                placeholder={t('please enter manufacturer name')}
+                                name="company"
+                                placeholder={t('please enter company name')}
                                 containerClass={'mb-3'}
-                                col={'col-12'}
+                                col={'col-4'}
                             />
                             <FormInput
-                                name="status"
-                                type="select"
-                                label="status"
-                                col={'col-12'}
-                                containerClass={'mb-3'}>
-                                <option value="ACTIVE">Active</option>
-                                <option value="INACTIVE">Inactive</option>
-                            </FormInput>
+                                label={t('name')}
+                                type="text"
+                                name="name"
+                                placeholder={t('please enter supplier name')}
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
+                            <FormInput
+                                label={t('mobile')}
+                                type="tel"
+                                name="mobile"
+                                placeholder={t('please enter mobile number')}
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
+                            <FormInput
+                                label={t('email')}
+                                type="email"
+                                name="email"
+                                placeholder={t('please enter supplier email')}
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
+                            <FormInput
+                                label={t('NID')}
+                                type="text"
+                                name="nid"
+                                placeholder={t('please enter supplier nid')}
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
+                            <FormInput
+                                label={t('address')}
+                                type="text"
+                                name="address"
+                                placeholder={t('please enter supplier address')}
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
+                            <FormInput
+                                label={t('father name')}
+                                type="text"
+                                name="fatherName"
+                                placeholder={t('please enter father name')}
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
+                            <FormInput
+                                label={t('remarks')}
+                                type="text"
+                                name="remarks"
+                                placeholder={t('please enter remarks')}
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
+                            <FormInput
+                                label={t('thana')}
+                                type="text"
+                                name="thana"
+                                placeholder={t('please enter thana')}
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
+                            <FormInput
+                                label={t('district')}
+                                type="text"
+                                name="district"
+                                placeholder={t('please enter district')}
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
+                            <FormInput
+                                label={t('previous due')}
+                                type="number"
+                                name="due"
+                                placeholder={t('please enter supplier previous due')}
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
+                            <FormInput
+                                label={t('reference name')}
+                                type="text"
+                                name="referenceName"
+                                placeholder={t('please enter reference name')}
 
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
+                            <FormInput
+                                label={t('reference mobile')}
+                                type="tel"
+                                name="referenceMobile"
+                                placeholder={t('please enter supplier mobile')}
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
+                            <FormInput
+                                label={t('reference address')}
+                                type="text"
+                                name="referenceAddress"
+                                placeholder={t('please enter reference address')}
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
+                            <FormInput
+                                label={t('reference nid')}
+                                type="text"
+                                name="referenceNid"
+                                placeholder={t('please enter reference nid')}
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
+                            <FormInput
+                                label={t('reference relation')}
+                                type="text"
+                                name="referenceRelation"
+                                placeholder={t('please enter reference address')}
+                                containerClass={'mb-3'}
+                                col={'col-4'}
+                            />
                             <div className="mb-3 text-end">
                                 <Button variant="primary" type="submit">
-                                    {editData ? t('update manufacturer') : t('create manufacturer')}
+                                    {editData ? t('update supplier') : t('create supplier')}
                                     &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
                                 </Button>
                             </div>
