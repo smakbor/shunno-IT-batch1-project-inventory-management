@@ -70,7 +70,7 @@ const Suppliers = () => {
             </>
         );
     };
-
+    console.log(data)
     // get all columns
     const columns = [
         {
@@ -81,22 +81,44 @@ const Suppliers = () => {
             classes: 'table-user',
         },
         {
-            Header: t('name'),
-            accessor: 'name',
+            Header: t('company name'),
+            accessor: 'company',
             sort: true,
-            Cell: ({ row }) => row.original.name,
+            Cell: ({ row }) => row.original.company,
             classes: 'table-user',
         },
         {
-            Header: t('status'),
-            accessor: 'status',
+            Header: t('name'),
+            accessor: 'name',
             sort: true,
             Cell: ({ row }) =>
-                row.original.status ? (
-                    <div className="badge bg-success">{t('active')}</div>
-                ) : (
-                    <div className="badge bg-danger">{t('inactive')}</div>
-                ),
+                row.original.name,
+            classes: 'table-user',
+        },
+        {
+            Header: t('address'),
+            accessor: 'address',
+            sort: true,
+            Cell: ({ row }) => {
+                const splitAddress = row.original.address.split(",")
+                return splitAddress.map((item, i) => <p className='mb-0' key={i}>{item}{i !== splitAddress.length - 1 ? ',' : ''}</p>)
+            },
+            classes: 'table-user',
+        },
+        {
+            Header: t('mobile'),
+            accessor: 'mobile',
+            sort: true,
+            Cell: ({ row }) =>
+                row.original.mobile,
+            classes: 'table-user',
+        },
+        {
+            Header: t('due'),
+            accessor: 'due',
+            sort: true,
+            Cell: ({ row }) =>
+                row.original.due,
             classes: 'table-user',
         },
 
