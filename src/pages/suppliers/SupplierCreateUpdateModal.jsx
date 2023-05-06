@@ -8,17 +8,17 @@ import classNames from 'classnames';
 import Select from 'react-select';
 
 //internal lib import
-import { FormInput, VerticalForm } from '../../../components';
-import removeEmptyObj from '../../../helpers/removeEmptyObj';
+import { FormInput, VerticalForm } from '../../components';
+import removeEmptyObj from '../../helpers/removeEmptyObj';
 
 //api services
 
 import {
     useManufacturerCreateMutation,
     useManufacturerUpdateMutation,
-} from '../../../redux/services/manufacturerService';
+} from '../../redux/services/manufacturerService';
 
-const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, editData, defaultValues }) => {
+const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
 
     const [manufacturerCreate, { isLoading, isSuccess }] = useManufacturerCreateMutation();
@@ -29,14 +29,30 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter manufacturer name')).min(2, t('minimum containing 2 letter')),
+            name: yup.string().required(t('please enter manufacturer name')).min(3, t('minimum containing 3 letter')),
+            isEcom: yup.boolean().required(),
         })
     );
+
+    //slugify
+
+    const slugify = (str) =>
+        str
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_-]+/g, '_')
+            .replace(/^-+|-+$/g, '');
+
+    /*
+     * handle form submission
+     */
 
     const onSubmit = (formData) => {
         const data = {};
         data.name = formData.name;
         data.status = formData.status;
+
         if (!editData) {
             manufacturerCreate(removeEmptyObj(data));
         } else {
@@ -50,7 +66,7 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
             setModal(false);
         }
     }, [isSuccess, updateSuccess]);
-    console.log(editData)
+
     return (
         <Card className={classNames('', { 'd-none': !modal })}>
             <Card.Body>
@@ -71,16 +87,15 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
                                 containerClass={'mb-3'}
                                 col={'col-12'}
                             />
-                            {<FormInput
+                            <FormInput
                                 name="status"
                                 type="select"
-                                label={t('status')}
-                                defaultValue="ACTIVE"
+                                label="status"
                                 col={'col-12'}
                                 containerClass={'mb-3'}>
                                 <option value="ACTIVE">Active</option>
                                 <option value="INACTIVE">Inactive</option>
-                            </FormInput>}
+                            </FormInput>
 
                             <div className="mb-3 text-end">
                                 <Button variant="primary" type="submit">

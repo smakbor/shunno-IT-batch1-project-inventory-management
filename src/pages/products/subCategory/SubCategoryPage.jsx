@@ -7,7 +7,7 @@ import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 
 //internal lib import
-import PageTitle from '../../../components/PageTitle';
+import PageTitle from '../../../components/PageTitle'
 import Table from '../../../components/Table';
 import exportFromJson from '../../../utils/exportFromJson';
 import LoadingData from '../../../components/common/LoadingData';

@@ -16,16 +16,17 @@ export const subCategoryService = apiService.injectEndpoints({
                 method: 'POST',
                 body: postBody,
             }),
-            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+            async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
+                const response = dispatch(
+                    apiService.util.updateQueryData('getSubCategories', undefined, (draft) => {
+                        draft.data.push(postBody);
+                    })
+                );
                 try {
-                    const { data } = await queryFulfilled;
-                    dispatch(
-                        apiService.util.updateQueryData('getSubCategories', undefined, (draft) => {
-                            draft.data.push(data.data);
-                        })
-                    );
-                } catch (e) {
-                    console.log(e);
+                    await queryFulfilled;
+
+                } catch {
+                    response.undo();
                 }
             },
         }),
@@ -37,18 +38,17 @@ export const subCategoryService = apiService.injectEndpoints({
                 body: postBody,
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
-                console.log(postBody);
+                const response = dispatch(
+                    apiService.util.updateQueryData('getSubCategories', undefined, (draft) => {
+                        const findIndex = draft.data.findIndex((item) => item._id === id);
+                        draft.data[findIndex] = postBody;
+                    })
+                );
                 try {
-                    const { data } = await queryFulfilled;
+                    await queryFulfilled;
 
-                    dispatch(
-                        apiService.util.updateQueryData('getSubCategories', undefined, (draft) => {
-                            const findIndex = draft.data.findIndex((item) => item._id === id);
-                            draft.data[findIndex] = postBody;
-                        })
-                    );
-                } catch (e) {
-                    console.log(e);
+                } catch {
+                    response.undo();
                 }
             },
         }),

@@ -7,31 +7,32 @@ import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 
 //internal lib import
-import PageTitle from '../../../components/PageTitle';
-import Table from '../../../components/Table';
-import exportFromJson from '../../../utils/exportFromJson';
-import LoadingData from '../../../components/common/LoadingData';
-import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
-import DateFormatter from '../../../utils/DateFormatter';
+import PageTitle from '../../components/PageTitle';
+import Table from '../../components/Table';
+import exportFromJson from '../../utils/exportFromJson';
+import LoadingData from '../../components/common/LoadingData';
+import ErrorDataLoad from '../../components/common/ErrorDataLoad';
+import AleartMessage from '../../utils/AleartMessage';
 
 //api services
 
-import AleartMessage from '../../../utils/AleartMessage';
 
-import { useGetManufacturersQuery, useManufacturerDeleteMutation } from '../../../redux/services/manufacturerService';
-import ManufacturerCreateUpdateModal from './ManufacturerCreateUpdateModal';
+
+import { useGetSuppliersQuery, useSupplierDeleteMutation } from '../../redux/services/suppliersService';
+import SupplierCreateUpdateModal from './SupplierCreateUpdateModal';
 
 // main component
-const Manufacturer = () => {
+const Suppliers = () => {
     const { t } = useTranslation();
     const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
 
-    const [manufacturerDelete] = useManufacturerDeleteMutation();
+    const [supplierDelete] = useSupplierDeleteMutation();
 
-    const { data, isLoading, isError } = useGetManufacturersQuery();
+    const { data, isLoading, isError } = useGetSuppliersQuery();
+
 
     /**
      * Show/hide the modal
@@ -46,11 +47,9 @@ const Manufacturer = () => {
     const toggle = (e) => {
         setModal(!modal);
     };
-    console.log(editData)
 
     /* action column render */
     const ActionColumn = ({ row }) => {
-        // console.log(row)
         const edit = () => {
             toggle();
             setEditData(row?.original);
@@ -65,7 +64,7 @@ const Manufacturer = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, manufacturerDelete)}>
+                    onClick={() => AleartMessage.Delete(row?.original._id, supplierDelete)}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
@@ -93,7 +92,7 @@ const Manufacturer = () => {
             accessor: 'status',
             sort: true,
             Cell: ({ row }) =>
-                row.original.status === 'ACTIVE' ? (
+                row.original.status ? (
                     <div className="badge bg-success">{t('active')}</div>
                 ) : (
                     <div className="badge bg-danger">{t('inactive')}</div>
@@ -130,8 +129,8 @@ const Manufacturer = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('suppliers'), path: '/user-role', active: true }]}
+                    title={t('suppliers')}
                 />
                 <LoadingData />
             </>
@@ -140,8 +139,8 @@ const Manufacturer = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('suppliers'), path: '/user-role', active: true }]}
+                    title={t('suppliers')}
                 />
                 <ErrorDataLoad />
             </>
@@ -161,7 +160,7 @@ const Manufacturer = () => {
                                 <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add manufacturer')}
+                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add supplier')}
                                         </Button>
                                     </Col>
 
@@ -211,10 +210,10 @@ const Manufacturer = () => {
                     </Col>
                 </Row>
                 {/* <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} /> */}
-                <ManufacturerCreateUpdateModal {...{ modal, setModal, toggle, editData, setEditData, defaultValues }} />
+                <SupplierCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }
 };
 
-export default Manufacturer;
+export default Suppliers;
