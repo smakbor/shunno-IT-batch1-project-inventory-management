@@ -58,7 +58,7 @@ const MENU_ITEMS = () => {
                 {
                     key: 'warranty',
                     label: t('warranty'),
-                    url: '/warranty',
+                    url: '/products/warranties',
                     parentKey: 'Products',
                 },
                 {
