@@ -36,18 +36,32 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, editData, defa
 
     //slugify
 
-    const slugify = (str) =>
-        str
-            .toLowerCase()
-            .trim()
-            .replace(/[^\w\s-]/g, '')
-            .replace(/[\s_-]+/g, '_')
-            .replace(/^-+|-+$/g, '');
 
     /*
      * handle form submission
      */
+    // {
+    //     "name": "Nahid",
+    //     "mobile": "01717487771",
+    //     "email": "arifulislamnahid98@gmail.com",
+    //     "fatherName":"Mr X",
+    //     "company":"Nahid Trading",
+    //     "address": "Kusthia",
+    //     "remarks":"Relative Supplier",
+    //     "thana":"Kusthia Sadar",
+    //     "district":"Kushtia",
+    //     "nid": "65165416352",
+    //     "reference": {
+    //         "name": "comok",
+    //         "mobile": "01725785177",
+    //         "address": "Bic",
+    //         "nid":"564319653165",
+    //         "relation":"Brother"
 
+    //     },
+    //     "due": 80,
+    //     "storeID":"602e42e46ebade5b1c7cf45f"
+    // }
     const onSubmit = (formData) => {
         const data = {};
         data.name = formData.name;
