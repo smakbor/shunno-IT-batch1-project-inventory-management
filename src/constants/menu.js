@@ -83,6 +83,26 @@ const MENU_ITEMS = () => {
             icon: 'uil-users-alt',
             url: '/customers',
         },
+        {
+            key: 'Expenditure',
+            label: t('expenditure'),
+            isTitle: false,
+            icon: 'dripicons-weight',
+            children: [
+                {
+                    key: 'costSection',
+                    label: t('cost section'),
+                    url: '/costSections',
+                    parentKey: 'Expenditure',
+                },
+                {
+                    key: 'expenditure',
+                    label: t('expenditure'),
+                    url: '/expenditure',
+                    parentKey: 'Expenditure',
+                },
+            ],
+        },
     ];
 };
 
