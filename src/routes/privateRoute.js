@@ -5,7 +5,7 @@ import { lazy } from 'react';
 import LazyLoad from '../components/common/LazyLoad.jsx';
 // import CostSection from '../pages/expenditure/costSection/CostSection.jsx';
 
-const Warranty = lazy(() => import('../pages/products/Warranty/Warranty.jsx'));
+const Warranty = lazy(() => import('../pages/products/warranty/Warranty.jsx'));
 const Suppliers = lazy(() => import('../pages/suppliers/Suppliers.jsx'));
 const Customers = lazy(() => import('../pages/customers/Customers.jsx'));
 const UnitPage = lazy(() => import('../pages/products/unit/UnitPage.jsx'));

@@ -18,7 +18,7 @@ import {
     useSupplierUpdateMutation,
 } from '../../redux/services/suppliersService';
 
-const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
+const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
 
     const { t } = useTranslation();
     const [supplierCreate, { isLoading, isSuccess }] = useSupplierCreateMutation();
@@ -35,28 +35,29 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, editData, defa
     );
 
     const onSubmit = (formData) => {
-        let updatedData = {}
-        updatedData.name = formData?.name;
-        updatedData.mobile = formData?.mobile;
-        updatedData.email = formData?.email;
-        updatedData.fatherName = formData?.fatherName;
-        updatedData.company = formData?.company;
-        updatedData.address = formData?.address;
-        updatedData.remarks = formData?.remarks;
-        updatedData.thana = formData?.thana;
-        updatedData.district = formData?.district;
-        updatedData.nid = formData?.nid;
-        updatedData.reference = {}
-        updatedData.reference.name = formData?.referenceName;
-        updatedData.reference.mobile = formData?.referenceMobile;
-        updatedData.reference.address = formData?.referenceAddress;
-        updatedData.reference.nid = formData?.referenceNid;
-        updatedData.reference.relation = formData?.referenceRelation;
-        updatedData.due = formData?.due;
-        updatedData.storeID = "602e42e46ebade5b1c7cf45f"
+        let data = {}
+        data.name = formData?.name;
+        data.mobile = formData?.mobile;
+        data.email = formData?.email;
+        data.fatherName = formData?.fatherName;
+        data.company = formData?.company;
+        data.address = formData?.address;
+        data.remarks = formData?.remarks;
+        data.thana = formData?.thana;
+        data.district = formData?.district;
+        data.nid = formData?.nid;
+        data.reference = {}
+        data.reference.name = formData?.referenceName;
+        data.reference.mobile = formData?.referenceMobile;
+        data.reference.address = formData?.referenceAddress;
+        data.reference.nid = formData?.referenceNid;
+        data.reference.relation = formData?.referenceRelation;
+        data.due = formData?.due;
+        data.storeID = "602e42e46ebade5b1c7cf45f"
         if (!editData) {
-            supplierCreate(removeEmptyObj(updatedData));
+            supplierCreate(removeEmptyObj(data));
         } else {
+            const updatedData = { ...editData, ...data }
             const postBody = removeEmptyObj(updatedData);
             supplierUpdate({ id: editData._id, postBody });
         }
@@ -223,4 +224,4 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, editData, defa
     );
 };
 
-export default ManufacturerCreateUpdateModal;
+export default SupplierCreateUpdateModal;
