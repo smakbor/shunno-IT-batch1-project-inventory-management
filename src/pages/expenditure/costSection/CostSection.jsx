@@ -16,21 +16,18 @@ import AleartMessage from '../../../utils/AleartMessage';
 import ModalCreateUpdate from './ModalCreateUpdate';
 
 //api services
-import {
-    useGetWarrantiesQuery,
-    useWarrantyDeleteMutation,
-} from '../../../redux/services/warrantyService';
+
+import { useGetAllCostSectionQuery, useCostSectionDeleteMutation } from '../../../redux/services/costSectionService';
 
 // main component
-const WarrantyPage = () => {
+const CostSection = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({});
+    const [defaultValues, setDefaultValues] = useState({ name: '' });
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-    const [warrantyDelete] = useWarrantyDeleteMutation();
-    const { data, isLoading, isError } = useGetWarrantiesQuery();
-    console.log(data)
+    const [costSectionDelete] = useCostSectionDeleteMutation();
+    const { data, isLoading, isError } = useGetAllCostSectionQuery();
 
     /**
      * Show/hide the modal
@@ -38,7 +35,7 @@ const WarrantyPage = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: true });
+        setDefaultValues({ name: '' });
         setModal(!modal);
     };
 
@@ -62,7 +59,7 @@ const WarrantyPage = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, warrantyDelete)}>
+                    onClick={() => AleartMessage.Delete(row?.original._id, costSectionDelete)}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
@@ -79,22 +76,10 @@ const WarrantyPage = () => {
             classes: 'table-user',
         },
         {
-            Header: t('warranty name'),
+            Header: t('cost section name'),
             accessor: 'name',
             sort: true,
             Cell: ({ row }) => row.original.name,
-            classes: 'table-user',
-        },
-        {
-            Header: t('status'),
-            accessor: 'status',
-            sort: true,
-            Cell: ({ row }) =>
-                row.original.status === 'ACTIVE' ? (
-                    <div className="badge bg-success">{t('active')}</div>
-                ) : (
-                    <div className="badge bg-danger">{t('inactive')}</div>
-                ),
             classes: 'table-user',
         },
         {
@@ -126,7 +111,7 @@ const WarrantyPage = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('warranty'), path: '/products/warranty', active: true }]}
+                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
                     title={t('user role')}
                 />
                 <LoadingData />
@@ -136,7 +121,7 @@ const WarrantyPage = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('warranty'), path: '/products/warranty', active: true }]}
+                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
                     title={t('user role')}
                 />
                 <ErrorDataLoad />
@@ -157,7 +142,7 @@ const WarrantyPage = () => {
                                 <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add warranty')}
+                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add cost section')}
                                         </Button>
                                     </Col>
 
@@ -212,4 +197,4 @@ const WarrantyPage = () => {
     }
 };
 
-export default WarrantyPage;
+export default CostSection;
