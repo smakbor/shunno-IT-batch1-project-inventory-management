@@ -103,6 +103,13 @@ const MENU_ITEMS = () => {
                 },
             ],
         },
+        {
+            key: 'NewMessage',
+            label: t('new message'),
+            isTitle: false,
+            icon: 'uil-users-alt',
+            url: '/messages/new-message',
+        },
     ];
 };
 

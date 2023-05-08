@@ -3,8 +3,7 @@ import { lazy } from 'react';
 
 //internal lib import
 import LazyLoad from '../components/common/LazyLoad.jsx';
-// import CostSection from '../pages/expenditure/costSection/CostSection.jsx';
-
+const NewMessage = lazy(() => import('../pages/message/NewMessage.jsx'));
 const Warranty = lazy(() => import('../pages/products/warranty/Warranty.jsx'));
 const Suppliers = lazy(() => import('../pages/suppliers/Suppliers.jsx'));
 const Customers = lazy(() => import('../pages/customers/Customers.jsx'));
@@ -84,6 +83,12 @@ const privateRoutes = [
     {
         path: '/costSections',
         element: <LazyLoad component={CostSection} />,
+        roles: ['ALL'],
+        routePermission: 'PERMISSIONS',
+    },
+    {
+        path: '/messages/new-message',
+        element: <LazyLoad component={NewMessage} />,
         roles: ['ALL'],
         routePermission: 'PERMISSIONS',
     },
