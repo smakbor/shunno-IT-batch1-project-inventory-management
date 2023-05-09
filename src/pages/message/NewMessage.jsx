@@ -16,7 +16,7 @@ const NewMessage = () => {
             <div className='d-flex align-items-center justify-content-between'>
                 <h3 className='text-start'>{t('new message')}</h3>
                 <div>
-                    <button>fullscreen</button>
+                    {/* <button>fullscreen</button> */}
                 </div>
             </div>
 
@@ -26,7 +26,7 @@ const NewMessage = () => {
                     label={t('receiver name')}
                     type="select"
                     name="receiver"
-                    containerClass={'mb-3 d-flex justify-content-between'}
+                    containerClass={'mb-2 d-flex justify-content-between'}
                     className='w-75'
                     labelClassName='fs-4'
                 >
@@ -40,7 +40,7 @@ const NewMessage = () => {
                     type="text"
                     name="subject"
                     placeholder={t("please write subject")}
-                    containerClass={'mb-3 d-flex justify-content-between'}
+                    containerClass={'mb-2 d-flex justify-content-between'}
                     className='w-75'
                     labelClassName='fs-4'
                 />

@@ -3,6 +3,8 @@ import { lazy } from 'react';
 
 //internal lib import
 import LazyLoad from '../components/common/LazyLoad.jsx';
+const Trash = lazy(() => import('../pages/message/Trash.jsx'));
+const Inbox = lazy(() => import('../pages/message/Inbox.jsx'));
 const NewMessage = lazy(() => import('../pages/message/NewMessage.jsx'));
 const Warranty = lazy(() => import('../pages/products/warranty/Warranty.jsx'));
 const Suppliers = lazy(() => import('../pages/suppliers/Suppliers.jsx'));
@@ -13,6 +15,7 @@ const PermissionsPage = lazy(() => import('../pages/Permissions/PermissionsPage'
 const CategoryPage = lazy(() => import('../pages/products/category/CategoryPage'));
 const Manufacturer = lazy(() => import('../pages/products/manufacturer/Manufacturer'));
 const CostSection = lazy(() => import('../pages/expenditure/costSection/CostSection.jsx'));
+const Sent = lazy(() => import('../pages/message/Sent.jsx'))
 const privateRoutes = [
     {
         path: '/dashboard',
@@ -86,12 +89,31 @@ const privateRoutes = [
         roles: ['ALL'],
         routePermission: 'PERMISSIONS',
     },
+    // {
+    //     path: '/messages/new-message',
+    //     element: <LazyLoad component={NewMessage} />,
+    //     roles: ['ALL'],
+    //     routePermission: 'PERMISSIONS',
+    // },
     {
-        path: '/messages/new-message',
-        element: <LazyLoad component={NewMessage} />,
+        path: '/messages/inbox',
+        element: <LazyLoad component={Inbox} />,
         roles: ['ALL'],
         routePermission: 'PERMISSIONS',
     },
+    {
+        path: '/messages/sent',
+        element: <LazyLoad component={Sent} />,
+        roles: ['ALL'],
+        routePermission: 'PERMISSIONS',
+    },
+    {
+        path: '/messages/trash',
+        element: <LazyLoad component={Trash} />,
+        roles: ['ALL'],
+        routePermission: 'PERMISSIONS',
+    },
+
 ];
 
 export default privateRoutes;

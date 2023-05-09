@@ -29,7 +29,7 @@ class RichEditor extends React.Component {
             askBeforePasteHTML: true,
             askBeforePasteFromWord: true,
             defaultActionOnPaste: 'insert_clear_html',
-            height: 400,
+            height: 250,
             colors: {
                 greyscale: [
                     '#000000',

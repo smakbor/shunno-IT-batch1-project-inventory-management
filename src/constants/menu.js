@@ -104,11 +104,24 @@ const MENU_ITEMS = () => {
             ],
         },
         {
-            key: 'NewMessage',
-            label: t('new message'),
+            key: 'Messages',
+            label: t('message'),
             isTitle: false,
-            icon: 'uil-users-alt',
-            url: '/messages/new-message',
+            icon: 'uil-comment-alt-dots', children: [
+                // {
+                //     key: 'newMessage',
+                //     label: t('new message'),
+                //     url: '/messages/new-message',
+                //     parentKey: 'Messages',
+                // },
+                {
+                    key: 'inbox',
+                    label: t('inbox'),
+                    url: '/messages/inbox',
+                    parentKey: 'Messages',
+                },
+            ],
+
         },
     ];
 };
