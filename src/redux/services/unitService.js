@@ -1,4 +1,4 @@
-//internal lib import
+//Internal Lib Import
 
 import { apiService } from '../api/apiService';
 
@@ -70,9 +70,4 @@ export const unitService = apiService.injectEndpoints({
         }),
     }),
 });
-export const {
-    useGetUnitsQuery,
-    useUnitDeleteMutation,
-    useUnitCreateMutation,
-    useUnitUpdateMutation,
-} = unitService;
+export const { useGetUnitsQuery, useUnitDeleteMutation, useUnitCreateMutation, useUnitUpdateMutation } = unitService;

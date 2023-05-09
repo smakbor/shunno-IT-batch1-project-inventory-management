@@ -1,4 +1,4 @@
-//external lib import
+//External Lib Import
 import React, { useEffect } from 'react';
 import { Card, Button, Modal, Spinner } from 'react-bootstrap';
 import * as yup from 'yup';
@@ -6,15 +6,17 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
-//internal lib import
+//Internal Lib Import
 import { FormInput, VerticalForm } from '../../components';
 import removeEmptyObj from '../../helpers/removeEmptyObj';
 
 //api services
 import { useRoleCreateMutation, useRoleUpdateMutation } from '../../redux/services/roleService';
+import { useProfileDetailsQuery } from '../../redux/services/profileService';
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
+    const { data: profile } = useProfileDetailsQuery() || {};
     const [roleCreate, { isLoading, isSuccess }] = useRoleCreateMutation();
     const [roleUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useRoleUpdateMutation();
 
@@ -24,7 +26,7 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
     const schemaResolver = yupResolver(
         yup.object().shape({
             name: yup.string().required(t('please enter role name')).min(3, t('minimum containing 3 letter')),
-            status: yup.boolean().required(),
+            visibility: yup.boolean().required(),
         })
     );
 
@@ -33,10 +35,13 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
      */
     const onSubmit = (formData) => {
         if (!editData) {
-            roleCreate(removeEmptyObj(formData));
+            const postBody = removeEmptyObj(formData);
+            postBody['storeID'] = profile.storeID;
+            roleCreate(postBody);
         } else {
             const postBody = removeEmptyObj(formData);
-            roleUpdate({ id: editData.id, postBody });
+            postBody['storeID'] = profile.storeID;
+            roleUpdate({ id: editData._id, postBody });
         }
     };
 
@@ -68,13 +73,13 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
                             <FormInput
                                 label={t('role status')}
                                 type="checkbox"
-                                name="status"
+                                name="visibility"
                                 containerClass={'mb-3 text-muted'}
                                 placeholder={t('please enter role status')}
                             />
                             <div className="mb-3 text-end">
                                 <Button variant="primary" type="submit">
-                                    {editData ? t('update role') : t('update role')}
+                                    {editData ? t('update role') : t('create role')}
                                     &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
                                 </Button>
                             </div>

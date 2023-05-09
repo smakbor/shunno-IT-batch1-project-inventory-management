@@ -1,5 +1,8 @@
-//external lib import
+//External Lib Import
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
+//Internal Lib Import
+import { userLogout } from '../features/authReducer';
 
 //constant env variable
 const SERVER_URL = process.env.REACT_APP_API_SERVER_URL;
@@ -9,7 +12,7 @@ const baseFetchBaseQuery = fetchBaseQuery({
     prepareHeaders: (headers, { getState }) => {
         const {
             setting: { language },
-            auth: { accessToken, refreshToken },
+            auth: { accessToken },
         } = getState();
         headers.set('authorization', accessToken ? `Bearer ${accessToken}` : '');
         headers.set('accept-language', language);
@@ -28,7 +31,7 @@ export const apiService = createApi({
             // api.dispatch(setLoading(false));
 
             if (error.status === 401) {
-                // api.dispatch(setLogout());
+                api.dispatch(userLogout());
                 // ToastMessage.errorMessage(error.data?.message);
             } else if (error.status === 404 || error.status === 400) {
                 //ToastMessage.errorMessage(error.data?.message);

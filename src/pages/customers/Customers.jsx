@@ -1,4 +1,4 @@
-//external lib import
+//External Lib Import
 import React, { useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +6,7 @@ import { GrDocumentCsv } from 'react-icons/gr';
 import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 
-//internal lib import
+//Internal Lib Import
 import PageTitle from '../../components/PageTitle';
 import Table from '../../components/Table';
 import exportFromJson from '../../utils/exportFromJson';

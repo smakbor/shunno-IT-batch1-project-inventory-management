@@ -1,4 +1,4 @@
-//internal lib import
+//Internal Lib Import
 
 import { apiService } from '../api/apiService';
 
@@ -24,7 +24,6 @@ export const manufacturerService = apiService.injectEndpoints({
                 );
                 try {
                     await queryFulfilled;
-
                 } catch {
                     response.undo();
                 }
@@ -46,9 +45,8 @@ export const manufacturerService = apiService.injectEndpoints({
                 );
                 try {
                     await queryFulfilled;
-
                 } catch {
-                    response.undo()
+                    response.undo();
                 }
             },
         }),

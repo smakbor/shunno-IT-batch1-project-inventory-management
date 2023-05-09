@@ -1,4 +1,4 @@
-//internal lib import
+//Internal Lib Import
 
 import { apiService } from '../api/apiService';
 

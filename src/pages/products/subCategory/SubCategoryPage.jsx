@@ -1,4 +1,4 @@
-//external lib import
+//External Lib Import
 import React, { useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -6,8 +6,8 @@ import { GrDocumentCsv } from 'react-icons/gr';
 import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 
-//internal lib import
-import PageTitle from '../../../components/PageTitle'
+//Internal Lib Import
+import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
 import exportFromJson from '../../../utils/exportFromJson';
 import LoadingData from '../../../components/common/LoadingData';
@@ -28,7 +28,7 @@ const CategoryPage = () => {
     const [editData, setEditData] = useState(false);
     const [categoryDelete] = useCategoryDeleteMutation();
     const { data, isLoading, isError } = useGetCategoriesQuery();
-    console.log(data);
+
 
     /**
      * Show/hide the modal

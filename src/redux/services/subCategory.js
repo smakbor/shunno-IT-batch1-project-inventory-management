@@ -1,4 +1,4 @@
-//internal lib import
+//Internal Lib Import
 import { object } from 'joi';
 import { apiService } from '../api/apiService';
 
@@ -24,7 +24,6 @@ export const subCategoryService = apiService.injectEndpoints({
                 );
                 try {
                     await queryFulfilled;
-
                 } catch {
                     response.undo();
                 }
@@ -46,7 +45,6 @@ export const subCategoryService = apiService.injectEndpoints({
                 );
                 try {
                     await queryFulfilled;
-
                 } catch {
                     response.undo();
                 }

@@ -1,4 +1,4 @@
-//external lib import
+//External Lib Import
 import exportFromJSON from 'export-from-json';
 
 const exportFromJson = (data, fileName, type) => {

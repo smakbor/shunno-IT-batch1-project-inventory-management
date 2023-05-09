@@ -1,8 +1,8 @@
-//external lib import
+//External Lib Import
 import { useRoutes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-//internal lib import
+//Internal Lib Import
 import PrivateRoute from './middleware/ProtectRoute';
 import publicRoute from './publicRoute';
 import Root from './Root';

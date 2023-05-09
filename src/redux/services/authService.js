@@ -1,5 +1,6 @@
-//internal lib import
+//Internal Lib Import
 import { apiService } from '../api/apiService';
+import { userLogin, userLogout } from '../features/authReducer';
 
 export const authService = apiService.injectEndpoints({
     endpoints: (builder) => ({
@@ -16,12 +17,22 @@ export const authService = apiService.injectEndpoints({
                 method: 'POST',
                 body: postBody,
             }),
+            async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
+                try {
+                    const { data } = await queryFulfilled;
+                    const {
+                        data: { accessToken },
+                    } = data || {};
+                    dispatch(userLogin(accessToken));
+                } catch (error) {
+                    dispatch(userLogout());
+                }
+            },
         }),
         logout: builder.mutation({
-            query: (postBody) => ({
+            query: () => ({
                 url: 'auth/logout',
-                method: 'POST',
-                body: postBody,
+                method: 'GET',
             }),
         }),
         fotgetPassword: builder.mutation({

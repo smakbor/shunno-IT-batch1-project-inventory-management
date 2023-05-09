@@ -1,8 +1,8 @@
-//external lib import
+//External Lib Import
 import { isRejectedWithValue } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import ToastMessage from '../../helpers/ToastMessage';
-import { setLogout } from '../features/authReducer';
+import { userLogout } from '../features/authReducer';
 import { setLoading } from '../features/settingReducer';
 
 const baseQuery = fetchBaseQuery({ baseUrl: 'http://localhost:8080/api/v1' });
@@ -32,7 +32,7 @@ export const rtkQueryErrorLogger = (api) => (next) => (action) => {
         api.dispatch(setLoading(false));
         if (action.payload.status === 401) {
             ToastMessage.errorMessage(action?.payload?.data?.message);
-            api.dispatch(setLogout());
+            api.dispatch(userLogout());
         } else if (action.payload.status === 404) {
             ToastMessage.errorMessage(action?.payload?.data?.message);
         } else if (action.payload.status === 400) {

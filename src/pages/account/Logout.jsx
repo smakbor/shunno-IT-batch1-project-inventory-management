@@ -29,17 +29,14 @@ const BottomLink = () => {
     );
 };
 
-const Logout = (): React$Element<any> | React$Element<React$FragmentType> => {
+const Logout = () => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
-
     return (
         <>
-            <AccountLayout bottomLinks={<BottomLink />}>
+            <AccountLayout bottomLinks={<BottomLink />} className="col-md-8 col-lg-6 col-xl-5 col-xxl-4 col-md-8">
                 <div className="text-center w-75 m-auto">
                     <h4 className="text-dark-50 text-center mt-0 fw-bold">{t('See You Again !')}</h4>
                     <p className="text-muted mb-4">{t('You are now successfully sign out.')}</p>
-
                     <div className="logout-icon m-auto">
                         <img src={logoutIcon} alt="" />
                     </div>

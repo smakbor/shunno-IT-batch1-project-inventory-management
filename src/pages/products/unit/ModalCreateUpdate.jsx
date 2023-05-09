@@ -1,4 +1,4 @@
-//external lib import
+//External Lib Import
 import React, { useEffect } from 'react';
 import { Card, Button, Modal, Spinner } from 'react-bootstrap';
 import * as yup from 'yup';
@@ -7,12 +7,12 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import Select from 'react-select';
 
-//internal lib import
+//Internal Lib Import
 import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 //api services
-import { useUnitCreateMutation, useUnitUpdateMutation } from '../../../redux/services/unitService'
+import { useUnitCreateMutation, useUnitUpdateMutation } from '../../../redux/services/unitService';
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
@@ -25,18 +25,17 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
     const schemaResolver = yupResolver(
         yup.object().shape({
             name: yup.string().required(t('please enter unit name')).min(2, t('minimum containing 2 letters')),
-            status: yup.string().required(t('please select status'))
+            status: yup.string().required(t('please select status')),
         })
     );
-
 
     /*
      * handle form submission
      */
     const onSubmit = (formData) => {
-        const data = {}
-        data.name = formData.name
-        data.status = formData.status
+        const data = {};
+        data.name = formData.name;
+        data.status = formData.status;
 
         if (!editData) {
             unitCreate(removeEmptyObj(data));
@@ -71,15 +70,12 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
                                 col={'col-12'}
                             />
                             <FormInput
-                                name='status'
-                                type='select'
+                                name="status"
+                                type="select"
                                 label={t('status')}
-                                defaultValue='ACTIVE'
+                                defaultValue="ACTIVE"
                                 col={'col-12'}
-                                containerClass={'mb-3'}
-
-                            >
-
+                                containerClass={'mb-3'}>
                                 <option value="ACTIVE">Active</option>
                                 <option value="INACTIVE">Inactive</option>
                             </FormInput>

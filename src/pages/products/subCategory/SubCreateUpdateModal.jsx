@@ -1,4 +1,4 @@
-//external lib import
+//External Lib Import
 import React, { useEffect } from 'react';
 import { Card, Button, Modal, Spinner } from 'react-bootstrap';
 import * as yup from 'yup';
@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
-//internal lib import
+//Internal Lib Import
 import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
