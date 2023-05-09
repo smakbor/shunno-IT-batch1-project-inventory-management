@@ -7,30 +7,30 @@ import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 
 //internal lib import
-import PageTitle from '../../../components/PageTitle';
-import Table from '../../../components/Table';
-import exportFromJson from '../../../utils/exportFromJson';
-import LoadingData from '../../../components/common/LoadingData';
-import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
-import AleartMessage from '../../../utils/AleartMessage';
-import ModalCreateUpdate from './ModalCreateUpdate';
+import PageTitle from '../../components/PageTitle';
+import Table from '../../components/Table';
+import exportFromJson from '../../utils/exportFromJson';
+import LoadingData from '../../components/common/LoadingData';
+import ErrorDataLoad from '../../components/common/ErrorDataLoad';
+import AleartMessage from '../../utils/AleartMessage';
 
 //api services
 
-import { useGetAllCostSectionQuery, useCostSectionDeleteMutation } from '../../../redux/services/costSectionService';
-import { useGetStoresQuery } from '../../../redux/services/storeService';
+import DateFormatter from '../../utils/DateFormatter';
+import EmployeeCreateUpdateModal from './EmployeeCreateUpdateModal';
+import { useEmployeeDeleteMutation, useGetEmployeesQuery } from '../../redux/services/employeeService';
 
 // main component
-const CostSection = () => {
+const Employee = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '' });
+    const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-    const [costSectionDelete] = useCostSectionDeleteMutation();
-    const { data, isLoading, isError } = useGetAllCostSectionQuery();
-    const { data: store, isLoading: isLoaded, isError: isErr } = useGetStoresQuery();
-    console.log(store);
+
+    const [employeeDelete] = useEmployeeDeleteMutation();
+
+    const { data, isLoading, isError } = useGetEmployeesQuery();
 
     /**
      * Show/hide the modal
@@ -38,7 +38,7 @@ const CostSection = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '' });
+        setDefaultValues({ name: '', status: '' });
         setModal(!modal);
     };
 
@@ -50,8 +50,11 @@ const CostSection = () => {
     const ActionColumn = ({ row }) => {
         const edit = () => {
             toggle();
-            setEditData(row?.original);
-            setDefaultValues(row?.original);
+            let { reference, ...updateData } = { ...row.original };
+            updateData.refName = row.original.reference?.name || '';
+            updateData.refMobile = row.original.reference?.mobile || '';
+            setEditData(updateData);
+            setDefaultValues(updateData);
         };
 
         return (
@@ -62,7 +65,7 @@ const CostSection = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, costSectionDelete)}>
+                    onClick={() => AleartMessage.Delete(row?.original._id, employeeDelete)}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
@@ -71,20 +74,66 @@ const CostSection = () => {
 
     // get all columns
     const columns = [
+        // {
+        //     Header: '#',
+        //     accessor: 'sl',
+        //     sort: true,
+        //     Cell: ({ row }) => row.index + 1,
+        //     classes: 'table-user',
+        // },
+
         {
-            Header: '#',
-            accessor: 'sl',
-            sort: false,
-            Cell: ({ row }) => row.index + 1,
-            classes: 'table-user',
-        },
-        {
-            Header: t('cost section name'),
+            Header: t('name'),
             accessor: 'name',
             sort: true,
             Cell: ({ row }) => row.original.name,
             classes: 'table-user',
         },
+
+        {
+            Header: t('mobile'),
+            accessor: 'mobile',
+            sort: false,
+            Cell: ({ row }) => row.original.mobile,
+            classes: 'table-user',
+        },
+        {
+            Header: t('address'),
+            accessor: 'address',
+            sort: false,
+            Cell: ({ row }) => row.original.address,
+            classes: 'table-user',
+        },
+        {
+            Header: t('salary'),
+            accessor: 'salary',
+            sort: false,
+            Cell: ({ row }) => row.original.salary,
+            classes: 'table-user',
+        },
+
+        {
+            Header: t('due'),
+            accessor: 'due',
+            sort: false,
+            Cell: ({ row }) => row.original.due,
+            classes: 'table-user',
+        },
+        {
+            Header: t('due'),
+            accessor: 'due',
+            sort: false,
+            Cell: ({ row }) => row.original.due,
+            classes: 'table-user',
+        },
+        {
+            Header: t('due'),
+            accessor: 'due',
+            sort: false,
+            Cell: ({ row }) => row.original.due,
+            classes: 'table-user',
+        },
+
         {
             Header: t('action'),
             accessor: 'action',
@@ -114,8 +163,8 @@ const CostSection = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('employees'), path: '/user-role', active: true }]}
+                    title={t('employees')}
                 />
                 <LoadingData />
             </>
@@ -124,8 +173,8 @@ const CostSection = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('employees'), path: '/user-role', active: true }]}
+                    title={t('employees')}
                 />
                 <ErrorDataLoad />
             </>
@@ -145,7 +194,7 @@ const CostSection = () => {
                                 <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add cost section')}
+                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add employee')}
                                         </Button>
                                     </Col>
 
@@ -194,10 +243,11 @@ const CostSection = () => {
                         </Card>
                     </Col>
                 </Row>
-                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
+
+                <EmployeeCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }
 };
 
-export default CostSection;
+export default Employee;

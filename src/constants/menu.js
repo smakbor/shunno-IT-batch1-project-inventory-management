@@ -84,6 +84,13 @@ const MENU_ITEMS = () => {
             url: '/customers',
         },
         {
+            key: 'Employees',
+            label: t('employee'),
+            isTitle: false,
+            icon: 'uil-users-alt',
+            url: '/employees',
+        },
+        {
             key: 'Expenditure',
             label: t('expenditure'),
             isTitle: false,
@@ -98,7 +105,7 @@ const MENU_ITEMS = () => {
                 {
                     key: 'expenditure',
                     label: t('expenditure'),
-                    url: '/expenditure',
+                    url: '/expenditures',
                     parentKey: 'Expenditure',
                 },
             ],

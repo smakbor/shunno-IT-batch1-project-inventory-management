@@ -15,6 +15,8 @@ import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 import AleartMessage from '../../../utils/AleartMessage';
 import ModalCreateUpdate from './ModalCreateUpdate';
 import { useExpenditureDeleteMutation, useGetExpendituresQuery } from '../../../redux/services/expenditureService';
+import DateFormatter from '../../../utils/DateFormatter';
+import { useGetAllCostSectionQuery } from '../../../redux/services/costSectionService';
 
 //api services
 
@@ -27,7 +29,7 @@ const Expenditure = () => {
     const [editData, setEditData] = useState(false);
     const [expenditureDelete] = useExpenditureDeleteMutation();
     const { data, isLoading, isError } = useGetExpendituresQuery();
-    console.log(data);
+    const { data: costSectionData, isLoading: isLoaded, isError: isErr } = useGetAllCostSectionQuery();
 
     /**
      * Show/hide the modal
@@ -35,7 +37,7 @@ const Expenditure = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: true });
+        setDefaultValues({ name: '' });
         setModal(!modal);
     };
 
@@ -76,17 +78,17 @@ const Expenditure = () => {
             classes: 'table-user',
         },
         {
-            Header: t('employee name'),
-            accessor: 'employeeName',
+            Header: t('staff name'),
+            accessor: 'staffName',
             sort: true,
-            Cell: ({ row }) => row.original.name,
+            Cell: ({ row }) => row.original.staffName,
             classes: 'table-user',
         },
         {
             Header: t('cost section'),
-            accessor: 'costSection',
+            accessor: 'purposeName',
             sort: true,
-            Cell: ({ row }) => row.original.name,
+            Cell: ({ row }) => row.original.purposeName,
             classes: 'table-user',
         },
         {
@@ -98,30 +100,19 @@ const Expenditure = () => {
         },
         {
             Header: t('note'),
-            accessor: 'note',
+            accessor: 'remarks',
             sort: true,
-            Cell: ({ row }) => row.original.note,
+            Cell: ({ row }) => row.original.remarks,
             classes: 'table-user',
         },
         {
             Header: t('date'),
-            accessor: 'date',
+            accessor: 'updatedAt',
             sort: true,
-            Cell: ({ row }) => row.original.date,
+            Cell: ({ row }) => DateFormatter(row.original.updatedAt),
             classes: 'table-user',
         },
-        {
-            Header: t('status'),
-            accessor: 'status',
-            sort: true,
-            Cell: ({ row }) =>
-                row.original.status === 'ACTIVE' ? (
-                    <div className="badge bg-success">{t('active')}</div>
-                ) : (
-                    <div className="badge bg-danger">{t('inactive')}</div>
-                ),
-            classes: 'table-user',
-        },
+
         {
             Header: t('action'),
             accessor: 'action',
@@ -151,8 +142,8 @@ const Expenditure = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('expenditure'), path: '/user-role', active: true }]}
+                    title={t('expenditure')}
                 />
                 <LoadingData />
             </>
@@ -161,8 +152,8 @@ const Expenditure = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('expenditure'), path: '/user-role', active: true }]}
+                    title={t('expenditure')}
                 />
                 <ErrorDataLoad />
             </>
@@ -231,7 +222,7 @@ const Expenditure = () => {
                         </Card>
                     </Col>
                 </Row>
-                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues, costSectionData }} />
             </>
         );
     }
