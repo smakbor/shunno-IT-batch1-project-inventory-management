@@ -40,7 +40,8 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
         if (!editData) {
             manufacturerCreate(removeEmptyObj(data));
         } else {
-            const postBody = removeEmptyObj(data);
+            const updatedData = { ...editData, ...data }
+            const postBody = removeEmptyObj(updatedData);
             manufacturerUpdate({ id: editData._id, postBody });
         }
     };

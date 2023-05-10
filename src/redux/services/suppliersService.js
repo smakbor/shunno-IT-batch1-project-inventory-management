@@ -38,7 +38,7 @@ export const suppliersService = apiService.injectEndpoints({
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('manufacturers', undefined, (draft) => {
+                    apiService.util.updateQueryData('getSuppliers', undefined, (draft) => {
                         const findIndex = draft.data.findIndex((item) => item._id === id);
                         draft.data[findIndex] = postBody;
                     })
@@ -57,13 +57,15 @@ export const suppliersService = apiService.injectEndpoints({
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('manufacturers', undefined, (draft) => {
+                    apiService.util.updateQueryData('getSuppliers', undefined, (draft) => {
                         draft.data = draft.data.filter((item) => item._id !== id);
                     })
                 );
                 try {
                     await queryFulfilled;
+
                 } catch {
+
                     response.undo();
                 }
             },

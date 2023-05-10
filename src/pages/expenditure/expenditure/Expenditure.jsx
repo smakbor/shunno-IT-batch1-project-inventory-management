@@ -1,4 +1,4 @@
-//External Lib Import
+//external lib import
 import React, { useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -6,30 +6,30 @@ import { GrDocumentCsv } from 'react-icons/gr';
 import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 
-//Internal Lib Import
-import PageTitle from '../../components/PageTitle';
-import Table from '../../components/Table';
-import exportFromJson from '../../utils/exportFromJson';
-import LoadingData from '../../components/common/LoadingData';
-import ErrorDataLoad from '../../components/common/ErrorDataLoad';
-import AleartMessage from '../../utils/AleartMessage';
+//internal lib import
+import PageTitle from '../../../components/PageTitle';
+import Table from '../../../components/Table';
+import exportFromJson from '../../../utils/exportFromJson';
+import LoadingData from '../../../components/common/LoadingData';
+import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
+import AleartMessage from '../../../utils/AleartMessage';
+import ModalCreateUpdate from './ModalCreateUpdate';
+import { useExpenditureDeleteMutation, useGetExpendituresQuery } from '../../../redux/services/expenditureService';
+import DateFormatter from '../../../utils/DateFormatter';
+import { useGetAllCostSectionQuery } from '../../../redux/services/costSectionService';
 
 //api services
 
-import { useGetSuppliersQuery, useSupplierDeleteMutation } from '../../redux/services/suppliersService';
-import SupplierCreateUpdateModal from './SupplierCreateUpdateModal';
-
 // main component
-const Suppliers = () => {
+const Expenditure = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
+    const [defaultValues, setDefaultValues] = useState({ name: '' });
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-
-    const [supplierDelete] = useSupplierDeleteMutation();
-
-    const { data, isLoading, isError } = useGetSuppliersQuery();
+    const [expenditureDelete] = useExpenditureDeleteMutation();
+    const { data, isLoading, isError } = useGetExpendituresQuery();
+    const { data: costSectionData, isLoading: isLoaded, isError: isErr } = useGetAllCostSectionQuery();
 
     /**
      * Show/hide the modal
@@ -37,7 +37,7 @@ const Suppliers = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({});
+        setDefaultValues({ name: '' });
         setModal(!modal);
     };
 
@@ -49,15 +49,8 @@ const Suppliers = () => {
     const ActionColumn = ({ row }) => {
         const edit = () => {
             toggle();
-            let dValues = { ...row?.original };
-
-            dValues.referenceName = row?.original.reference.name;
-            dValues.referenceMobile = row?.original.reference.mobile;
-            dValues.referenceNid = row?.original.reference.nid;
-            dValues.referenceRelation = row?.original.reference.relation;
-            dValues.referenceAddress = row?.original.reference.address;
-            setEditData(dValues);
-            setDefaultValues(dValues);
+            setEditData(row?.original);
+            setDefaultValues(row?.original);
         };
 
         return (
@@ -68,62 +61,55 @@ const Suppliers = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, supplierDelete)}>
+                    onClick={() => AleartMessage.Delete(row?.original._id, expenditureDelete)}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
         );
     };
+
     // get all columns
     const columns = [
         {
             Header: '#',
             accessor: 'sl',
-            sort: true,
+            sort: false,
             Cell: ({ row }) => row.index + 1,
             classes: 'table-user',
         },
         {
-            Header: t('company name'),
-            accessor: 'company',
+            Header: t('staff name'),
+            accessor: 'staffName',
             sort: true,
-            Cell: ({ row }) => row.original.company,
+            Cell: ({ row }) => row.original.staffName,
             classes: 'table-user',
         },
         {
-            Header: t('name'),
-            accessor: 'name',
+            Header: t('cost section'),
+            accessor: 'purposeName',
             sort: true,
-            Cell: ({ row }) => row.original.name,
+            Cell: ({ row }) => row.original.purposeName,
             classes: 'table-user',
         },
         {
-            Header: t('address'),
-            accessor: 'address',
+            Header: t('amount'),
+            accessor: 'amount',
             sort: true,
-            Cell: ({ row }) => {
-                const splitAddress = row.original.address.split(',');
-                return splitAddress.map((item, i) => (
-                    <p className="mb-0" key={i}>
-                        {item}
-                        {i !== splitAddress.length - 1 ? ',' : ''}
-                    </p>
-                ));
-            },
+            Cell: ({ row }) => row.original.amount,
             classes: 'table-user',
         },
         {
-            Header: t('mobile'),
-            accessor: 'mobile',
+            Header: t('note'),
+            accessor: 'remarks',
             sort: true,
-            Cell: ({ row }) => row.original.mobile,
+            Cell: ({ row }) => row.original.remarks,
             classes: 'table-user',
         },
         {
-            Header: t('due'),
-            accessor: 'due',
+            Header: t('date'),
+            accessor: 'updatedAt',
             sort: true,
-            Cell: ({ row }) => row.original.due,
+            Cell: ({ row }) => DateFormatter(row.original.updatedAt),
             classes: 'table-user',
         },
 
@@ -156,8 +142,8 @@ const Suppliers = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('suppliers'), path: '/user-role', active: true }]}
-                    title={t('suppliers')}
+                    breadCrumbItems={[{ label: t('expenditure'), path: '/user-role', active: true }]}
+                    title={t('expenditure')}
                 />
                 <LoadingData />
             </>
@@ -166,8 +152,8 @@ const Suppliers = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('suppliers'), path: '/user-role', active: true }]}
-                    title={t('suppliers')}
+                    breadCrumbItems={[{ label: t('expenditure'), path: '/user-role', active: true }]}
+                    title={t('expenditure')}
                 />
                 <ErrorDataLoad />
             </>
@@ -187,7 +173,7 @@ const Suppliers = () => {
                                 <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add supplier')}
+                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add expenditure')}
                                         </Button>
                                     </Col>
 
@@ -236,11 +222,10 @@ const Suppliers = () => {
                         </Card>
                     </Col>
                 </Row>
-                {/* <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} /> */}
-                <SupplierCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues, costSectionData }} />
             </>
         );
     }
 };
 
-export default Suppliers;
+export default Expenditure;

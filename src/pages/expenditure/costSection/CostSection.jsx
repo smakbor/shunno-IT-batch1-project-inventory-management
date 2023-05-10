@@ -1,4 +1,4 @@
-//External Lib Import
+//external lib import
 import React, { useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -6,30 +6,31 @@ import { GrDocumentCsv } from 'react-icons/gr';
 import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 
-//Internal Lib Import
-import PageTitle from '../../components/PageTitle';
-import Table from '../../components/Table';
-import exportFromJson from '../../utils/exportFromJson';
-import LoadingData from '../../components/common/LoadingData';
-import ErrorDataLoad from '../../components/common/ErrorDataLoad';
-import AleartMessage from '../../utils/AleartMessage';
+//internal lib import
+import PageTitle from '../../../components/PageTitle';
+import Table from '../../../components/Table';
+import exportFromJson from '../../../utils/exportFromJson';
+import LoadingData from '../../../components/common/LoadingData';
+import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
+import AleartMessage from '../../../utils/AleartMessage';
+import ModalCreateUpdate from './ModalCreateUpdate';
 
 //api services
 
-import { useGetSuppliersQuery, useSupplierDeleteMutation } from '../../redux/services/suppliersService';
-import SupplierCreateUpdateModal from './SupplierCreateUpdateModal';
+import { useGetAllCostSectionQuery, useCostSectionDeleteMutation } from '../../../redux/services/costSectionService';
+import { useGetStoresQuery } from '../../../redux/services/storeService';
 
 // main component
-const Suppliers = () => {
+const CostSection = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
+    const [defaultValues, setDefaultValues] = useState({ name: '' });
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-
-    const [supplierDelete] = useSupplierDeleteMutation();
-
-    const { data, isLoading, isError } = useGetSuppliersQuery();
+    const [costSectionDelete] = useCostSectionDeleteMutation();
+    const { data, isLoading, isError } = useGetAllCostSectionQuery();
+    const { data: store, isLoading: isLoaded, isError: isErr } = useGetStoresQuery();
+    console.log(store);
 
     /**
      * Show/hide the modal
@@ -37,7 +38,7 @@ const Suppliers = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({});
+        setDefaultValues({ name: '' });
         setModal(!modal);
     };
 
@@ -49,15 +50,8 @@ const Suppliers = () => {
     const ActionColumn = ({ row }) => {
         const edit = () => {
             toggle();
-            let dValues = { ...row?.original };
-
-            dValues.referenceName = row?.original.reference.name;
-            dValues.referenceMobile = row?.original.reference.mobile;
-            dValues.referenceNid = row?.original.reference.nid;
-            dValues.referenceRelation = row?.original.reference.relation;
-            dValues.referenceAddress = row?.original.reference.address;
-            setEditData(dValues);
-            setDefaultValues(dValues);
+            setEditData(row?.original);
+            setDefaultValues(row?.original);
         };
 
         return (
@@ -68,65 +62,29 @@ const Suppliers = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, supplierDelete)}>
+                    onClick={() => AleartMessage.Delete(row?.original._id, costSectionDelete)}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
         );
     };
+
     // get all columns
     const columns = [
         {
             Header: '#',
             accessor: 'sl',
-            sort: true,
+            sort: false,
             Cell: ({ row }) => row.index + 1,
             classes: 'table-user',
         },
         {
-            Header: t('company name'),
-            accessor: 'company',
-            sort: true,
-            Cell: ({ row }) => row.original.company,
-            classes: 'table-user',
-        },
-        {
-            Header: t('name'),
+            Header: t('cost section name'),
             accessor: 'name',
             sort: true,
             Cell: ({ row }) => row.original.name,
             classes: 'table-user',
         },
-        {
-            Header: t('address'),
-            accessor: 'address',
-            sort: true,
-            Cell: ({ row }) => {
-                const splitAddress = row.original.address.split(',');
-                return splitAddress.map((item, i) => (
-                    <p className="mb-0" key={i}>
-                        {item}
-                        {i !== splitAddress.length - 1 ? ',' : ''}
-                    </p>
-                ));
-            },
-            classes: 'table-user',
-        },
-        {
-            Header: t('mobile'),
-            accessor: 'mobile',
-            sort: true,
-            Cell: ({ row }) => row.original.mobile,
-            classes: 'table-user',
-        },
-        {
-            Header: t('due'),
-            accessor: 'due',
-            sort: true,
-            Cell: ({ row }) => row.original.due,
-            classes: 'table-user',
-        },
-
         {
             Header: t('action'),
             accessor: 'action',
@@ -156,8 +114,8 @@ const Suppliers = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('suppliers'), path: '/user-role', active: true }]}
-                    title={t('suppliers')}
+                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
+                    title={t('user role')}
                 />
                 <LoadingData />
             </>
@@ -166,8 +124,8 @@ const Suppliers = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('suppliers'), path: '/user-role', active: true }]}
-                    title={t('suppliers')}
+                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
+                    title={t('user role')}
                 />
                 <ErrorDataLoad />
             </>
@@ -187,7 +145,7 @@ const Suppliers = () => {
                                 <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add supplier')}
+                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add cost section')}
                                         </Button>
                                     </Col>
 
@@ -236,11 +194,10 @@ const Suppliers = () => {
                         </Card>
                     </Col>
                 </Row>
-                {/* <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} /> */}
-                <SupplierCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }
 };
 
-export default Suppliers;
+export default CostSection;
