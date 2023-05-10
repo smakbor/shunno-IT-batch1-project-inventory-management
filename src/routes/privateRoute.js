@@ -5,7 +5,6 @@ import { lazy } from 'react';
 import LazyLoad from '../components/common/LazyLoad.jsx';
 const Trash = lazy(() => import('../pages/message/Trash.jsx'));
 const Inbox = lazy(() => import('../pages/message/Inbox.jsx'));
-const NewMessage = lazy(() => import('../pages/message/NewMessage.jsx'));
 const Warranty = lazy(() => import('../pages/products/warranty/Warranty.jsx'));
 const Suppliers = lazy(() => import('../pages/suppliers/Suppliers.jsx'));
 const Customers = lazy(() => import('../pages/customers/Customers.jsx'));
