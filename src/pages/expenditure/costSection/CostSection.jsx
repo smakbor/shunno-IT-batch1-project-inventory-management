@@ -18,6 +18,7 @@ import ModalCreateUpdate from './ModalCreateUpdate';
 //api services
 
 import { useGetAllCostSectionQuery, useCostSectionDeleteMutation } from '../../../redux/services/costSectionService';
+import { useGetStoresQuery } from '../../../redux/services/storeService';
 
 // main component
 const CostSection = () => {
@@ -28,6 +29,8 @@ const CostSection = () => {
     const [editData, setEditData] = useState(false);
     const [costSectionDelete] = useCostSectionDeleteMutation();
     const { data, isLoading, isError } = useGetAllCostSectionQuery();
+    const { data: store, isLoading: isLoaded, isError: isErr } = useGetStoresQuery();
+    console.log(store);
 
     /**
      * Show/hide the modal

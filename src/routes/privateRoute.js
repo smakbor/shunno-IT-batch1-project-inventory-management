@@ -17,6 +17,7 @@ const Manufacturer = lazy(() => import('../pages/products/manufacturer/Manufactu
 const CostSection = lazy(() => import('../pages/expenditure/costSection/CostSection.jsx'));
 const Sent = lazy(() => import('../pages/message/Sent.jsx'));
 const Details = lazy(() => import('../pages/message/Details.jsx'));
+const Expenditure = lazy(() => import('../pages/expenditure/expenditure/Expenditure.jsx'));
 const privateRoutes = [
     {
         path: '/dashboard',
@@ -111,6 +112,12 @@ const privateRoutes = [
     {
         path: '/messages/trash',
         element: <LazyLoad component={Trash} />,
+        roles: ['ALL'],
+        routePermission: 'PERMISSIONS',
+    },
+    {
+        path: '/expenditure',
+        element: <LazyLoad component={Expenditure} />,
         roles: ['ALL'],
         routePermission: 'PERMISSIONS',
     },

@@ -15,7 +15,7 @@ import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 import { useExpenditureCreateMutation, useExpenditureUpdateMutation } from '../../../redux/services/expenditureService';
 
-const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
+const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues, costSectionData }) => {
     const { t } = useTranslation();
     const [expenditureCreate, { isLoading, isSuccess }] = useExpenditureCreateMutation();
     const [expenditureUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useExpenditureUpdateMutation();
@@ -26,7 +26,6 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
     const schemaResolver = yupResolver(
         yup.object().shape({
             name: yup.string().required(t('please enter expenditure')).min(2, t('minimum containing 2 letters')),
-            status: yup.string().required(t('please select status')),
         })
     );
 
@@ -55,22 +54,35 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
     return (
         <Card className={classNames('', { 'd-none': !modal })}>
             <Card.Body>
-                <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false}>
+                <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false} size="lg">
                     <Modal.Header onHide={toggle} closeButton>
-                        <h4 className="modal-title">{editData ? t('edit cost section') : t('add cost section')}</h4>
+                        <h4 className="modal-title">{editData ? t('edit expenditure') : t('add expenditure')}</h4>
                     </Modal.Header>
 
                     <Modal.Body>
                         <VerticalForm onSubmit={onSubmit} resolver={schemaResolver} defaultValues={defaultValues}>
                             <FormInput
-                                name="status"
+                                name="select employee"
                                 type="select"
-                                label={t('status')}
+                                label={t('employee')}
                                 defaultValue="ACTIVE"
                                 col={'col-12'}
                                 containerClass={'mb-3'}>
                                 <option value="ACTIVE">Active</option>
                                 <option value="INACTIVE">Inactive</option>
+                            </FormInput>
+                            <FormInput
+                                name="expenditureType"
+                                type="select"
+                                label={t('select expenditure')}
+                                defaultValue="ACTIVE"
+                                col={'col-12'}
+                                containerClass={'mb-3'}>
+                                {costSectionData.data.map((item) => {
+                                    return <option value={item.name}>{item.name}</option>;
+                                })}
+                                {/* <option value="ACTIVE">Active</option>
+                                <option value="INACTIVE">Inactive</option> */}
                             </FormInput>
 
                             <FormInput
@@ -92,7 +104,7 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
 
                             <div className="mb-3 text-end">
                                 <Button variant="primary" type="submit">
-                                    {editData ? t('update warranty') : t('add warranty')}
+                                    {editData ? t('update') : t('submit')}
                                     &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
                                 </Button>
                             </div>
