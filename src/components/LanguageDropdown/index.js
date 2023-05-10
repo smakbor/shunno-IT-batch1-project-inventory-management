@@ -26,7 +26,7 @@ const languages = [
     },
 ];
 
-const LanguageDropdown = (): React$Element<any> => {
+const LanguageDropdown = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const state = useSelector((state) => state.setting);
 

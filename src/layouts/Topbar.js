@@ -25,6 +25,7 @@ import logo from '../assets/images/logo-light.png';
 
 //constants
 import * as layoutConstants from '../constants/layout';
+import StoreDropdown from '../components/StoreDropdown';
 
 // get the notifications
 const Notifications = [
@@ -122,7 +123,7 @@ type TopbarProps = {
     topbarDark?: boolean,
 };
 
-const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: TopbarProps): React$Element<any> => {
+const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: TopbarProps) => {
     const dispatch = useDispatch();
 
     const [isopen, setIsopen] = useState(false);
@@ -188,6 +189,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         </li>
                         <li className="dropdown notification-list topbar-dropdown d-none d-lg-block">
                             <LanguageDropdown />
+                        </li>
+                        <li className="dropdown notification-list topbar-dropdown d-none d-lg-block">
+                            <StoreDropdown />
                         </li>
                         <li className="dropdown notification-list">
                             <NotificationDropdown notifications={Notifications} />
