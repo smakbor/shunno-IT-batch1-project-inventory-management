@@ -23,6 +23,7 @@ export const authService = apiService.injectEndpoints({
                     const {
                         data: { accessToken },
                     } = data || {};
+
                     dispatch(userLogin(accessToken));
                 } catch (error) {
                     dispatch(userLogout());
@@ -34,6 +35,12 @@ export const authService = apiService.injectEndpoints({
                 url: 'auth/logout',
                 method: 'GET',
             }),
+            async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(userLogout());
+                } catch (error) {}
+            },
         }),
         fotgetPassword: builder.mutation({
             query: (email) => ({

@@ -1,6 +1,5 @@
 //Internal Lib Import
 import { apiService } from '../api/apiService';
-import { profileService } from './profileService';
 
 export const roleService = apiService.injectEndpoints({
     endpoints: (builder) => ({

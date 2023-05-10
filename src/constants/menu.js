@@ -3,30 +3,9 @@ import { useTranslation } from 'react-i18next';
 const MENU_ITEMS = () => {
     const { t } = useTranslation();
     return [
-        { key: 'Permissions', label: 'Permissions', isTitle: true },
+        { key: 'contacts', label: t('contacts'), isTitle: true },
         {
-            key: 'Permissions',
-            label: 'Permissions',
-            isTitle: false,
-            icon: 'uil-shield-exclamation',
-            children: [
-                {
-                    key: 'user-role',
-                    label: 'User Role',
-                    url: '/user-role',
-                    parentKey: 'Permissions',
-                },
-                {
-                    key: 'permissions',
-                    label: 'Permissions',
-                    url: '/permissions',
-                    parentKey: 'Permissions',
-                },
-            ],
-        },
-        { key: 'Contacts', label: t('contacts'), isTitle: true },
-        {
-            key: 'Products',
+            key: 'products',
             label: t('products'),
             isTitle: false,
             icon: 'dripicons-weight',
@@ -35,53 +14,89 @@ const MENU_ITEMS = () => {
                     key: 'products',
                     label: t('products'),
                     url: '/products',
-                    parentKey: 'Products',
+                    parentKey: 'products',
                 },
                 {
                     key: 'category',
                     label: t('category'),
                     url: '/products/categories',
-                    parentKey: 'Products',
+                    parentKey: 'products',
                 },
                 {
                     key: 'unit',
                     label: t('unit'),
                     url: 'products/units',
-                    parentKey: 'Products',
+                    parentKey: 'products',
                 },
                 {
                     key: 'manufacturer',
                     label: t('manufacturer'),
                     url: '/products/manufacturers',
-                    parentKey: 'Products',
+                    parentKey: 'products',
                 },
                 {
                     key: 'warranty',
                     label: t('warranty'),
                     url: '/products/warranties',
-                    parentKey: 'Products',
+                    parentKey: 'products',
                 },
                 {
                     key: 'stock',
                     label: t('stock'),
                     url: '/stock',
-                    parentKey: 'Products',
+                    parentKey: 'products',
                 },
             ],
         },
         {
-            key: 'Suppliers',
+            key: 'suppliers',
             label: t('suppliers'),
             isTitle: false,
             icon: 'uil-briefcase',
             url: '/suppliers',
         },
         {
-            key: 'Customers',
+            key: 'customers',
             label: t('customers'),
             isTitle: false,
             icon: 'uil-users-alt',
             url: '/customers',
+        },
+        { key: 'permissions', label: 'permissions', isTitle: true },
+        {
+            key: 'permissions',
+            label: 'permissions',
+            isTitle: false,
+            icon: 'uil-shield-exclamation',
+            children: [
+                {
+                    key: 'user-role',
+                    label: 'User Role',
+                    url: '/user-role',
+                    parentKey: 'permissions',
+                },
+                {
+                    key: 'permissions',
+                    label: 'permissions',
+                    url: '/permissions',
+                    parentKey: 'permissions',
+                },
+            ],
+        },
+        { key: 'settings', label: 'settings', isTitle: true },
+        {
+            key: 'settings',
+            label: 'settings',
+            isTitle: false,
+            icon: 'dripicons-gear',
+            children: [
+                {
+                    key: 'user',
+                    label: 'users',
+                    url: '/users',
+                    parentKey: 'settings',
+                },
+            ],
         },
     ];
 };
