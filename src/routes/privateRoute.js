@@ -7,7 +7,6 @@ import LazyLoad from '../components/common/LazyLoad.jsx';
 const Warranty = lazy(() => import('../pages/products/warranty/Warranty.jsx'));
 const Suppliers = lazy(() => import('../pages/suppliers/Suppliers.jsx'));
 const Customers = lazy(() => import('../pages/customers/Customers.jsx'));
-const Employee = lazy(() => import('../pages/employees/Employee.jsx'));
 const UnitPage = lazy(() => import('../pages/products/unit/UnitPage.jsx'));
 const UserRolePage = lazy(() => import('../pages/Permissions/UserRolePage'));
 const PermissionsPage = lazy(() => import('../pages/Permissions/PermissionsPage'));
@@ -79,12 +78,6 @@ const privateRoutes = [
     {
         path: '/customers',
         element: <LazyLoad component={Customers} />,
-        roles: ['ALL'],
-        routePermission: 'PERMISSIONS',
-    },
-    {
-        path: '/employees',
-        element: <LazyLoad component={Employee} />,
         roles: ['ALL'],
         routePermission: 'PERMISSIONS',
     },
