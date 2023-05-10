@@ -22,11 +22,13 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 // components
-import PageTitle from '../../../components/PageTitle';
-import { VerticalForm, FormInput } from '../../../components/';
+import PageTitle from '../../components/PageTitle';
+
 
 // dafault data
-import { emails as mails } from './Data';
+import { emails as mails } from '../apps/Email/Data';
+import { FormInput, VerticalForm } from '../../components';
+import { useTranslation } from 'react-i18next';
 
 // left side panel
 const LeftSide = (props) => {
@@ -39,32 +41,18 @@ const LeftSide = (props) => {
             </div>
 
             <div className="email-menu-list mt-3">
-                <Link to="/apps/email/inbox" className="text-danger fw-bold" onClick={props.showAllEmails}>
+                <Link to="/messages/inbox" onClick={props.showAllEmails}>
                     <i className="dripicons-inbox me-2"></i>Inbox
                     <span className="badge badge-danger-lighten float-end ms-2">{props.totalUnreadEmails}</span>
                 </Link>
-                <Link to="/apps/email/inbox" onClick={props.showStarredEmails}>
-                    <i className="dripicons-star me-2"></i>Starred
-                </Link>
-                <Link to="/apps/email/inbox">
-                    <i className="dripicons-clock me-2"></i>Snoozed
-                </Link>
-                <Link to="/apps/email/inbox">
-                    <i className="dripicons-document me-2"></i>Draft
-                    <span className="badge badge-info-lighten float-end ms-2">32</span>
-                </Link>
-                <Link to="/apps/email/inbox">
+
+                <Link to="/messages/sent" >
                     <i className="dripicons-exit me-2"></i>Sent Mail
                 </Link>
-                <Link to="/apps/email/inbox">
+                <Link to="/messages/trash" className="text-danger fw-bold">
                     <i className="dripicons-trash me-2"></i>Trash
                 </Link>
-                <Link to="/apps/email/inbox">
-                    <i className="dripicons-tag me-2"></i>Important
-                </Link>
-                <Link to="/apps/email/inbox">
-                    <i className="dripicons-warning me-2"></i>Spam
-                </Link>
+
             </div>
 
             <div className="mt-4">
@@ -92,14 +80,14 @@ const LeftSide = (props) => {
                 </div>
             </div>
 
-            <div className="mt-5">
+            {/* <div className="mt-5">
                 <h4>
                     <span className="badge rounded-pill p-1 px-2 badge-secondary-lighten">FREE</span>
                 </h4>
                 <h6 className="text-uppercase mt-3">Storage</h6>
                 <ProgressBar variant="success" now={46} className="my-2 progress-sm" />
                 <p className="text-muted font-13 mb-0">7.02 GB (46%) of 15 GB used</p>
-            </div>
+            </div> */}
         </>
     );
 };
@@ -169,15 +157,19 @@ const EmailsList = (props) => {
 };
 
 // Inbox
-const Inbox = () => {
+const Trash = () => {
+    // dummy data
+    const receiverOptions = [{ label: 'Omy', value: '1' }, { label: 'Promy', value: '2' },]
+
+    const { t } = useTranslation();
     const [emails, setEmails] = useState(mails.slice(0, 20));
-    const [totalEmails] = useState(mails.length);
-    const [pageSize] = useState(20);
+    const totalEmails = mails.length
+    const pageSize = 20;
     const [page, setPage] = useState(1);
     const [startIndex, setStartIndex] = useState(1);
     const [endIndex, setEndIndex] = useState(20);
-    const [totalPages] = useState(mails.length / 20);
-    const [totalUnreadEmails] = useState(mails.filter((e) => e.is_read === false).length);
+    const totalPages = mails.length / 20;
+    const totalUnreadEmails = mails.filter((e) => e.is_read === false).length;
     const [composeModal, setComposeModal] = useState(false);
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
@@ -186,7 +178,7 @@ const Inbox = () => {
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            to: yup.string().required('Please specify receiver'),
+            receiver: yup.string().required('Please specify to email'),
             subject: yup.string().required('Please specify subject'),
         })
     );
@@ -247,9 +239,10 @@ const Inbox = () => {
      * @param {*} event
      * @param {*} values
      */
-    const handleEmailSave = (event, values) => {
+    const handleEmailSave = (formData) => {
+
         const body = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-        console.log({ ...values, body });
+        console.log({ ...formData, body });
         toggleComposeModal();
     };
 
@@ -264,10 +257,10 @@ const Inbox = () => {
         <>
             <PageTitle
                 breadCrumbItems={[
-                    { label: 'Email', path: '/apps/email/inbox' },
-                    { label: 'Inbox', path: '/apps/email/inbox', active: true },
+                    { label: 'Messages', path: '/messages/trash' },
+                    { label: 'Trash', path: '/messages/trash', active: true },
                 ]}
-                title={'Inbox'}
+                title={'Trash'}
             />
 
             <Row>
@@ -382,30 +375,39 @@ const Inbox = () => {
             </Row>
             <Modal show={composeModal} onHide={toggleComposeModal}>
                 <Modal.Header closeButton onHide={toggleComposeModal} className="modal-colored-header bg-primary">
-                    <Modal.Title className="m-0">New Message</Modal.Title>
+                    <Modal.Title className="m-0">{t('new message')}</Modal.Title>
                 </Modal.Header>
                 <div className="p-1">
                     <Modal.Body className="px-3 pt-3 pb-0">
                         <VerticalForm onSubmit={handleEmailSave} resolver={schemaResolver}>
                             <FormInput
                                 label="To"
-                                type="email"
-                                name="to"
-                                placeholder="example@email.com"
+                                type="select"
+                                name="receiver"
                                 containerClass={'mb-2'}
-                            />
+                                col={'col-12'}
+                                defaultValue=""
+                            >
+                                <option value="" disabled>{t("select receiver")}</option>
+                                {
+                                    receiverOptions.map(item =>
+                                        <option key={item.value} value={item.value}>{item.label}</option>
+                                    )
+                                }
+                            </FormInput>
                             <FormInput
                                 label="Subject"
                                 type="text"
                                 name="subject"
                                 placeholder="Your subject"
                                 containerClass={'mb-2'}
+                                col={'col-12'}
+
                             />
-                            <Row className="mb-3">
+                            <Row className="mb-3" col={'col-12'}>
                                 <Col>
                                     <label className="form-label">Message</label>
                                     <Editor
-                                        editorState={editorState}
                                         onEditorStateChange={onEditorStateChange}
                                         toolbarClassName="draft-toolbar"
                                         wrapperClassName="react-draft-wrapper border border-1 rounded-1"
@@ -420,13 +422,14 @@ const Inbox = () => {
                                     />
                                 </Col>
                             </Row>
-                            <div className="pb-3">
-                                <Button variant="primary" type="submit" className="me-1">
-                                    <i className="mdi mdi-send me-1"></i> Send Message
+                            <div className="pb-3 text-end">
+                                <Button variant="light" onClick={toggleComposeModal} className="me-1">
+                                    {t("cancel")}
                                 </Button>
-                                <Button variant="light" onClick={toggleComposeModal}>
-                                    Cancel
+                                <Button variant="primary" type="submit">
+                                    <i className="mdi mdi-send me-1"></i> {t("send")}
                                 </Button>
+
                             </div>
                         </VerticalForm>
                     </Modal.Body>
@@ -436,4 +439,4 @@ const Inbox = () => {
     );
 };
 
-export default Inbox;
+export default Trash;

@@ -84,13 +84,6 @@ const MENU_ITEMS = () => {
             url: '/customers',
         },
         {
-            key: 'Employees',
-            label: t('employee'),
-            isTitle: false,
-            icon: 'uil-users-alt',
-            url: '/employees',
-        },
-        {
             key: 'Expenditure',
             label: t('expenditure'),
             isTitle: false,
@@ -105,10 +98,18 @@ const MENU_ITEMS = () => {
                 {
                     key: 'expenditure',
                     label: t('expenditure'),
-                    url: '/expenditures',
+                    url: '/expenditure',
                     parentKey: 'Expenditure',
                 },
             ],
+        },
+        {
+            key: 'Messages',
+            label: t('message'),
+            isTitle: false,
+            icon: 'uil-comment-alt-dots',
+            url: '/messages/inbox'
+
         },
     ];
 };

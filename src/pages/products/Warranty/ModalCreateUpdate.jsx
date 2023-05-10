@@ -41,7 +41,8 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
         if (!editData) {
             warrantyCreate(removeEmptyObj(data));
         } else {
-            const postBody = removeEmptyObj(data);
+            const updatedData = { ...editData, ...data }
+            const postBody = removeEmptyObj(updatedData);
             warrantyUpdate({ id: editData._id, postBody });
         }
     };

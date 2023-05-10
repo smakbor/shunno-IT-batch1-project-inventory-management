@@ -13,6 +13,7 @@ import removeEmptyObj from '../../../helpers/removeEmptyObj';
 //api services
 
 import { useSubCategoryCreateMutation, useSubCategoryUpdateMutation } from '../../../redux/services/subCategory';
+import slugify from '../../../helpers/slugify';
 
 const SubCategoryCreateUpdateModal = ({
     subCategoryModal,
@@ -35,15 +36,7 @@ const SubCategoryCreateUpdateModal = ({
         })
     );
 
-    //slugify
 
-    const slugify = (str) =>
-        str
-            .toLowerCase()
-            .trim()
-            .replace(/[^\w\s-]/g, '')
-            .replace(/[\s_-]+/g, '_')
-            .replace(/^-+|-+$/g, '');
 
     /*
      * handle form submission

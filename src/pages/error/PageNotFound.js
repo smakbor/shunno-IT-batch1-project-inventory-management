@@ -46,7 +46,7 @@ const ErrorPageNotFound = (): React$Element<React$FragmentType> => {
                 </div>
             </div>
 
-            <footer className="footer footer-alt">2018 - 2021 © Agrosys - Shunnoit.com</footer>
+            <footer className="footer footer-alt">2018 - 2021 © Hisab Nikash - Shunnoit.com</footer>
         </>
     );
 };
