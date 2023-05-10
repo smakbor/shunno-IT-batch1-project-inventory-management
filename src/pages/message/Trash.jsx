@@ -80,14 +80,14 @@ const LeftSide = (props) => {
                 </div>
             </div>
 
-            <div className="mt-5">
+            {/* <div className="mt-5">
                 <h4>
                     <span className="badge rounded-pill p-1 px-2 badge-secondary-lighten">FREE</span>
                 </h4>
                 <h6 className="text-uppercase mt-3">Storage</h6>
                 <ProgressBar variant="success" now={46} className="my-2 progress-sm" />
                 <p className="text-muted font-13 mb-0">7.02 GB (46%) of 15 GB used</p>
-            </div>
+            </div> */}
         </>
     );
 };
@@ -257,10 +257,10 @@ const Trash = () => {
         <>
             <PageTitle
                 breadCrumbItems={[
-                    { label: 'Email', path: '/apps/email/inbox' },
-                    { label: 'Inbox', path: '/apps/email/inbox', active: true },
+                    { label: 'Messages', path: '/messages/trash' },
+                    { label: 'Trash', path: '/messages/trash', active: true },
                 ]}
-                title={'Inbox'}
+                title={'Trash'}
             />
 
             <Row>
@@ -375,7 +375,7 @@ const Trash = () => {
             </Row>
             <Modal show={composeModal} onHide={toggleComposeModal}>
                 <Modal.Header closeButton onHide={toggleComposeModal} className="modal-colored-header bg-primary">
-                    <Modal.Title className="m-0">New Message</Modal.Title>
+                    <Modal.Title className="m-0">{t('new message')}</Modal.Title>
                 </Modal.Header>
                 <div className="p-1">
                     <Modal.Body className="px-3 pt-3 pb-0">

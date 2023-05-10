@@ -107,20 +107,8 @@ const MENU_ITEMS = () => {
             key: 'Messages',
             label: t('message'),
             isTitle: false,
-            icon: 'uil-comment-alt-dots', children: [
-                // {
-                //     key: 'newMessage',
-                //     label: t('new message'),
-                //     url: '/messages/new-message',
-                //     parentKey: 'Messages',
-                // },
-                {
-                    key: 'inbox',
-                    label: t('inbox'),
-                    url: '/messages/inbox',
-                    parentKey: 'Messages',
-                },
-            ],
+            icon: 'uil-comment-alt-dots',
+            url: '/messages/inbox'
 
         },
     ];

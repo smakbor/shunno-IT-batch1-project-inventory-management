@@ -15,7 +15,8 @@ const PermissionsPage = lazy(() => import('../pages/Permissions/PermissionsPage'
 const CategoryPage = lazy(() => import('../pages/products/category/CategoryPage'));
 const Manufacturer = lazy(() => import('../pages/products/manufacturer/Manufacturer'));
 const CostSection = lazy(() => import('../pages/expenditure/costSection/CostSection.jsx'));
-const Sent = lazy(() => import('../pages/message/Sent.jsx'))
+const Sent = lazy(() => import('../pages/message/Sent.jsx'));
+const Details = lazy(() => import('../pages/message/Details.jsx'));
 const privateRoutes = [
     {
         path: '/dashboard',
@@ -89,12 +90,12 @@ const privateRoutes = [
         roles: ['ALL'],
         routePermission: 'PERMISSIONS',
     },
-    // {
-    //     path: '/messages/new-message',
-    //     element: <LazyLoad component={NewMessage} />,
-    //     roles: ['ALL'],
-    //     routePermission: 'PERMISSIONS',
-    // },
+    {
+        path: '/messages/details',
+        element: <LazyLoad component={Details} />,
+        roles: ['ALL'],
+        routePermission: 'PERMISSIONS',
+    },
     {
         path: '/messages/inbox',
         element: <LazyLoad component={Inbox} />,

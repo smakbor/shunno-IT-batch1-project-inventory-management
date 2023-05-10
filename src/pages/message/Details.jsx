@@ -13,25 +13,30 @@ import {
     OverlayTrigger,
     Tooltip,
 } from 'react-bootstrap';
-import classNames from 'classnames';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { EditorState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 // components
 import PageTitle from '../../components/PageTitle';
+import { VerticalForm, FormInput } from '../../components/';
 
+// dummy data
+import { emails } from './Data';
 
-// dafault data
-import { emails as mails } from '../apps/Email/Data';
-import { FormInput, VerticalForm } from '../../components';
-import { useTranslation } from 'react-i18next';
+// images
+import avatarImg from '../../assets/images/users/avatar-2.jpg';
+
+type LeftSideProps = {
+    totalUnreadEmails: number,
+    toggleComposeModal: () => void,
+};
 
 // left side panel
-const LeftSide = (props) => {
+const LeftSide = (props: LeftSideProps) => {
     return (
         <>
             <div className="d-grid">
@@ -41,21 +46,19 @@ const LeftSide = (props) => {
             </div>
 
             <div className="email-menu-list mt-3">
-                <Link to="/messages/inbox" className="text-danger fw-bold" onClick={props.showAllEmails}>
+                <Link to="/messages/inbox" className="text-danger fw-bold">
                     <i className="dripicons-inbox me-2"></i>Inbox
                     <span className="badge badge-danger-lighten float-end ms-2">{props.totalUnreadEmails}</span>
                 </Link>
-
                 <Link to="/messages/sent">
                     <i className="dripicons-exit me-2"></i>Sent Mail
                 </Link>
                 <Link to="/messages/trash">
                     <i className="dripicons-trash me-2"></i>Trash
                 </Link>
-
             </div>
 
-            <div className="mt-4">
+            {/* <div className="mt-4">
                 <h6 className="text-uppercase">Labels</h6>
                 <div className="email-menu-list labels-list mt-2">
                     <Link to="/apps/email/inbox">
@@ -78,107 +81,32 @@ const LeftSide = (props) => {
                         Promotions
                     </Link>
                 </div>
-            </div>
-
-            {/* <div className="mt-5">
-                <h4>
-                    <span className="badge rounded-pill p-1 px-2 badge-secondary-lighten">FREE</span>
-                </h4>
-                <h6 className="text-uppercase mt-3">Storage</h6>
-                <ProgressBar variant="success" now={46} className="my-2 progress-sm" />
-                <p className="text-muted font-13 mb-0">7.02 GB (46%) of 15 GB used</p>
             </div> */}
         </>
     );
 };
 
-// emails list
-const EmailsList = (props) => {
-    const emails = props.emails || [];
-
-    return (
-        <>
-            <ul className="email-list">
-                {emails.map((email, idx) => {
-                    return (
-                        <li className={classNames({ unread: !email.is_read })} key={idx}>
-                            <div className="email-sender-info">
-                                <div className="checkbox-wrapper-mail">
-                                    <div className="form-check">
-                                        <input type="checkbox" className="form-check-input" id={'mail' + email.id} />
-                                        <label className="form-check-label" htmlFor={'mail' + email.id}></label>
-                                    </div>
-                                </div>
-                                <span
-                                    className={classNames('star-toggle', 'mdi', 'mdi-star-outline', {
-                                        'text-warning': email.is_important,
-                                    })}></span>
-                                <Link to="/messages/details" className="email-title">
-                                    {email.from_name}
-                                    {email.number_of_reply > 1 && <span> ({email.number_of_reply})</span>}
-                                </Link>
-                            </div>
-                            <div className="email-content">
-                                <Link to="/apps/email/details" className="email-subject">
-                                    {email.subject}
-                                </Link>
-                                <div className="email-date">{email.time}</div>
-                            </div>
-                            <div className="email-action-icons">
-                                <ul className="list-inline">
-                                    <li className="list-inline-item">
-                                        <Link to="#">
-                                            <i className="mdi mdi-archive email-action-icons-item"></i>
-                                        </Link>
-                                    </li>
-                                    <li className="list-inline-item">
-                                        <Link to="#">
-                                            <i className="mdi mdi-delete email-action-icons-item"></i>
-                                        </Link>
-                                    </li>
-                                    <li className="list-inline-item">
-                                        <Link to="#">
-                                            <i className="mdi mdi-email-open email-action-icons-item"></i>
-                                        </Link>
-                                    </li>
-                                    <li className="list-inline-item">
-                                        <Link to="#">
-                                            <i className="mdi mdi-clock email-action-icons-item"></i>
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    );
-                })}
-            </ul>
-        </>
-    );
-};
-
-// Inbox
-const Inbox = () => {
-    // dummy data
-    const receiverOptions = [{ label: 'Omy', value: '1' }, { label: 'Promy', value: '2' },]
-
-    const { t } = useTranslation();
-    const [emails, setEmails] = useState(mails.slice(0, 20));
-    const totalEmails = mails.length
-    const pageSize = 20;
-    const [page, setPage] = useState(1);
-    const [startIndex, setStartIndex] = useState(1);
-    const [endIndex, setEndIndex] = useState(20);
-    const totalPages = mails.length / 20;
-    const totalUnreadEmails = mails.filter((e) => e.is_read === false).length;
+// EmailDetail
+const EmailDetail = () => {
+    const [totalUnreadEmails] = useState(emails.filter((e) => e.is_read === false).length);
+    const [email] = useState({
+        avatar: avatarImg,
+        subject: 'Your elite author Graphic Optimization reward is ready!',
+        from_name: 'Steven Smith',
+        from_email: 'jonathan@domain.com',
+        recieved_on: 'Jul 24, 2019, 5:17 AM',
+        attachments: [
+            { id: 1, name: 'Hyper-admin-design.zip', size: '2.3MB', ext: '.zip' },
+            { id: 2, name: 'Dashboard-design.jpg', size: '0.3MB', ext: '.jpg' },
+            { id: 3, name: 'Admin-bug-report.mp4', size: '4.1MB', ext: '.mp4' },
+        ],
+    });
     const [composeModal, setComposeModal] = useState(false);
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-    /*
-     * form validation schema
-     */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            receiver: yup.string().required('Please specify to email'),
+            to: yup.string().required('Please specify to email'),
             subject: yup.string().required('Please specify subject'),
         })
     );
@@ -191,58 +119,13 @@ const Inbox = () => {
     };
 
     /**
-     * Gets the next page
-     */
-    const getNextPage = () => {
-        var nextPage = page + 1;
-        if (nextPage > totalEmails / pageSize) {
-            nextPage = totalEmails / pageSize;
-        }
-        var startIdx = nextPage * pageSize - pageSize + 1;
-        var endIdx = nextPage * pageSize;
-        setPage(nextPage);
-        setStartIndex(startIdx);
-        setEndIndex(endIdx);
-        setEmails(mails.slice(startIdx, endIdx));
-    };
-
-    /**
-     * Gets the prev page
-     */
-    const getPrevPage = () => {
-        var prevPage = page - 1;
-        if (prevPage === 0) prevPage = 1;
-        var startIdx = prevPage * pageSize - pageSize + 1;
-        var endIdx = prevPage * pageSize;
-        setPage(prevPage);
-        setStartIndex(startIdx);
-        setEndIndex(endIndex);
-        setEmails(mails.slice(startIdx, endIdx));
-    };
-
-    /**
-     * Shows the starred emails only
-     */
-    const showAllEmails = () => {
-        setEmails(mails.slice(0, 20));
-    };
-
-    /**
-     * Shows the starred emails only
-     */
-    const showStarredEmails = () => {
-        setEmails(mails.filter((e) => e.is_important).slice(0, 20));
-    };
-
-    /**
      * Handles the save
      * @param {*} event
      * @param {*} values
      */
-    const handleEmailSave = (formData) => {
-
+    const handleEmailSave = (event, values) => {
         const body = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-        console.log({ ...formData, body });
+        console.log({ ...values, body });
         toggleComposeModal();
     };
 
@@ -257,10 +140,10 @@ const Inbox = () => {
         <>
             <PageTitle
                 breadCrumbItems={[
-                    { label: 'Messages', path: '/messages/inbox' },
-                    { label: 'Inbox', path: '/messages/inbox', active: true },
+                    { label: 'Email', path: '/apps/email/details' },
+                    { label: 'Email Read', path: '/apps/email/details', active: true },
                 ]}
-                title={'Inbox'}
+                title={'Email Read'}
             />
 
             <Row>
@@ -270,11 +153,10 @@ const Inbox = () => {
                             <div className="page-aside-left">
                                 <LeftSide
                                     totalUnreadEmails={totalUnreadEmails}
-                                    showAllEmails={showAllEmails}
-                                    showStarredEmails={showStarredEmails}
                                     toggleComposeModal={toggleComposeModal}
                                 />
                             </div>
+
                             <div className="page-aside-right">
                                 <ButtonGroup className="me-1 my-1">
                                     <OverlayTrigger placement="bottom" overlay={<Tooltip>Archived</Tooltip>}>
@@ -287,7 +169,7 @@ const Inbox = () => {
                                             <i className="mdi mdi-alert-octagon font-16"></i>
                                         </Button>
                                     </OverlayTrigger>
-                                    <OverlayTrigger key="bottm" placement="bottom" overlay={<Tooltip>Delete</Tooltip>}>
+                                    <OverlayTrigger placement="bottom" overlay={<Tooltip>Delete</Tooltip>}>
                                         <Button variant="secondary">
                                             <i className="mdi mdi-delete-variant font-16"></i>
                                         </Button>
@@ -337,81 +219,145 @@ const Inbox = () => {
                                 </ButtonGroup>
 
                                 <div className="mt-3">
-                                    <EmailsList emails={emails} />
+                                    <h5 className="font-18">Your elite author Graphic Optimization reward is ready!</h5>
+                                    <hr />
+
+                                    <div className="d-flex mb-3 mt-1">
+                                        <img
+                                            className="d-flex me-2 rounded-circle"
+                                            src={email.avatar}
+                                            alt={email.from_name}
+                                            height="32"
+                                        />
+                                        <div className="w-100 overflow-hidden">
+                                            <small className="float-end">{email.recieved_on}</small>
+                                            <h6 className="m-0 font-14">{email.from_name}</h6>
+                                            <small className="text-muted">From: {email.from_email}</small>
+                                        </div>
+                                    </div>
+
+                                    <p>Hi Coderthemes!</p>
+                                    <p>
+                                        Clicking ‘Order Service’ on the right-hand side of the above page will present
+                                        you with an order page. This service has the following Briefing Guidelines that
+                                        will need to be filled before placing your order:
+                                    </p>
+
+                                    <ol>
+                                        <li>Your design preferences (Color, style, shapes, Fonts, others) </li>
+                                        <li>Tell me, why is your item different? </li>
+                                        <li>
+                                            Do you want to bring up a specific feature of your item? If yes, please tell
+                                            me{' '}
+                                        </li>
+                                        <li>
+                                            Do you have any preference or specific thing you would like to change or
+                                            improve on your item page?{' '}
+                                        </li>
+                                        <li>
+                                            Do you want to include your item's or your provider's logo on the page? if
+                                            yes, please send it to me in vector format (Ai or EPS){' '}
+                                        </li>
+                                        <li>Please provide me with the copy or text to display</li>
+                                    </ol>
+
+                                    <p>
+                                        Filling in this form with the above information will ensure that they will be
+                                        able to start work quickly.
+                                    </p>
+                                    <p>
+                                        You can complete your order by putting your coupon code into the Promotional
+                                        code box and clicking ‘Apply Coupon’.
+                                    </p>
+                                    <p>
+                                        <b>Best,</b> <br /> Graphic Studio
+                                    </p>
+                                    <hr />
+
+                                    <h5 className="mb-3">Attachments</h5>
+                                    <Row>
+                                        {email.attachments.map((f, idx) => {
+                                            return (
+                                                <Col xl={4} key={idx}>
+                                                    <Card className="mb-1 shadow-none border">
+                                                        <div className="p-2">
+                                                            <Row className="align-items-center">
+                                                                <Col className="col-auto">
+                                                                    <div className="avatar-sm">
+                                                                        <span className="avatar-title bg-primary-lighten text-primary rounded">
+                                                                            {f.ext}
+                                                                        </span>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col className="col ps-0">
+                                                                    <Link
+                                                                        to="#"
+                                                                        className="text-muted font-weight-bold">
+                                                                        {f.name}
+                                                                    </Link>
+                                                                    <p className="mb-0">{f.size}</p>
+                                                                </Col>
+                                                                <Col className="col-auto">
+                                                                    <Link
+                                                                        to="#"
+                                                                        className="btn btn-link btn-lg text-muted">
+                                                                        <i className="dripicons-download"></i>
+                                                                    </Link>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                    </Card>
+                                                </Col>
+                                            );
+                                        })}
+                                    </Row>
+
+                                    <div className="mt-5">
+                                        <Link to="#" className="btn btn-secondary me-2">
+                                            <i className="mdi mdi-reply me-1"></i> Reply
+                                        </Link>
+                                        <Link to="#" className="btn btn-light">
+                                            Forward <i className="mdi mdi-forward ms-1"></i>
+                                        </Link>
+                                    </div>
                                 </div>
-
-                                <Row>
-                                    <Col sm={7} className="mt-1">
-                                        Showing {startIndex} - {endIndex} of {totalEmails}
-                                    </Col>
-                                    <Col sm={5}>
-                                        <ButtonGroup className="float-end">
-                                            {page === 1 ? (
-                                                <Button variant="light" className="btn-sm" disabled>
-                                                    <i className="mdi mdi-chevron-left"></i>
-                                                </Button>
-                                            ) : (
-                                                <Button variant="info" className="btn-sm" onClick={getPrevPage}>
-                                                    <i className="mdi mdi-chevron-left"></i>
-                                                </Button>
-                                            )}
-
-                                            {page < totalPages ? (
-                                                <Button variant="info" className="btn-sm" onClick={getNextPage}>
-                                                    <i className="mdi mdi-chevron-right"></i>
-                                                </Button>
-                                            ) : (
-                                                <Button variant="light" className="btn-sm" disabled>
-                                                    <i className="mdi mdi-chevron-right"></i>
-                                                </Button>
-                                            )}
-                                        </ButtonGroup>
-                                    </Col>
-                                </Row>
                             </div>
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
+
+            {/* compose email modal */}
             <Modal show={composeModal} onHide={toggleComposeModal}>
                 <Modal.Header closeButton onHide={toggleComposeModal} className="modal-colored-header bg-primary">
-                    <Modal.Title className="m-0">{t('new message')}</Modal.Title>
+                    <Modal.Title className="m-0">New Message</Modal.Title>
                 </Modal.Header>
                 <div className="p-1">
                     <Modal.Body className="px-3 pt-3 pb-0">
                         <VerticalForm onSubmit={handleEmailSave} resolver={schemaResolver}>
                             <FormInput
                                 label="To"
-                                type="select"
-                                name="receiver"
+                                type="email"
+                                name="to"
+                                placeholder="example@email.com"
                                 containerClass={'mb-2'}
-                                col={'col-12'}
-                                defaultValue=""
-                            >
-                                <option value="" disabled>{t("select receiver")}</option>
-                                {
-                                    receiverOptions.map(item =>
-                                        <option key={item.value} value={item.value}>{item.label}</option>
-                                    )
-                                }
-                            </FormInput>
+                            />
                             <FormInput
                                 label="Subject"
                                 type="text"
                                 name="subject"
                                 placeholder="Your subject"
                                 containerClass={'mb-2'}
-                                col={'col-12'}
-
                             />
-                            <Row className="mb-3" col={'col-12'}>
+                            <Row className="mb-3">
                                 <Col>
                                     <label className="form-label">Message</label>
                                     <Editor
+                                        editorState={editorState}
                                         onEditorStateChange={onEditorStateChange}
                                         toolbarClassName="draft-toolbar"
-                                        wrapperClassName="react-draft-wrapper border border-1 rounded-1"
-                                        editorStyle={{ minHeight: '150px' }}
+                                        wrapperClassName="react-draft-wrapper  border border-1 rounded-1"
+                                        editorStyle={{ minHeight: '200px' }}
                                         toolbar={{
                                             options: ['inline', 'fontSize', 'fontFamily', 'list', 'textAlign', 'link'],
                                             inline: { inDropdown: true },
@@ -422,14 +368,13 @@ const Inbox = () => {
                                     />
                                 </Col>
                             </Row>
-                            <div className="pb-3 text-end">
-                                <Button variant="light" onClick={toggleComposeModal} className="me-1">
-                                    {t("cancel")}
+                            <div className="pb-3">
+                                <Button variant="primary" type="submit" className="me-1">
+                                    <i className="mdi mdi-send me-1"></i> Send Message
                                 </Button>
-                                <Button variant="primary" type="submit">
-                                    <i className="mdi mdi-send me-1"></i> {t("send")}
+                                <Button variant="light" onClick={toggleComposeModal}>
+                                    Cancel
                                 </Button>
-
                             </div>
                         </VerticalForm>
                     </Modal.Body>
@@ -439,4 +384,4 @@ const Inbox = () => {
     );
 };
 
-export default Inbox;
+export default EmailDetail;

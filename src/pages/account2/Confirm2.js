@@ -15,7 +15,7 @@ const BottomLink = () => {
 
     return (
         <footer className="footer footer-alt">
-            <p className="text-muted">{t('2018 - 2021 © Agrosys - Shunnoit.com')}</p>
+            <p className="text-muted">{t('2018 - 2021 © Hisab Nikash - Shunnoit.com')}</p>
         </footer>
     );
 };
