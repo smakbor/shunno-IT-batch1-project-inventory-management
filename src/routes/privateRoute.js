@@ -1,7 +1,7 @@
-//external lib import
+//External Lib Import
 import { lazy } from 'react';
 
-//internal lib import
+//Internal Lib Import
 import LazyLoad from '../components/common/LazyLoad.jsx';
 const Trash = lazy(() => import('../pages/message/Trash.jsx'));
 const Inbox = lazy(() => import('../pages/message/Inbox.jsx'));
@@ -22,37 +22,37 @@ const privateRoutes = [
         path: '/dashboard',
         element: <LazyLoad component={UserRolePage} />,
         roles: ['ALL'],
-        routePermission: null,
+        routePermission: 'ALL',
     },
     {
         path: '/user-role',
         element: <LazyLoad component={UserRolePage} />,
         roles: ['ALL'],
-        routePermission: null,
+        routePermission: 'ALL',
     },
     {
         path: '/permissions',
         element: <LazyLoad component={PermissionsPage} />,
         roles: ['ALL'],
-        routePermission: 'PERMISSIONS',
+        routePermission: 'ALL',
     },
     {
         path: '/customers',
         element: <LazyLoad component={Customers} />,
         roles: ['ALL'],
-        routePermission: 'PERMISSIONS',
+        routePermission: 'ALL',
     },
     {
         path: '/products/categories',
         element: <LazyLoad component={CategoryPage} />,
         roles: ['ALL'],
-        routePermission: 'PERMISSIONS',
+        routePermission: 'ALL',
     },
     {
         path: '/products/units',
         element: <LazyLoad component={UnitPage} />,
         roles: ['ALL'],
-        routePermission: 'PERMISSIONS',
+        routePermission: 'ALL',
     },
     {
         path: '/products/warranty',
@@ -64,25 +64,25 @@ const privateRoutes = [
         path: '/products/manufacturers',
         element: <LazyLoad component={Manufacturer} />,
         roles: ['ALL'],
-        routePermission: 'PERMISSIONS',
+        routePermission: 'ALL',
     },
     {
         path: '/products/warranties',
         element: <LazyLoad component={Warranty} />,
         roles: ['ALL'],
-        routePermission: 'PERMISSIONS',
+        routePermission: 'ALL',
     },
     {
         path: '/suppliers',
         element: <LazyLoad component={Suppliers} />,
         roles: ['ALL'],
-        routePermission: 'PERMISSIONS',
+        routePermission: 'ALL',
     },
     {
         path: '/customers',
         element: <LazyLoad component={Customers} />,
         roles: ['ALL'],
-        routePermission: 'PERMISSIONS',
+        routePermission: 'ALL',
     },
     {
         path: '/costSections',

@@ -1,30 +1,34 @@
-//external lib import
-import { useDispatch, useSelector } from 'react-redux';
+//External Lib Import
+import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-//internal lib import
+//Internal Lib Import
 import privateRoutes from '../privateRoute';
-import { setLogin, setLogout } from '../../redux/features/authReducer';
-import { useEffect } from 'react';
+import { useProfileDetailsQuery } from '../../redux/services/profileService';
 
 //api services
-import { useProfileDetailsQuery } from '../../redux/services/profileService';
-import SessionHelper from '../../helpers/SessionHelper';
-
 const ProtectRoute = ({ r, children }) => {
-    const loginUser = { name: 'sujon', role: 'STAFF', permissions: { PERMISSIONS: true } };
+    const { accessToken } = useSelector((state) => state.auth);
+    const { data: loginCurrentUser } = useProfileDetailsQuery(undefined, {
+        skip: !accessToken,
+    });
 
-    if (r.roles.indexOf('ALL') === -1 && r.roles.indexOf(loginUser.role) === -1) {
-        // role not authorize so to not-access page
-        return <Navigate to="/not-access" replace />;
+    if (accessToken || loginCurrentUser) {
+        if (r.roles.indexOf('ALL') === -1 && r.roles.indexOf(loginCurrentUser.role) === -1) {
+            // role not authorize so go to login page
+            return <Navigate to="/account/login" replace />;
+        }
+
+        if (r.routePermission !== 'ALL' && !loginCurrentUser.permissions[r.routePermission]) {
+            // access not authorize so go to not-access page
+            return <Navigate to="/not-access" replace />;
+        }
+
+        return children;
+    } else {
+        // user authorize so go to login page
+        return <Navigate to="/account/login" replace />;
     }
-
-    if (r.routePermission && !loginUser.permissions[r.routePermission]) {
-        alert(33);
-        return <Navigate to="/not-access" replace />;
-    }
-
-    return children;
 };
 
 const getProtectRoute = () => {

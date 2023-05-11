@@ -1,4 +1,4 @@
-//external lib import
+//External Lib Import
 import React, { useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +6,7 @@ import { GrDocumentCsv } from 'react-icons/gr';
 import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 
-//internal lib import
+//Internal Lib Import
 import PageTitle from '../../components/PageTitle';
 import Table from '../../components/Table';
 import exportFromJson from '../../utils/exportFromJson';
@@ -15,8 +15,6 @@ import ErrorDataLoad from '../../components/common/ErrorDataLoad';
 import AleartMessage from '../../utils/AleartMessage';
 
 //api services
-
-
 
 import { useGetSuppliersQuery, useSupplierDeleteMutation } from '../../redux/services/suppliersService';
 import SupplierCreateUpdateModal from './SupplierCreateUpdateModal';
@@ -96,8 +94,7 @@ const Suppliers = () => {
             Header: t('name'),
             accessor: 'name',
             sort: true,
-            Cell: ({ row }) =>
-                row.original.name,
+            Cell: ({ row }) => row.original.name,
             classes: 'table-user',
         },
         {
@@ -105,8 +102,13 @@ const Suppliers = () => {
             accessor: 'address',
             sort: true,
             Cell: ({ row }) => {
-                const splitAddress = row.original.address.split(",")
-                return splitAddress.map((item, i) => <p className='mb-0' key={i}>{item}{i !== splitAddress.length - 1 ? ',' : ''}</p>)
+                const splitAddress = row.original.address.split(',');
+                return splitAddress.map((item, i) => (
+                    <p className="mb-0" key={i}>
+                        {item}
+                        {i !== splitAddress.length - 1 ? ',' : ''}
+                    </p>
+                ));
             },
             classes: 'table-user',
         },
@@ -114,16 +116,14 @@ const Suppliers = () => {
             Header: t('mobile'),
             accessor: 'mobile',
             sort: true,
-            Cell: ({ row }) =>
-                row.original.mobile,
+            Cell: ({ row }) => row.original.mobile,
             classes: 'table-user',
         },
         {
             Header: t('due'),
             accessor: 'due',
             sort: true,
-            Cell: ({ row }) =>
-                row.original.due,
+            Cell: ({ row }) => row.original.due,
             classes: 'table-user',
         },
 

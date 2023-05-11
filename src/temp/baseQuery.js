@@ -1,9 +1,9 @@
-//external lib import
+//External Lib Import
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-//internal lib import
+//Internal Lib Import
 import ToastMessage from '../../helpers/ToastMessage';
-import { setLogin, setLogout } from '../features/authReducer';
+import { userLogin, userLogout } from '../features/authReducer';
 import { setLoading } from '../features/settingReducer';
 
 const basefetchBaseQuery = () => {
@@ -30,9 +30,9 @@ const basefetchBaseQuery = () => {
                     const refreshResult = await baseQuery(`/auth/refreshTokens/${refreshToken}`, api, extraOptions);
 
                     if (refreshResult?.data) {
-                        api.dispatch(setLogin(refreshResult?.data));
+                        api.dispatch(userLogin(refreshResult?.data));
                     } else {
-                        api.dispatch(setLogout());
+                        api.dispatch(userLogout());
                         ToastMessage.errorMessage(error.data?.message);
                     }
                 }

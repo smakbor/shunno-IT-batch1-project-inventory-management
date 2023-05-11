@@ -1,7 +1,7 @@
-//external lib import
+//External Lib Import
 import { lazy } from 'react';
 
-//internal lib import
+//Internal Lib Import
 import LazyLoad from '../components/common/LazyLoad';
 
 // auth
@@ -16,27 +16,27 @@ const ErrorPageNotFound = lazy(() => import('../pages/error/PageNotFound'));
 
 const publicRoute = [
     {
-        path: '/login',
+        path: '/account/login',
         element: <LazyLoad component={Login} />,
     },
     {
-        path: '/logout',
+        path: '/account/logout',
         element: <LazyLoad component={Logout} />,
     },
     {
-        path: '/register',
+        path: '/account/register',
         element: <LazyLoad component={Register} />,
     },
     {
-        path: '/confirm',
+        path: '/account/confirm',
         element: <LazyLoad component={Confirm} />,
     },
     {
-        path: '/forget-password',
+        path: '/account/forget-password',
         element: <LazyLoad component={ForgetPassword} />,
     },
     {
-        path: '/lock-screen',
+        path: '/account/lock-screen',
         element: <LazyLoad component={LockScreen} />,
     },
     {

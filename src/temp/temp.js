@@ -1,15 +1,15 @@
-//external lib import
+//External Lib Import
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-//internal lib import
-import privateRoutes from '../privateRoute';
-import { setLogin, setLogout } from '../../redux/features/authReducer';
+//Internal Lib Import
+import privateRoutes from '../routes/privateRoute';
+import { userLogin, userLogout } from '../redux/features/authReducer';
 import { useEffect } from 'react';
 
 //api services
-import { useProfileDetailsQuery } from '../../redux/services/profileService';
-import SessionHelper from '../../helpers/SessionHelper';
+import { useProfileDetailsQuery } from '../redux/services/profileService';
+import SessionHelper from '../helpers/SessionHelper';
 
 const ProtectRoute = ({ r, children }) => {
     const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const ProtectRoute = ({ r, children }) => {
     useEffect(() => {
         if (SessionHelper.getAccessToken()) {
             dispatch(
-                setLogin({
+                userLogin({
                     accessToken: SessionHelper.getAccessToken(),
                     refreshToken: SessionHelper.getRefreshToken(),
                 })
@@ -30,7 +30,7 @@ const ProtectRoute = ({ r, children }) => {
     if (accessToken) {
         if (isError) {
             //server not ready error
-            if (error.status === 'FETCH_ERROR') dispatch(setLogout());
+            if (error.status === 'FETCH_ERROR') dispatch(userLogout());
         } else if (data) {
             //user roles
             if (r.roles) {

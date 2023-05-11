@@ -1,14 +1,10 @@
-//external lib import
+//External Lib Import
 import React, { useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
-import { GrDocumentCsv } from 'react-icons/gr';
-import { SiMicrosoftexcel } from 'react-icons/si';
-import { BiImport } from 'react-icons/bi';
 
-//internal lib import
+//Internal Lib Import
 import PageTitle from '../../components/PageTitle';
 import Table from '../../components/Table';
-import exportFromJson from '../../utils/exportFromJson';
 import LoadingData from '../../components/common/LoadingData';
 import ErrorDataLoad from '../../components/common/ErrorDataLoad';
 import DateFormatter from '../../utils/DateFormatter';
@@ -18,16 +14,24 @@ import { useRoleDeleteMutation, useRoleListQuery } from '../../redux/services/ro
 import AleartMessage from '../../utils/AleartMessage';
 import ModalCreateUpdate from './ModalCreateUpdate';
 import { useTranslation } from 'react-i18next';
+import { useProfileDetailsQuery } from '../../redux/services/profileService';
+import ExportData from '../../components/ExportData';
 
 // main component
 const UserRolePage = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
-
+    const [defaultValues, setDefaultValues] = useState({ name: '', visibility: true });
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(null);
+    const { data: profile } = useProfileDetailsQuery() || {};
     const [roleDelete] = useRoleDeleteMutation();
-    const { data, isLoading, isError } = useRoleListQuery();
+    const {
+        data: roles,
+        isLoading,
+        isError,
+    } = useRoleListQuery(profile?.storeID, {
+        skip: !profile?.storeID,
+    });
 
     /**
      * Show/hide the modal
@@ -35,7 +39,7 @@ const UserRolePage = () => {
 
     const addShowModal = () => {
         setEditData(null);
-        setDefaultValues({ name: '', status: true });
+        setDefaultValues({ name: '', visibility: true });
         setModal(!modal);
     };
 
@@ -59,7 +63,9 @@ const UserRolePage = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original.id, roleDelete)}>
+                    onClick={() =>
+                        AleartMessage.Delete({ id: row?.original._id, storeID: profile?.storeID }, roleDelete)
+                    }>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
@@ -84,10 +90,10 @@ const UserRolePage = () => {
         },
         {
             Header: t('status'),
-            accessor: 'status',
+            accessor: 'visibility',
             sort: true,
             Cell: ({ row }) =>
-                row.original.status ? (
+                row.original.visibility ? (
                     <div className="badge bg-success">{t('active')}</div>
                 ) : (
                     <div className="badge bg-danger">{t('inactive')}</div>
@@ -164,38 +170,12 @@ const UserRolePage = () => {
                                             <i className="mdi mdi-plus-circle me-2"></i> {t('add user role')}
                                         </Button>
                                     </Col>
-
-                                    <Col sm={7}>
-                                        <div className="text-sm-end">
-                                            <Button variant="success" className="mb-2 me-1">
-                                                <i className="mdi mdi-cog"></i>
-                                            </Button>
-
-                                            <Button variant="light" className="mb-2 me-1">
-                                                <BiImport />
-                                                {t('import')}
-                                            </Button>
-
-                                            <Button
-                                                variant="light"
-                                                className="mb-2 me-1"
-                                                onClick={() => exportFromJson([{ name: 'f' }], 'roles', 'xls')}>
-                                                <SiMicrosoftexcel />
-                                                {t('export')}
-                                            </Button>
-                                            <Button
-                                                variant="light"
-                                                className="mb-2 me-1"
-                                                onClick={() => exportFromJson([{ name: 'f' }], 'roles', 'csv')}>
-                                                <GrDocumentCsv /> {t('export')}
-                                            </Button>
-                                        </div>
-                                    </Col>
+                                    <ExportData name="roles" data={roles} />
                                 </Row>
 
                                 <Table
                                     columns={columns}
-                                    data={data}
+                                    data={roles || []}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}

@@ -31,13 +31,11 @@ const BottomLink = () => {
     );
 };
 
-const Register = (): React$Element<React$FragmentType> => {
+const Register = () => {
     const { accessToken } = useSelector((state) => state.auth);
-
     const [district, setDistrict] = useState('');
     const { language } = useSelector((state) => state.setting);
     const { t } = useTranslation();
-
     const [register, { isLoading, isSuccess, isError, error }] = useRegisterMutation();
 
     /*

@@ -18,20 +18,14 @@ class SessionHelper {
     }
 
     static getAccessToken() {
-        return localStorage.getItem('accessToken');
+        return localStorage.getItem('hnfeAccessToken');
     }
     static setAccessToken(accessToken) {
-        return localStorage.setItem('accessToken', accessToken);
-    }
-    static setRefreshToken(refreshToken) {
-        return localStorage.setItem('refreshToken', refreshToken);
-    }
-    static getRefreshToken() {
-        return localStorage.getItem('refreshToken');
+        if (!accessToken) return undefined;
+        return localStorage.setItem('hnfeAccessToken', accessToken);
     }
     static removeTokens() {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('hnfeAccessToken');
     }
 }
 

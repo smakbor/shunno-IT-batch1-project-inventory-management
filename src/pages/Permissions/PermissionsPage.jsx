@@ -1,39 +1,42 @@
-//external lib import
-import { Row, Col, Card, Tab, Nav } from 'react-bootstrap';
+//External Lib Import
+import { Row, Col, Card, Tab, Tabs, Nav } from 'react-bootstrap';
 
-//internal lib import
+//Internal Lib Import
 import PageTitle from '../../components/PageTitle';
 import LoadingData from '../../components/common/LoadingData';
 import ErrorDataLoad from '../../components/common/ErrorDataLoad';
 import { useTranslation } from 'react-i18next';
-import classNames from 'classnames';
 
-//external lib import
+//External Lib Import
 import PermissionsTable from './PermissionsTable';
 
 //api services
 import { useRoleDropDownQuery } from '../../redux/services/roleService';
+import { useProfileDetailsQuery } from '../../redux/services/profileService';
 
 const PermissionsPage = () => {
     const { t } = useTranslation();
-    const { data, isLoading, isError } = useRoleDropDownQuery();
+    const { data: profile, isLoading: profileLoad, isError: profileError } = useProfileDetailsQuery() || {};
+    const { data, isLoading, isError } = useRoleDropDownQuery(profile?.storeID, {
+        skip: !profile?.storeID,
+    });
 
-    if (isLoading) {
+    if (isLoading || profileLoad) {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('Permission'), path: '/user-role', active: true }]}
-                    title={t('Permission')}
+                    breadCrumbItems={[{ label: t('permission'), path: '/user-role', active: true }]}
+                    title={t('permission')}
                 />
                 <LoadingData />
             </>
         );
-    } else if (isError) {
+    } else if (isError || profileError) {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('Permission'), path: '/user-role', active: true }]}
-                    title={t('Permission')}
+                    breadCrumbItems={[{ label: t('permission'), path: '/user-role', active: true }]}
+                    title={t('permission')}
                 />
                 <ErrorDataLoad />
             </>
@@ -42,43 +45,26 @@ const PermissionsPage = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('Permission'), path: '/user-role', active: true }]}
-                    title={t('Permission')}
+                    breadCrumbItems={[{ label: t('permission'), path: '/user-role', active: true }]}
+                    title={t('permission')}
                 />
 
                 <Row>
                     <Col>
                         <Card>
                             <Card.Body>
-                                <Tab.Container defaultActiveKey={data?.[0]?.label}>
-                                    <Nav variant="pills" className="no-borderd mb-2" as="ul">
-                                        {data?.map((tab, index) => {
-                                            return (
-                                                <Nav.Item key={index}>
-                                                    <Nav.Link to="#" eventKey={tab?.label}>
-                                                        <i
-                                                            className={classNames(
-                                                                tab?.icon,
-                                                                'd-md-none',
-                                                                'd-block',
-                                                                'me-1'
-                                                            )}></i>
-                                                        <span className="d-none d-md-block">{tab?.label}</span>
-                                                    </Nav.Link>
-                                                </Nav.Item>
-                                            );
-                                        })}
-                                    </Nav>
-                                    <Tab.Content>
-                                        {data?.map((tab, index) => {
-                                            return (
-                                                <Tab.Pane eventKey={tab?.label} id={tab?.value} key={index}>
-                                                    <PermissionsTable roleItem={tab} />
-                                                </Tab.Pane>
-                                            );
-                                        })}
-                                    </Tab.Content>
-                                </Tab.Container>
+                                <Tabs
+                                    defaultActiveKey={data?.[0]?.label}
+                                    transition={false}
+                                    className="mb-4 nav-bordered">
+                                    {data?.map((tab, index) => {
+                                        return (
+                                            <Tab eventKey={tab?.label} title={tab?.label}>
+                                                <PermissionsTable roleItem={tab} index={index} />
+                                            </Tab>
+                                        );
+                                    })}
+                                </Tabs>
                             </Card.Body>
                         </Card>
                     </Col>

@@ -1,19 +1,15 @@
-//external lib import
-import { useEffect } from 'react';
-
+//External Lib Import
+import { useSelector } from 'react-redux';
 import { Button, Alert, Row, Col } from 'react-bootstrap';
 import { Link, Navigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 
-//internal lib import
+//Internal Lib Import
 import { VerticalForm, FormInput } from '../../components';
 import AccountLayout from './AccountLayout';
 import { useLoginMutation } from '../../redux/services/authService';
-import { setLogin } from '../../redux/features/authReducer';
-import { useSelector } from 'react-redux';
 
 /* bottom link of account pages */
 const BottomLink = () => {
@@ -22,9 +18,9 @@ const BottomLink = () => {
         <Row className="mt-3">
             <Col className="text-center">
                 <p className="text-muted">
-                    {t("Don't have an account?")}{' '}
+                    {t("don't have an account?")}{' '}
                     <Link to={'/account/register'} className="text-muted ms-1">
-                        <b>{t('Sign Up')}</b>
+                        <b>{t('sign up')}</b>
                     </Link>
                 </p>
             </Col>
@@ -32,18 +28,11 @@ const BottomLink = () => {
     );
 };
 
-const Login = (): React$Element<any> => {
+const Login = () => {
     const { accessToken } = useSelector((state) => state.auth);
     const { t } = useTranslation();
-    const dispatch = useDispatch();
 
     const [login, { isLoading, isError, error, isSuccess, data }] = useLoginMutation();
-
-    useEffect(() => {
-        if (isSuccess) {
-            dispatch(setLogin(data?.tokens));
-        }
-    }, [isSuccess]);
 
     /*
     form validation schema
@@ -52,15 +41,15 @@ const Login = (): React$Element<any> => {
         yup.object().shape({
             mobile: yup
                 .string()
-                .required(t('Please enter Mobile'))
-                .matches(/(^(\+88|0088|88)?(01){1}[3456789]{1}(\d){8})$/, t('Write 11 Digit Mobile Number')),
+                .required(t('please enter mobile'))
+                .matches(/(^(\+88|0088|88)?(01){1}[3456789]{1}(\d){8})$/, t('write 11 digit mobile number')),
             password: yup
                 .string()
-                .required(t('Please enter Password'))
-                .min(8, t('Password must be at least 8 characters'))
+                .required(t('please enter password'))
+                .min(8, t('password must be at least 8 characters'))
                 .matches(
                     /^(?=.*[0-9])(?=.*[a-zA-Z])(?=\S+$).{6,20}$/,
-                    'Password must contain at least 1 letter and 1 number'
+                    'password must contain at least 1 letter and 1 number'
                 ),
         })
     );
@@ -78,7 +67,7 @@ const Login = (): React$Element<any> => {
         <AccountLayout bottomLinks={<BottomLink />} className="col-md-8 col-lg-6 col-xl-5 col-xxl-4 col-md-8">
             <div className="text-center w-75 m-auto">
                 <h4 className="text-dark-50 text-center mt-0 fw-bold">{t('Sign In')}</h4>
-                <p className="text-muted mb-4">{t('Enter your mobile number and password to access admin panel.')}</p>
+                <p className="text-muted mb-4">{t('enter your mobile number and password to access admin panel.')}</p>
             </div>
 
             {isError && (
@@ -90,7 +79,7 @@ const Login = (): React$Element<any> => {
             <VerticalForm
                 onSubmit={onSubmit}
                 resolver={schemaResolver}
-                defaultValues={{ mobile: '01772703036', password: 'pass1234' }}>
+                defaultValues={{ mobile: '01772703036', password: 'team@#ss2021$' }}>
                 <FormInput
                     label={t('Mobile')}
                     type="text"

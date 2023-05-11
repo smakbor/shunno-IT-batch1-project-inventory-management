@@ -1,4 +1,4 @@
-//internal lib import
+//Internal Lib Import
 
 import { apiService } from '../api/apiService';
 
@@ -24,7 +24,6 @@ export const suppliersService = apiService.injectEndpoints({
                 );
                 try {
                     await queryFulfilled;
-
                 } catch {
                     response.undo();
                 }
@@ -46,8 +45,6 @@ export const suppliersService = apiService.injectEndpoints({
                 );
                 try {
                     await queryFulfilled;
-
-
                 } catch {
                     response.undo();
                 }
@@ -75,9 +72,5 @@ export const suppliersService = apiService.injectEndpoints({
         }),
     }),
 });
-export const {
-    useGetSuppliersQuery,
-    useSupplierDeleteMutation,
-    useSupplierCreateMutation,
-    useSupplierUpdateMutation,
-} = suppliersService;
+export const { useGetSuppliersQuery, useSupplierDeleteMutation, useSupplierCreateMutation, useSupplierUpdateMutation } =
+    suppliersService;

@@ -1,9 +1,11 @@
-// @flow
+//External Lib Import
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 
+//Internal Lib Import
 // actions
 import { showRightSidebar, changeSidebarType } from '../redux/features/layoutReducer';
 
@@ -16,7 +18,6 @@ import TopbarSearch from '../components/TopbarSearch';
 import AppsDropdown from '../components/AppsDropdown/';
 
 // images
-import profilePic from '../assets/images/users/avatar-1.jpg';
 import avatar1 from '../assets/images/users/avatar-2.jpg';
 import avatar2 from '../assets/images/users/avatar-4.jpg';
 import logoSmDark from '../assets/images/logo_sm_dark.png';
@@ -116,14 +117,7 @@ const ProfileMenus = [
     },
 ];
 
-type TopbarProps = {
-    hideLogo?: boolean,
-    navCssClasses?: string,
-    openLeftMenuCallBack?: () => void,
-    topbarDark?: boolean,
-};
-
-const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: TopbarProps) => {
+const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }) => {
     const dispatch = useDispatch();
 
     const [isopen, setIsopen] = useState(false);
@@ -207,12 +201,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </button>
                         </li>
                         <li className="dropdown notification-list">
-                            <ProfileDropdown
-                                profilePic={profilePic}
-                                menuItems={ProfileMenus}
-                                username={'Dominic Keller'}
-                                userTitle={'Founder'}
-                            />
+                            <ProfileDropdown menuItems={ProfileMenus} />
                         </li>
                     </ul>
 
@@ -252,6 +241,13 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
             </div>
         </>
     );
+};
+
+Topbar.propTypes = {
+    hideLogo: PropTypes.bool,
+    navCssClasses: PropTypes.string,
+    openLeftMenuCallBack: PropTypes.func,
+    topbarDark: PropTypes.bool,
 };
 
 export default Topbar;
