@@ -117,7 +117,7 @@ const PermissionsTable = ({ roleItem, index }) => {
     const onSubmit = (formData) => {
         roleUpdate({
             id: roleItem?._id,
-            postBody: { storeID: profile?.storeID, permissions: formData, name: roleItem.label },
+            postBody: { storeID: profile?.storeID, permissions: formData, name: roleItem.name },
         });
     };
 

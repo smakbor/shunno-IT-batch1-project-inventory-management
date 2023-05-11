@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 const MENU_ITEMS = () => {
     const { t } = useTranslation();
     return [
-        { key: 'contacts', label: t('contacts'), isTitle: true },
         {
             key: 'products',
             label: t('products'),
@@ -48,6 +47,7 @@ const MENU_ITEMS = () => {
                 },
             ],
         },
+        { key: 'contacts', label: t('contacts'), isTitle: true },
         {
             key: 'suppliers',
             label: t('suppliers'),
@@ -62,6 +62,7 @@ const MENU_ITEMS = () => {
             icon: 'uil-users-alt',
             url: '/customers',
         },
+        { key: 'contacts', label: t('contacts'), isTitle: true },
         {
             key: 'Expenditure',
             label: t('expenditure'),
@@ -82,12 +83,49 @@ const MENU_ITEMS = () => {
                 },
             ],
         },
+        { key: 'contacts', label: t('contacts'), isTitle: true },
         {
             key: 'Messages',
             label: t('message'),
             isTitle: false,
             icon: 'uil-comment-alt-dots',
             url: '/messages/inbox',
+        },
+        { key: 'permissions', label: 'permissions', isTitle: true },
+        {
+            key: 'permissions',
+            label: 'permissions',
+            isTitle: false,
+            icon: 'uil-shield-exclamation',
+            children: [
+                {
+                    key: 'user-role',
+                    label: 'User Role',
+                    url: '/user-role',
+                    parentKey: 'permissions',
+                },
+                {
+                    key: 'permissions',
+                    label: 'permissions',
+                    url: '/permissions',
+                    parentKey: 'permissions',
+                },
+            ],
+        },
+        { key: 'settings', label: 'settings', isTitle: true },
+        {
+            key: 'settings',
+            label: 'settings',
+            isTitle: false,
+            icon: 'dripicons-gear',
+            children: [
+                {
+                    key: 'user',
+                    label: 'users',
+                    url: '/users',
+                    parentKey: 'settings',
+                },
+            ],
         },
     ];
 };
