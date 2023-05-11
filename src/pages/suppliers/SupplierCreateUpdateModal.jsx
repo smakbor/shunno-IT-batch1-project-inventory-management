@@ -13,13 +13,9 @@ import removeEmptyObj from '../../helpers/removeEmptyObj';
 
 //api services
 
-import {
-    useSupplierCreateMutation,
-    useSupplierUpdateMutation,
-} from '../../redux/services/suppliersService';
+import { useSupplierCreateMutation, useSupplierUpdateMutation } from '../../redux/services/suppliersService';
 
 const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
-
     const { t } = useTranslation();
     const [supplierCreate, { isLoading, isSuccess }] = useSupplierCreateMutation();
     const [supplierUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useSupplierUpdateMutation();
@@ -30,12 +26,11 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
     const schemaResolver = yupResolver(
         yup.object().shape({
             name: yup.string().required(t('please enter manufacturer name')).min(3, t('minimum containing 3 letter')),
-
         })
     );
 
     const onSubmit = (formData) => {
-        let data = {}
+        let data = {};
         data.name = formData?.name;
         data.mobile = formData?.mobile;
         data.email = formData?.email;
@@ -46,18 +41,18 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
         data.thana = formData?.thana;
         data.district = formData?.district;
         data.nid = formData?.nid;
-        data.reference = {}
+        data.reference = {};
         data.reference.name = formData?.referenceName;
         data.reference.mobile = formData?.referenceMobile;
         data.reference.address = formData?.referenceAddress;
         data.reference.nid = formData?.referenceNid;
         data.reference.relation = formData?.referenceRelation;
         data.due = formData?.due;
-        data.storeID = "602e42e46ebade5b1c7cf45f"
+        data.storeID = '602e42e46ebade5b1c7cf45f';
         if (!editData) {
             supplierCreate(removeEmptyObj(data));
         } else {
-            const updatedData = { ...editData, ...data }
+            const updatedData = { ...editData, ...data };
             const postBody = removeEmptyObj(updatedData);
             supplierUpdate({ id: editData._id, postBody });
         }
@@ -72,11 +67,9 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
     return (
         <Card className={classNames('', { 'd-none': !modal })}>
             <Card.Body>
-                <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false} size='xl'>
+                <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false} size="xl">
                     <Modal.Header onHide={toggle} closeButton>
-                        <h4 className="modal-title">
-                            {editData ? t('update supplier') : t('add supplier')}
-                        </h4>
+                        <h4 className="modal-title">{editData ? t('update supplier') : t('add supplier')}</h4>
                     </Modal.Header>
 
                     <Modal.Body>
@@ -174,7 +167,6 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 type="text"
                                 name="referenceName"
                                 placeholder={t('please enter reference name')}
-
                                 containerClass={'mb-3'}
                                 col={'col-4'}
                             />

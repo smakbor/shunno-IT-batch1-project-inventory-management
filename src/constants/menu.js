@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 const MENU_ITEMS = () => {
     const { t } = useTranslation();
     return [
-        { key: 'contacts', label: t('contacts'), isTitle: true },
         {
             key: 'products',
             label: t('products'),
@@ -48,6 +47,7 @@ const MENU_ITEMS = () => {
                 },
             ],
         },
+        { key: 'contacts', label: t('contacts'), isTitle: true },
         {
             key: 'suppliers',
             label: t('suppliers'),
@@ -61,6 +61,35 @@ const MENU_ITEMS = () => {
             isTitle: false,
             icon: 'uil-users-alt',
             url: '/customers',
+        },
+        { key: 'contacts', label: t('contacts'), isTitle: true },
+        {
+            key: 'Expenditure',
+            label: t('expenditure'),
+            isTitle: false,
+            icon: 'dripicons-weight',
+            children: [
+                {
+                    key: 'costSection',
+                    label: t('cost section'),
+                    url: '/costSections',
+                    parentKey: 'Expenditure',
+                },
+                {
+                    key: 'expenditure',
+                    label: t('expenditure'),
+                    url: '/expenditure',
+                    parentKey: 'Expenditure',
+                },
+            ],
+        },
+        { key: 'contacts', label: t('contacts'), isTitle: true },
+        {
+            key: 'Messages',
+            label: t('message'),
+            isTitle: false,
+            icon: 'uil-comment-alt-dots',
+            url: '/messages/inbox',
         },
         { key: 'permissions', label: 'permissions', isTitle: true },
         {

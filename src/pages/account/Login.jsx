@@ -79,7 +79,7 @@ const Login = () => {
             <VerticalForm
                 onSubmit={onSubmit}
                 resolver={schemaResolver}
-                defaultValues={{ mobile: '01772703036', password: 'team@#ss2021$' }}>
+                defaultValues={{ mobile: '01772703036', password: 'team@ss#2021$' }}>
                 <FormInput
                     label={t('Mobile')}
                     type="text"

@@ -11,15 +11,28 @@ import { useTranslation } from 'react-i18next';
 import PermissionsTable from './PermissionsTable';
 
 //api services
-import { useRoleDropDownQuery } from '../../redux/services/roleService';
+import { useRoleListQuery } from '../../redux/services/roleService';
 import { useProfileDetailsQuery } from '../../redux/services/profileService';
+import { useEffect, useState } from 'react';
 
 const PermissionsPage = () => {
     const { t } = useTranslation();
     const { data: profile, isLoading: profileLoad, isError: profileError } = useProfileDetailsQuery() || {};
-    const { data, isLoading, isError } = useRoleDropDownQuery(profile?.storeID, {
+    const {
+        data: allRoles,
+        isLoading,
+        isError,
+    } = useRoleListQuery(profile?.storeID, {
         skip: !profile?.storeID,
     });
+
+    const [activeRole, setActiveRole] = useState([]);
+
+    useEffect(() => {
+        if (allRoles) {
+            setActiveRole(allRoles.filter((r) => r.visibility === true));
+        }
+    }, []);
 
     if (isLoading || profileLoad) {
         return (
@@ -54,12 +67,12 @@ const PermissionsPage = () => {
                         <Card>
                             <Card.Body>
                                 <Tabs
-                                    defaultActiveKey={data?.[0]?.label}
+                                    defaultActiveKey={activeRole?.[0]?.name}
                                     transition={false}
                                     className="mb-4 nav-bordered">
-                                    {data?.map((tab, index) => {
+                                    {activeRole?.map((tab, index) => {
                                         return (
-                                            <Tab eventKey={tab?.label} title={tab?.label}>
+                                            <Tab eventKey={tab?.name} title={tab?.name}>
                                                 <PermissionsTable roleItem={tab} index={index} />
                                             </Tab>
                                         );

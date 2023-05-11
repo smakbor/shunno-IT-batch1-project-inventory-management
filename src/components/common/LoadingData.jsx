@@ -13,9 +13,16 @@ const LoadingData = () => {
                         <div
                             className="d-flex justify-content-center align-items-center"
                             style={{
-                                minHeight: '300px',
+                                minHeight: '50vh',
                             }}>
-                            <img top src={LoaderImg} alt="" style={{ width: '100px' }} />{' '}
+                            {/* <img top src={LoaderImg} alt="" style={{ width: '100px' }} />{' '} */}
+                            <div className="status" id="status-load">
+                                <div className="bouncing-loader">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
                         </div>
                     </Card.Body>
                 </Card>
