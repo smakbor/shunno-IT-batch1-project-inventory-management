@@ -4,11 +4,12 @@ import { apiService } from '../api/apiService';
 
 export const expenditureService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getExpenditures: builder.query({
+        expenditureList: builder.query({
             query: () => ({
                 url: `expenditures`,
                 method: 'GET',
             }),
+            transformResponse: ({ data }) => data || [],
         }),
         expenditureCreate: builder.mutation({
             query: (postBody) => ({
@@ -21,7 +22,7 @@ export const expenditureService = apiService.injectEndpoints({
                     const { data } = await queryFulfilled;
                     dispatch(
                         apiService.util.updateQueryData('getExpenditures', undefined, (draft) => {
-                            draft.data.push(data.data);
+                            draft.push(data);
                         })
                     );
                 } catch (e) {
@@ -41,8 +42,8 @@ export const expenditureService = apiService.injectEndpoints({
                     const { data } = await queryFulfilled;
                     dispatch(
                         apiService.util.updateQueryData('getExpenditures', undefined, (draft) => {
-                            const findIndex = draft.data.findIndex((item) => item._id === id);
-                            draft.data[findIndex] = postBody;
+                            const findIndex = draft.findIndex((item) => item._id === id);
+                            draft[findIndex] = postBody;
                         })
                     );
                 } catch (e) {
@@ -58,7 +59,7 @@ export const expenditureService = apiService.injectEndpoints({
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getExpenditures', undefined, (draft) => {
-                        draft.data = draft.data.filter((item) => item._id !== id);
+                        draft = draft.filter((item) => item._id !== id);
                     })
                 );
                 try {
@@ -71,7 +72,7 @@ export const expenditureService = apiService.injectEndpoints({
     }),
 });
 export const {
-    useGetExpendituresQuery,
+    useExpenditureListQuery,
     useExpenditureDeleteMutation,
     useExpenditureCreateMutation,
     useExpenditureUpdateMutation,

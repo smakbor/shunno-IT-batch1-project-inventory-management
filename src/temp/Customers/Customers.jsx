@@ -1,25 +1,23 @@
 //External Lib Import
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-import { GrDocumentCsv } from 'react-icons/gr';
-import { SiMicrosoftexcel } from 'react-icons/si';
-import { BiImport } from 'react-icons/bi';
 
 //Internal Lib Import
 import PageTitle from '../../components/PageTitle';
 import Table from '../../components/Table';
 import exportFromJson from '../../utils/exportFromJson';
+import { GrDocumentCsv } from 'react-icons/gr';
+import { SiMicrosoftexcel } from 'react-icons/si';
+import { BiImport } from 'react-icons/bi';
 import LoadingData from '../../components/common/LoadingData';
 import ErrorDataLoad from '../../components/common/ErrorDataLoad';
-import AleartMessage from '../../utils/AleartMessage';
+import DateFormatter from '../../utils/DateFormatter';
 
 //api services
-
-import { useGetCustomersQuery, useCustomerDeleteMutation } from '../../redux/services/customerService';
-
-import CustomerCreateUpdateModal from './CustomerCreateUpdateModal';
-import DateFormatter from '../../utils/DateFormatter';
+import { useCustomerDeleteMutation, useCustomerListQuery } from '../../redux/services/customerService';
+import AleartMessage from '../../utils/AleartMessage';
+import ModalCreateUpdate from './ModalCreateUpdate';
+import { useTranslation } from 'react-i18next';
 
 // main component
 const Customers = () => {
@@ -27,19 +25,17 @@ const Customers = () => {
     const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
 
     const [modal, setModal] = useState(false);
-    const [editData, setEditData] = useState(false);
-
+    const [editData, setEditData] = useState(null);
     const [customerDelete] = useCustomerDeleteMutation();
-
-    const { data, isLoading, isError } = useGetCustomersQuery();
+    const { data, isLoading, isError } = useCustomerListQuery();
 
     /**
      * Show/hide the modal
      */
 
     const addShowModal = () => {
-        setEditData(false);
-        setDefaultValues({ name: '', status: '' });
+        setEditData(null);
+        setDefaultValues({ name: '', status: true });
         setModal(!modal);
     };
 
@@ -51,22 +47,17 @@ const Customers = () => {
     const ActionColumn = ({ row }) => {
         const edit = () => {
             toggle();
-            let { reference, ...updateData } = { ...row.original };
-            updateData.refName = row.original.reference?.name || '';
-            updateData.refAddress = row.original.reference?.address || '';
-            updateData.refMobile = row.original.reference?.mobile || '';
-            console.log(updateData);
-            setEditData(updateData);
-            setDefaultValues(updateData);
+            setEditData(row?.original);
+            setDefaultValues(row?.original);
         };
 
         return (
             <>
-                <span role="button" className="action-icon text-warning" onClick={edit}>
+                <span customer="button" className="action-icon text-warning" onClick={edit}>
                     <i className="mdi mdi-square-edit-outline"></i>
                 </span>
                 <span
-                    role="button"
+                    customer="button"
                     className="action-icon text-danger"
                     onClick={() => AleartMessage.Delete(row?.original._id, customerDelete)}>
                     <i className="mdi mdi-delete"></i>
@@ -77,74 +68,41 @@ const Customers = () => {
 
     // get all columns
     const columns = [
-        // {
-        //     Header: '#',
-        //     accessor: 'sl',
-        //     sort: true,
-        //     Cell: ({ row }) => row.index + 1,
-        //     classes: 'table-user',
-        // },
-
         {
-            Header: t('name'),
-            accessor: 'name',
+            Header: 'ID',
+            accessor: 'sl',
             sort: true,
-            Cell: ({ row }) => row.original.name,
+            Cell: ({ row }) => row.index + 1,
             classes: 'table-user',
         },
         {
-            Header: t("father's name"),
-            accessor: 'fatherName',
+            Header: 'User Customer',
+            accessor: 'UserCustomer',
             sort: true,
-            Cell: ({ row }) => row.original.fatherName,
+            Cell: ({ row }) => row.original.label,
             classes: 'table-user',
         },
         {
-            Header: t('address'),
-            accessor: 'address',
+            Header: 'Status',
+            accessor: 'Status',
             sort: true,
-            Cell: ({ row }) => {
-                const splitAddress = row.original.address?.split(',');
-                return splitAddress?.map((item, i) => (
-                    <p className="mb-0" key={i}>
-                        {item}
-                        {i !== splitAddress.length - 1 ? ',' : ''}
-                    </p>
-                ));
-            },
+            Cell: ({ row }) =>
+                row.original.status ? (
+                    <div className="badge bg-success">Active</div>
+                ) : (
+                    <div className="badge bg-danger">Deactive</div>
+                ),
             classes: 'table-user',
         },
         {
-            Header: t('mobile'),
-            accessor: 'mobile',
-            sort: false,
-            Cell: ({ row }) => row.original.mobile,
-            classes: 'table-user',
-        },
-        {
-            Header: t('ledger number'),
-            accessor: 'ledgerNumber',
-            sort: true,
-            Cell: ({ row }) => row.original.ledgerNumber,
-            classes: 'table-user',
-        },
-        {
-            Header: t('due'),
-            accessor: 'due',
-            sort: false,
-            Cell: ({ row }) => row.original.due,
-            classes: 'table-user',
-        },
-        {
-            Header: t('date'),
+            Header: 'Created Date',
             accessor: 'createdAt',
-            sort: false,
-            Cell: ({ row }) => DateFormatter(row.original.createdAt),
+            sort: true,
+            Cell: ({ row }) => DateFormatter(row?.original?.createdAt),
             classes: 'table-user',
         },
-
         {
-            Header: t('action'),
+            Header: 'Action',
             accessor: 'action',
             sort: false,
             classes: 'table-action',
@@ -155,15 +113,15 @@ const Customers = () => {
     // get pagelist to display
     const sizePerPageList = [
         {
-            text: t('5'),
+            text: '5',
             value: 5,
         },
         {
-            text: t('10'),
+            text: '10',
             value: 10,
         },
         {
-            text: t('50'),
+            text: '50',
             value: 50,
         },
     ];
@@ -172,37 +130,30 @@ const Customers = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('customers'), path: '/customers', active: true }]}
-                    title={t('customers')}
+                    breadCrumbItems={[{ label: t('User Customer'), path: '/user-customer', active: true }]}
+                    title={t('User Customer')}
                 />
-                <Card>
-                    <Card.Body>
-                        <LoadingData />
-                    </Card.Body>
-                </Card>
+                <LoadingData />
             </>
         );
     } else if (isError) {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('customers'), path: '/customers', active: true }]}
-                    title={t('customers')}
+                    breadCrumbItems={[{ label: t('User Customer'), path: '/user-customer', active: true }]}
+                    title={t('User Customer')}
                 />
-                <Card>
-                    <Card.Body>
-                        <ErrorDataLoad />
-                    </Card.Body>
-                </Card>
+                <ErrorDataLoad />
             </>
         );
     } else {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('customers'), path: '/customers', active: true }]}
-                    title={t('customers')}
+                    breadCrumbItems={[{ label: t('User Customer'), path: '/user-customer', active: true }]}
+                    title={t('User Customer')}
                 />
+
                 <Row>
                     <Col xs={12}>
                         <Card>
@@ -210,7 +161,7 @@ const Customers = () => {
                                 <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add customer')}
+                                            <i className="mdi mdi-plus-circle me-2"></i> {t('Add User Customer')}
                                         </Button>
                                     </Col>
 
@@ -221,22 +172,21 @@ const Customers = () => {
                                             </Button>
 
                                             <Button variant="light" className="mb-2 me-1">
-                                                <BiImport />
-                                                {t('import')}
+                                                <BiImport /> {t('Import')}
                                             </Button>
 
                                             <Button
                                                 variant="light"
                                                 className="mb-2 me-1"
-                                                onClick={() => exportFromJson([{ name: 'f' }], 'roles', 'xls')}>
+                                                onClick={() => exportFromJson([{ name: 'f' }], 'customers', 'xls')}>
                                                 <SiMicrosoftexcel />
-                                                {t('export')}
+                                                {t('Export')}
                                             </Button>
                                             <Button
                                                 variant="light"
                                                 className="mb-2 me-1"
-                                                onClick={() => exportFromJson([{ name: 'f' }], 'roles', 'csv')}>
-                                                <GrDocumentCsv /> {t('export')}
+                                                onClick={() => exportFromJson([{ name: 'f' }], 'customers', 'csv')}>
+                                                <GrDocumentCsv /> {t('Export')}
                                             </Button>
                                         </div>
                                     </Col>
@@ -244,7 +194,7 @@ const Customers = () => {
 
                                 <Table
                                     columns={columns}
-                                    data={data.data}
+                                    data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}
@@ -259,8 +209,7 @@ const Customers = () => {
                         </Card>
                     </Col>
                 </Row>
-                {/* <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} /> */}
-                <CustomerCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }

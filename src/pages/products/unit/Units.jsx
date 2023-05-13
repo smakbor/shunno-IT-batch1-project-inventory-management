@@ -16,7 +16,7 @@ import AleartMessage from '../../../utils/AleartMessage';
 import UnitCreateUpdate from './UnitCreateUpdate';
 
 //api services
-import { useGetUnitsQuery, useUnitDeleteMutation } from '../../../redux/services/unitService';
+import { useUnitListQuery, useUnitDeleteMutation } from '../../../redux/services/unitService';
 
 // main component
 const Units = () => {
@@ -26,7 +26,7 @@ const Units = () => {
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
     const [unitDelete] = useUnitDeleteMutation();
-    const { data, isLoading, isError } = useGetUnitsQuery();
+    const { data, isLoading, isError } = useUnitListQuery();
 
     /**
      * Show/hide the modal
@@ -141,10 +141,10 @@ const Units = () => {
     } else {
         return (
             <>
-                {/* <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('category')}
-                /> */}
+                <PageTitle
+                    breadCrumbItems={[{ label: t('units'), path: '/products/units', active: true }]}
+                    title={t('units')}
+                />
 
                 <Row>
                     <Col xs={12}>
@@ -187,7 +187,7 @@ const Units = () => {
 
                                 <Table
                                     columns={columns}
-                                    data={data.data}
+                                    data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}

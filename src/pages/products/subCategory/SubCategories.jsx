@@ -195,7 +195,7 @@ const SubCategories = () => {
 
                                 <Table
                                     columns={columns}
-                                    data={data.data}
+                                    data={data || []}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}

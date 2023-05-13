@@ -4,11 +4,12 @@ import { apiService } from '../api/apiService';
 
 export const warrantyService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getWarranties: builder.query({
+        warrantyList: builder.query({
             query: () => ({
                 url: `warranties`,
                 method: 'GET',
             }),
+            transformResponse: ({ data }) => data || [],
         }),
         warrantyCreate: builder.mutation({
             query: (postBody) => ({
@@ -21,7 +22,7 @@ export const warrantyService = apiService.injectEndpoints({
                     const { data } = await queryFulfilled;
                     dispatch(
                         apiService.util.updateQueryData('getWarranties', undefined, (draft) => {
-                            draft.data.push(data.data);
+                            draft.push(data);
                         })
                     );
                 } catch (e) {
@@ -41,8 +42,8 @@ export const warrantyService = apiService.injectEndpoints({
                     const { data } = await queryFulfilled;
                     dispatch(
                         apiService.util.updateQueryData('getWarranties', undefined, (draft) => {
-                            const findIndex = draft.data.findIndex((item) => item._id === id);
-                            draft.data[findIndex] = postBody;
+                            const findIndex = draft.findIndex((item) => item._id === id);
+                            draft[findIndex] = postBody;
                         })
                     );
                 } catch (e) {
@@ -58,7 +59,7 @@ export const warrantyService = apiService.injectEndpoints({
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getWarranties', undefined, (draft) => {
-                        draft.data = draft.data.filter((item) => item._id !== id);
+                        draft = draft.filter((item) => item._id !== id);
                     })
                 );
                 try {
@@ -71,7 +72,7 @@ export const warrantyService = apiService.injectEndpoints({
     }),
 });
 export const {
-    useGetWarrantiesQuery,
+    useWarrantyListQuery,
     useWarrantyDeleteMutation,
     useWarrantyCreateMutation,
     useWarrantyUpdateMutation,

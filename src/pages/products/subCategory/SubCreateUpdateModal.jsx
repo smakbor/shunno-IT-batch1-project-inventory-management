@@ -14,6 +14,7 @@ import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 import { useSubCategoryCreateMutation, useSubCategoryUpdateMutation } from '../../../redux/services/subCategory';
 import slugify from '../../../helpers/slugify';
+import getStore from '../../../helpers/getStore';
 
 const SubCategoryCreateUpdateModal = ({
     subCategoryModal,
@@ -22,6 +23,7 @@ const SubCategoryCreateUpdateModal = ({
     subCategoryEditData,
     subCategoryDefaultValues,
 }) => {
+    const store = getStore()
     const { t } = useTranslation();
     const [subCategoryCreate, { isLoading, isSuccess }] = useSubCategoryCreateMutation();
     const [subCategoryUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useSubCategoryUpdateMutation();
@@ -49,7 +51,7 @@ const SubCategoryCreateUpdateModal = ({
         data.isEcom = formData.isEcom;
         data.status = formData.status;
         data.categoryID = subCategoryDefaultValues.categoryID;
-
+        data.storeID = store._id;
         if (!subCategoryEditData) {
             subCategoryCreate(removeEmptyObj(data));
         } else {

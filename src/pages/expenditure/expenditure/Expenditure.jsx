@@ -14,9 +14,9 @@ import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 import AleartMessage from '../../../utils/AleartMessage';
 import ExpenditureCreateUpdate from './ExpenditureCreateUpdate';
-import { useExpenditureDeleteMutation, useGetExpendituresQuery } from '../../../redux/services/expenditureService';
+import { useExpenditureDeleteMutation, useExpenditureListQuery } from '../../../redux/services/expenditureService';
 import DateFormatter from '../../../utils/DateFormatter';
-import { useGetAllCostSectionQuery } from '../../../redux/services/costSectionService';
+import { useCostSectionListQuery } from '../../../redux/services/costSectionService';
 
 //api services
 
@@ -28,8 +28,8 @@ const Expenditure = () => {
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
     const [expenditureDelete] = useExpenditureDeleteMutation();
-    const { data, isLoading, isError } = useGetExpendituresQuery();
-    const { data: costSectionData, isLoading: isLoaded, isError: isErr } = useGetAllCostSectionQuery();
+    const { data, isLoading, isError } = useExpenditureListQuery();
+    const { data: costSectionData, isLoading: isLoaded, isError: isErr } = useCostSectionListQuery();
 
     /**
      * Show/hide the modal

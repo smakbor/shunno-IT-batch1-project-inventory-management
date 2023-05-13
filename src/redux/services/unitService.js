@@ -4,11 +4,12 @@ import { apiService } from '../api/apiService';
 
 export const unitService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getUnits: builder.query({
+        unitList: builder.query({
             query: () => ({
                 url: `units`,
                 method: 'GET',
             }),
+            transformResponse: ({ data }) => data || [],
         }),
         unitCreate: builder.mutation({
             query: (postBody) => ({
@@ -21,7 +22,7 @@ export const unitService = apiService.injectEndpoints({
                     const { data } = await queryFulfilled;
                     dispatch(
                         apiService.util.updateQueryData('getUnits', undefined, (draft) => {
-                            draft.data.push(data.data);
+                            draft.push(data);
                         })
                     );
                 } catch (e) {
@@ -41,8 +42,8 @@ export const unitService = apiService.injectEndpoints({
                     const { data } = await queryFulfilled;
                     dispatch(
                         apiService.util.updateQueryData('getUnits', undefined, (draft) => {
-                            const findIndex = draft.data.findIndex((item) => item._id === id);
-                            draft.data[findIndex] = postBody;
+                            const findIndex = draft.findIndex((item) => item._id === id);
+                            draft[findIndex] = postBody;
                         })
                     );
                 } catch (e) {
@@ -58,7 +59,7 @@ export const unitService = apiService.injectEndpoints({
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getUnits', undefined, (draft) => {
-                        draft.data = draft.data.filter((item) => item._id !== id);
+                        draft = draft.filter((item) => item._id !== id);
                     })
                 );
                 try {
@@ -70,4 +71,4 @@ export const unitService = apiService.injectEndpoints({
         }),
     }),
 });
-export const { useGetUnitsQuery, useUnitDeleteMutation, useUnitCreateMutation, useUnitUpdateMutation } = unitService;
+export const { useUnitListQuery, useUnitDeleteMutation, useUnitCreateMutation, useUnitUpdateMutation } = unitService;

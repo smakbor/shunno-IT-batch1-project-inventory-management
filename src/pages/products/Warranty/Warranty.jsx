@@ -17,7 +17,7 @@ import WarrantyCreateUpdate from './WarrantyCreateUpdate';
 
 //api services
 
-import { useGetWarrantiesQuery, useWarrantyDeleteMutation } from '../../../redux/services/warrantyService';
+import { useWarrantyListQuery, useWarrantyDeleteMutation } from '../../../redux/services/warrantyService';
 
 // main component
 const Warranty = () => {
@@ -27,7 +27,7 @@ const Warranty = () => {
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
     const [warrantyDelete] = useWarrantyDeleteMutation();
-    const { data, isLoading, isError } = useGetWarrantiesQuery();
+    const { data, isLoading, isError } = useWarrantyListQuery();
 
     /**
      * Show/hide the modal

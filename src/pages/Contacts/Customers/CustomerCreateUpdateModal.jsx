@@ -7,12 +7,12 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
 //Internal Lib Import
-import { FormInput, VerticalForm } from '../../components';
-import removeEmptyObj from '../../helpers/removeEmptyObj';
+import { FormInput, VerticalForm } from '../../../components';
+import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 //api services
 
-import { useCustomerCreateMutation, useCustomerUpdateMutation } from '../../redux/services/customerService';
+import { useCustomerCreateMutation, useCustomerUpdateMutation } from '../../../redux/services/customerService';
 
 const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();

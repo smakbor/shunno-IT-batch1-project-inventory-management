@@ -17,8 +17,8 @@ import CostSectionCreateUpdate from './CostSectionCreateUpdate';
 
 //api services
 
-import { useGetAllCostSectionQuery, useCostSectionDeleteMutation } from '../../../redux/services/costSectionService';
-import { useGetStoresQuery } from '../../../redux/services/storeService';
+import { useCostSectionListQuery, useCostSectionDeleteMutation } from '../../../redux/services/costSectionService';
+import { useStoreListQuery } from '../../../redux/services/storeService';
 
 // main component
 const CostSection = () => {
@@ -28,8 +28,8 @@ const CostSection = () => {
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
     const [costSectionDelete] = useCostSectionDeleteMutation();
-    const { data, isLoading, isError } = useGetAllCostSectionQuery();
-    const { data: store, isLoading: isLoaded, isError: isErr } = useGetStoresQuery();
+    const { data, isLoading, isError } = useCostSectionListQuery();
+    const { data: store, isLoading: isLoaded, isError: isErr } = useStoreListQuery();
     console.log(store);
 
     /**

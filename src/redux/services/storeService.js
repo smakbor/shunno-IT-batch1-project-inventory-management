@@ -4,14 +4,14 @@ import { apiService } from '../api/apiService';
 
 export const storeService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getStores: builder.query({
+        storeList: builder.query({
             query: () => ({
                 url: `stores`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data,
         }),
-        expenditureCreate: builder.mutation({
+        storeCreate: builder.mutation({
             query: (postBody) => ({
                 url: `stores`,
                 method: 'POST',
@@ -22,7 +22,7 @@ export const storeService = apiService.injectEndpoints({
                     const { data } = await queryFulfilled;
                     dispatch(
                         apiService.util.updateQueryData('getStores', undefined, (draft) => {
-                            draft.data.push(data.data);
+                            draft.push(data);
                         })
                     );
                 } catch (e) {
@@ -31,7 +31,7 @@ export const storeService = apiService.injectEndpoints({
             },
         }),
 
-        expenditureUpdate: builder.mutation({
+        storeUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
                 url: `stores/${id}`,
                 method: 'PUT',
@@ -42,8 +42,8 @@ export const storeService = apiService.injectEndpoints({
                     const { data } = await queryFulfilled;
                     dispatch(
                         apiService.util.updateQueryData('getStores', undefined, (draft) => {
-                            const findIndex = draft.data.findIndex((item) => item._id === id);
-                            draft.data[findIndex] = postBody;
+                            const findIndex = draft.findIndex((item) => item._id === id);
+                            draft[findIndex] = postBody;
                         })
                     );
                 } catch (e) {
@@ -51,7 +51,7 @@ export const storeService = apiService.injectEndpoints({
                 }
             },
         }),
-        expenditureDelete: builder.mutation({
+        storeDelete: builder.mutation({
             query: (id) => ({
                 url: `stores/${id}`,
                 method: 'DELETE',
@@ -59,7 +59,7 @@ export const storeService = apiService.injectEndpoints({
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getStores', undefined, (draft) => {
-                        draft.data = draft.data.filter((item) => item._id !== id);
+                        draft = draft.filter((item) => item._id !== id);
                     })
                 );
                 try {
@@ -72,8 +72,8 @@ export const storeService = apiService.injectEndpoints({
     }),
 });
 export const {
-    useGetStoresQuery,
-    useExpenditureDeleteMutation,
-    useExpenditureCreateMutation,
-    useExpenditureUpdateMutation,
+    useStoreListQuery,
+    useStoreDeleteMutation,
+    useStoreCreateMutation,
+    useStoreUpdateMutation,
 } = storeService;

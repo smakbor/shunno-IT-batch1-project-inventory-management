@@ -16,7 +16,7 @@ import AleartMessage from '../../utils/AleartMessage';
 
 //api services
 
-import { useGetSuppliersQuery, useSupplierDeleteMutation } from '../../redux/services/suppliersService';
+import { useSupplierListQuery, useSupplierDeleteMutation } from '../../redux/services/suppliersService';
 import SupplierCreateUpdateModal from './SupplierCreateUpdateModal';
 
 // main component
@@ -29,7 +29,7 @@ const Suppliers = () => {
 
     const [supplierDelete] = useSupplierDeleteMutation();
 
-    const { data, isLoading, isError } = useGetSuppliersQuery();
+    const { data, isLoading, isError } = useSupplierListQuery();
 
     /**
      * Show/hide the modal

@@ -27,7 +27,7 @@ export const roleService = apiService.injectEndpoints({
                 queryFulfilled.then(({ data }) => {
                     dispatch(
                         apiService.util.updateQueryData('roleList', storeID, (draft) => {
-                            draft.unshift(data?.data);
+                            draft.unshift(data);
                         })
                     );
                 });
@@ -50,7 +50,7 @@ export const roleService = apiService.injectEndpoints({
                     dispatch(
                         apiService.util.updateQueryData('roleList', storeID, (draft) => {
                             const findIndex = draft.findIndex((item) => item._id === id);
-                            draft[findIndex] = data?.data;
+                            draft[findIndex] = data;
                         })
                     );
                 });

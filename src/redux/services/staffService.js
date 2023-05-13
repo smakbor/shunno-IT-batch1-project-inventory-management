@@ -20,7 +20,7 @@ export const staffService = apiService.injectEndpoints({
                 queryFulfilled.then(({ data }) => {
                     dispatch(
                         apiService.util.updateQueryData('staffList', storeID, (draft) => {
-                            draft.unshift(data?.data);
+                            draft.unshift(data);
                         })
                     );
                 });
@@ -37,7 +37,7 @@ export const staffService = apiService.injectEndpoints({
                     dispatch(
                         apiService.util.updateQueryData('staffList', storeID, (draft) => {
                             const findIndex = draft.findIndex((item) => item._id === id);
-                            draft[findIndex] = data?.data;
+                            draft[findIndex] = data;
                         })
                     );
                 });

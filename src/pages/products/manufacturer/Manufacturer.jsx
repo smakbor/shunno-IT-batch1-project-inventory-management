@@ -18,7 +18,7 @@ import DateFormatter from '../../../utils/DateFormatter';
 
 import AleartMessage from '../../../utils/AleartMessage';
 
-import { useGetManufacturersQuery, useManufacturerDeleteMutation } from '../../../redux/services/manufacturerService';
+import { useManufacturerListQuery, useManufacturerDeleteMutation } from '../../../redux/services/manufacturerService';
 import ManufacturerCreateUpdateModal from './ManufacturerCreateUpdateModal';
 
 // main component
@@ -31,7 +31,7 @@ const Manufacturer = () => {
 
     const [manufacturerDelete] = useManufacturerDeleteMutation();
 
-    const { data, isLoading, isError } = useGetManufacturersQuery();
+    const { data, isLoading, isError } = useManufacturerListQuery();
 
     /**
      * Show/hide the modal

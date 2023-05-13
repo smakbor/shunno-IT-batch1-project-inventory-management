@@ -4,14 +4,14 @@ import { Dropdown } from 'react-bootstrap';
 
 //External Lbi Import
 import { useProfileDetailsQuery } from '../redux/services/profileService';
-import { useGetStoresQuery } from '../redux/services/storeService';
+import { useStoreListQuery } from '../redux/services/storeService';
 
 const StoreDropdown = () => {
     const [activeStore, setActiveStore] = useState({});
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const { data: profile } = useProfileDetailsQuery() || {};
-    const { data: stores, isSuccess } = useGetStoresQuery(undefined, {
+    const { data: stores, isSuccess } = useStoreListQuery(undefined, {
         skip: !profile?.storeID,
     });
 
