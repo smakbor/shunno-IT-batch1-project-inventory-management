@@ -12,9 +12,12 @@ import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 //api services
 import { useCategoryCreateMutation, useCategoryUpdateMutation } from '../../../redux/services/categoryService';
+import { useSelector } from 'react-redux';
+import slugify from '../../../helpers/slugify';
 
 const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
+    const storeID = useSelector(state => state.setting.activeStore._id)
     const [categoryCreate, { isLoading, isSuccess }] = useCategoryCreateMutation();
     const [categoryUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCategoryUpdateMutation();
 
@@ -29,15 +32,7 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
         })
     );
 
-    //slugify
 
-    const slugify = (str) =>
-        str
-            .toLowerCase()
-            .trim()
-            .replace(/[^\w\s-]/g, '')
-            .replace(/[\s_-]+/g, '_')
-            .replace(/^-+|-+$/g, '');
 
     /*
      * handle form submission
@@ -51,7 +46,7 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
         data.status = formData.status;
 
         if (!editData) {
-            categoryCreate(removeEmptyObj(data));
+            categoryCreate({ storeID, postBody: removeEmptyObj(data) });
         } else {
             const updatedData = { ...editData, ...data };
             const postBody = removeEmptyObj(updatedData);
@@ -65,7 +60,7 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
             setModal(false);
         }
     }, [isSuccess, updateSuccess]);
-
+    console.log(defaultValues)
     return (
         <Card className={classNames('', { 'd-none': !modal })}>
             <Card.Body>
@@ -88,7 +83,6 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
                                 name="status"
                                 type="select"
                                 label={t('status')}
-                                defaultValue="ACTIVE"
                                 col={'col-12'}
                                 containerClass={'mb-3'}>
                                 <option value="ACTIVE">Active</option>

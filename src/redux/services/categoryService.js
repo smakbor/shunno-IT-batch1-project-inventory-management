@@ -4,15 +4,15 @@ import { apiService } from '../api/apiService';
 export const categoryService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         categoryList: builder.query({
-            query: () => ({
-                url: `categories`,
+            query: (storeID) => ({
+                url: `categories/${storeID}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         categoryCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `categories`,
+            query: ({ storeID, postBody }) => ({
+                url: `categories/${storeID}`,
                 method: 'POST',
                 body: postBody,
             }),
@@ -40,6 +40,7 @@ export const categoryService = apiService.injectEndpoints({
                 const response = dispatch(
                     apiService.util.updateQueryData('categoryList', undefined, (draft) => {
                         const findIndex = draft.findIndex((item) => item._id === id);
+                        console.log(findIndex)
                         draft[findIndex] = postBody;
                     })
                 );

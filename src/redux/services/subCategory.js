@@ -5,15 +5,15 @@ import { apiService } from '../api/apiService';
 export const subCategoryService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         subCategoryList: builder.query({
-            query: () => ({
-                url: `categories/subcategories`,
+            query: (storeID) => ({
+                url: `categories/subcategories/${storeID}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         subCategoryCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `categories/subcategories`,
+            query: ({ storeID, postBody }) => ({
+                url: `categories/subcategories/${storeID}`,
                 method: 'POST',
                 body: postBody,
             }),

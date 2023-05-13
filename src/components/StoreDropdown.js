@@ -34,6 +34,7 @@ const StoreDropdown = () => {
         const selectedStore = stores.find((item) => item._id === id);
         localStorage.setItem('activeStore', JSON.stringify(selectedStore));
         setActiveStore(JSON.parse(localStorage.getItem('activeStore')));
+        window.location.reload()
     };
 
     return (

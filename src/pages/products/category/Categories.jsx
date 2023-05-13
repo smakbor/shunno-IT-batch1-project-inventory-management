@@ -20,14 +20,15 @@ import AleartMessage from '../../../utils/AleartMessage';
 import CategoryCreateUpdate from './CategoryCreateUpdate';
 import { useSubCategoryListQuery, useSubCategoryDeleteMutation } from '../../../redux/services/subCategory';
 import SubCategoryCreateUpdateModal from '../subCategory/SubCreateUpdateModal';
+import { useSelector } from 'react-redux';
 
 // main component
 const Categories = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
+    const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
     const [subCategoryDefaultValues, setSubCategoryDefaultValues] = useState({
         name: '',
-        status: true,
+        status: 'true',
         categoryID: '',
     });
 
@@ -35,9 +36,14 @@ const Categories = () => {
     const [subCategoryModal, setSubCategoryModal] = useState(false);
     const [editData, setEditData] = useState(false);
     const [subCategoryEditData, setSubCategoryEditData] = useState(false);
+    const storeID = useSelector(state => state.setting.activeStore._id)
     const [categoryDelete] = useCategoryDeleteMutation();
-    const { data, isLoading, isError } = useCategoryListQuery();
-    const { data: subCategory, isLoading: loading, isError: error } = useSubCategoryListQuery();
+    const { data, isLoading, isError } = useCategoryListQuery(storeID, {
+        skip: !storeID
+    });
+    const { data: subCategory, isLoading: loading, isError: error } = useSubCategoryListQuery(storeID, {
+        skip: !storeID
+    });
     const [subCategoryDelete] = useSubCategoryDeleteMutation();
 
     /**
@@ -46,7 +52,7 @@ const Categories = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: true });
+        setDefaultValues({ name: '', status: 'ACTIVE' });
         setModal(!modal);
     };
     const subCategoryShowModal = (id) => {
