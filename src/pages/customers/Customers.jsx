@@ -172,30 +172,37 @@ const Customers = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('suppliers'), path: '/user-role', active: true }]}
-                    title={t('suppliers')}
+                    breadCrumbItems={[{ label: t('customers'), path: '/customers', active: true }]}
+                    title={t('customers')}
                 />
-                <LoadingData />
+                <Card>
+                    <Card.Body>
+                        <LoadingData />
+                    </Card.Body>
+                </Card>
             </>
         );
     } else if (isError) {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('suppliers'), path: '/user-role', active: true }]}
-                    title={t('suppliers')}
+                    breadCrumbItems={[{ label: t('customers'), path: '/customers', active: true }]}
+                    title={t('customers')}
                 />
-                <ErrorDataLoad />
+                <Card>
+                    <Card.Body>
+                        <ErrorDataLoad />
+                    </Card.Body>
+                </Card>
             </>
         );
     } else {
         return (
             <>
-                {/* <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('category')}
-                /> */}
-
+                <PageTitle
+                    breadCrumbItems={[{ label: t('customers'), path: '/customers', active: true }]}
+                    title={t('customers')}
+                />
                 <Row>
                     <Col xs={12}>
                         <Card>

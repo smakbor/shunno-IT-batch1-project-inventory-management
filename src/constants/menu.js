@@ -105,7 +105,7 @@ const MENU_ITEMS = () => {
                     parentKey: 'permissions',
                 },
                 {
-                    key: 'permissions',
+                    key: 'permission',
                     label: 'permissions',
                     url: '/permissions',
                     parentKey: 'permissions',

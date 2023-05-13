@@ -1,27 +1,41 @@
-import React, { useState } from 'react';
-import Select from 'react-select'
-import { useGetStoresQuery } from '../redux/services/storeService'
-import FormInput from './FormInput';
+//External Lbi Import
+import React, { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 
+//External Lbi Import
+import { useProfileDetailsQuery } from '../redux/services/profileService';
+import { useGetStoresQuery } from '../redux/services/storeService';
+
 const StoreDropdown = () => {
-    const { data, isSuccess } = useGetStoresQuery()
+    const [activeStore, setActiveStore] = useState({});
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    const stores = data?.data;
-    if (!localStorage.getItem('activeStore')) {
-        localStorage.setItem('activeStore', JSON.stringify(stores[0]))
-    }
-    const activeStore = JSON.parse(localStorage.getItem('activeStore'))
+    const { data: profile } = useProfileDetailsQuery() || {};
+    const { data: stores, isSuccess } = useGetStoresQuery(undefined, {
+        skip: !profile?.storeID,
+    });
+
+    useEffect(() => {
+        if (stores && stores.length > 0) {
+            if (!localStorage.getItem('activeStore')) {
+                localStorage.setItem('activeStore', JSON.stringify(stores[0]));
+            }
+        }
+        if (localStorage.getItem('activeStore')) {
+            setActiveStore(JSON.parse(localStorage.getItem('activeStore')));
+        }
+    }, [stores]);
+
     const toggleDropdown = ({ dropdownOpen: boolean }) => {
         setDropdownOpen(!dropdownOpen);
     };
 
-    const handleStoreChange = id => {
-        const selectedStore = stores.find(item => item._id === id)
-        localStorage.setItem('activeStore', JSON.stringify(selectedStore))
-    }
-    console.log(activeStore)
+    const handleStoreChange = (id) => {
+        const selectedStore = stores.find((item) => item._id === id);
+        localStorage.setItem('activeStore', JSON.stringify(selectedStore));
+        setActiveStore(JSON.parse(localStorage.getItem('activeStore')));
+    };
+
     return (
         <Dropdown show={dropdownOpen} onToggle={toggleDropdown}>
             <Dropdown.Toggle

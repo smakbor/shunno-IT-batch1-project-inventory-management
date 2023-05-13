@@ -15,7 +15,7 @@ import { useRoleListQuery } from '../../redux/services/roleService';
 import { useProfileDetailsQuery } from '../../redux/services/profileService';
 import { useEffect, useState } from 'react';
 
-const PermissionsPage = () => {
+const Permissions = () => {
     const { t } = useTranslation();
     const { data: profile, isLoading: profileLoad, isError: profileError } = useProfileDetailsQuery() || {};
     const {
@@ -38,20 +38,28 @@ const PermissionsPage = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('permission'), path: '/user-role', active: true }]}
-                    title={t('permission')}
+                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
+                    title={t('user role')}
                 />
-                <LoadingData />
+                <Card>
+                    <Card.Body>
+                        <LoadingData />
+                    </Card.Body>
+                </Card>
             </>
         );
     } else if (isError || profileError) {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('permission'), path: '/user-role', active: true }]}
-                    title={t('permission')}
+                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
+                    title={t('user role')}
                 />
-                <ErrorDataLoad />
+                <Card>
+                    <Card.Body>
+                        <ErrorDataLoad />
+                    </Card.Body>
+                </Card>
             </>
         );
     } else {
@@ -61,7 +69,6 @@ const PermissionsPage = () => {
                     breadCrumbItems={[{ label: t('permission'), path: '/user-role', active: true }]}
                     title={t('permission')}
                 />
-
                 <Row>
                     <Col>
                         <Card>
@@ -87,4 +94,4 @@ const PermissionsPage = () => {
     }
 };
 
-export default PermissionsPage;
+export default Permissions;

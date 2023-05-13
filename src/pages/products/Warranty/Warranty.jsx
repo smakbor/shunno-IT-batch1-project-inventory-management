@@ -13,7 +13,7 @@ import exportFromJson from '../../../utils/exportFromJson';
 import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 import AleartMessage from '../../../utils/AleartMessage';
-import ModalCreateUpdate from './ModalCreateUpdate';
+import WarrantyCreateUpdate from './WarrantyCreateUpdate';
 
 //api services
 
@@ -28,7 +28,6 @@ const Warranty = () => {
     const [editData, setEditData] = useState(false);
     const [warrantyDelete] = useWarrantyDeleteMutation();
     const { data, isLoading, isError } = useGetWarrantiesQuery();
-  
 
     /**
      * Show/hide the modal
@@ -204,7 +203,7 @@ const Warranty = () => {
                         </Card>
                     </Col>
                 </Row>
-                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <WarrantyCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }

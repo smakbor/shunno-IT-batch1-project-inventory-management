@@ -9,6 +9,7 @@ export const storeService = apiService.injectEndpoints({
                 url: `stores`,
                 method: 'GET',
             }),
+            transformResponse: ({ data }) => data,
         }),
         expenditureCreate: builder.mutation({
             query: (postBody) => ({

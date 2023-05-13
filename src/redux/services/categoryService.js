@@ -3,11 +3,12 @@ import { apiService } from '../api/apiService';
 
 export const categoryService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getCategories: builder.query({
+        categoryList: builder.query({
             query: () => ({
                 url: `categories`,
                 method: 'GET',
             }),
+            transformResponse: ({ data }) => data || [],
         }),
         categoryCreate: builder.mutation({
             query: (postBody) => ({
@@ -17,7 +18,7 @@ export const categoryService = apiService.injectEndpoints({
             }),
             async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getCategories', undefined, (draft) => {
+                    apiService.util.updateQueryData('categoryList', undefined, (draft) => {
                         draft.data.push(postBody);
                     })
                 );
@@ -37,9 +38,9 @@ export const categoryService = apiService.injectEndpoints({
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getCategories', undefined, (draft) => {
-                        const findIndex = draft.data.findIndex((item) => item._id === id);
-                        draft.data[findIndex] = postBody;
+                    apiService.util.updateQueryData('categoryList', undefined, (draft) => {
+                        const findIndex = draft.findIndex((item) => item._id === id);
+                        draft[findIndex] = postBody;
                     })
                 );
                 try {
@@ -56,8 +57,8 @@ export const categoryService = apiService.injectEndpoints({
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getCategories', undefined, (draft) => {
-                        draft.data = draft.data.filter((item) => item._id !== id);
+                    apiService.util.updateQueryData('categoryList', undefined, (draft) => {
+                        draft = draft.filter((item) => item._id !== id);
                     })
                 );
                 try {
@@ -69,9 +70,5 @@ export const categoryService = apiService.injectEndpoints({
         }),
     }),
 });
-export const {
-    useGetCategoriesQuery,
-    useCategoryDeleteMutation,
-    useCategoryCreateMutation,
-    useCategoryUpdateMutation,
-} = categoryService;
+export const { useCategoryListQuery, useCategoryDeleteMutation, useCategoryCreateMutation, useCategoryUpdateMutation } =
+    categoryService;

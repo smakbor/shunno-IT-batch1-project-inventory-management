@@ -4,7 +4,7 @@ import { apiService } from '../api/apiService';
 
 export const subCategoryService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getSubCategories: builder.query({
+        subCategoryList: builder.query({
             query: () => ({
                 url: `categories/subcategories`,
                 method: 'GET',
@@ -18,7 +18,7 @@ export const subCategoryService = apiService.injectEndpoints({
             }),
             async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getSubCategories', undefined, (draft) => {
+                    apiService.util.updateQueryData('subCategoryList', undefined, (draft) => {
                         draft.data.push(postBody);
                     })
                 );
@@ -38,7 +38,7 @@ export const subCategoryService = apiService.injectEndpoints({
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getSubCategories', undefined, (draft) => {
+                    apiService.util.updateQueryData('subCategoryList', undefined, (draft) => {
                         const findIndex = draft.data.findIndex((item) => item._id === id);
                         draft.data[findIndex] = postBody;
                     })
@@ -57,7 +57,7 @@ export const subCategoryService = apiService.injectEndpoints({
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getSubCategories', undefined, (draft) => {
+                    apiService.util.updateQueryData('subCategoryList', undefined, (draft) => {
                         draft.data = draft.data.filter((item) => item._id !== id);
                     })
                 );
@@ -71,7 +71,7 @@ export const subCategoryService = apiService.injectEndpoints({
     }),
 });
 export const {
-    useGetSubCategoriesQuery,
+    useSubCategoryListQuery,
     useSubCategoryCreateMutation,
     useSubCategoryUpdateMutation,
     useSubCategoryDeleteMutation,

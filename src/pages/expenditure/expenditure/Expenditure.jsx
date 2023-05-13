@@ -13,7 +13,7 @@ import exportFromJson from '../../../utils/exportFromJson';
 import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 import AleartMessage from '../../../utils/AleartMessage';
-import ModalCreateUpdate from './ModalCreateUpdate';
+import ExpenditureCreateUpdate from './ExpenditureCreateUpdate';
 import { useExpenditureDeleteMutation, useGetExpendituresQuery } from '../../../redux/services/expenditureService';
 import DateFormatter from '../../../utils/DateFormatter';
 import { useGetAllCostSectionQuery } from '../../../redux/services/costSectionService';
@@ -142,30 +142,37 @@ const Expenditure = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('expenditure'), path: '/user-role', active: true }]}
+                    breadCrumbItems={[{ label: t('expenditure'), path: '/expenditure', active: true }]}
                     title={t('expenditure')}
                 />
-                <LoadingData />
+                <Card>
+                    <Card.Body>
+                        <LoadingData />
+                    </Card.Body>
+                </Card>
             </>
         );
     } else if (isError) {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('expenditure'), path: '/user-role', active: true }]}
+                    breadCrumbItems={[{ label: t('expenditure'), path: '/expenditure', active: true }]}
                     title={t('expenditure')}
                 />
-                <ErrorDataLoad />
+                <Card>
+                    <Card.Body>
+                        <ErrorDataLoad />
+                    </Card.Body>
+                </Card>
             </>
         );
     } else {
         return (
             <>
-                {/* <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('category')}
-                /> */}
-
+                <PageTitle
+                    breadCrumbItems={[{ label: t('expenditure'), path: '/expenditure', active: true }]}
+                    title={t('expenditure')}
+                />
                 <Row>
                     <Col xs={12}>
                         <Card>
@@ -222,7 +229,7 @@ const Expenditure = () => {
                         </Card>
                     </Col>
                 </Row>
-                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues, costSectionData }} />
+                <ExpenditureCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues, costSectionData }} />
             </>
         );
     }

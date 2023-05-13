@@ -8,12 +8,12 @@ import Table from '../../components/Table';
 import LoadingData from '../../components/common/LoadingData';
 import ErrorDataLoad from '../../components/common/ErrorDataLoad';
 import DateFormatter from '../../utils/DateFormatter';
+import { useTranslation } from 'react-i18next';
 
 //api services
 import { useRoleDeleteMutation, useRoleListQuery } from '../../redux/services/roleService';
 import AleartMessage from '../../utils/AleartMessage';
-import ModalCreateUpdate from './ModalCreateUpdate';
-import { useTranslation } from 'react-i18next';
+import RoleCreateUpdate from './RoleCreateUpdate';
 import { useProfileDetailsQuery } from '../../redux/services/profileService';
 import ExportData from '../../components/ExportData';
 
@@ -139,7 +139,11 @@ const UserRolePage = () => {
                     breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
                     title={t('user role')}
                 />
-                <LoadingData />
+                <Card>
+                    <Card.Body>
+                        <LoadingData />
+                    </Card.Body>
+                </Card>
             </>
         );
     } else if (isError) {
@@ -149,18 +153,21 @@ const UserRolePage = () => {
                     breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
                     title={t('user role')}
                 />
-                <ErrorDataLoad />
+                <Card>
+                    <Card.Body>
+                        <ErrorDataLoad />
+                    </Card.Body>
+                </Card>
             </>
         );
     } else {
         return (
             <>
-                <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
-                />
-
                 <Row>
+                    <PageTitle
+                        breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
+                        title={t('user role')}
+                    />
                     <Col xs={12}>
                         <Card>
                             <Card.Body>
@@ -190,7 +197,7 @@ const UserRolePage = () => {
                         </Card>
                     </Col>
                 </Row>
-                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <RoleCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }

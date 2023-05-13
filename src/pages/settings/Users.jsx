@@ -1,4 +1,4 @@
-//external lib import
+//External Lib Import
 import React, { useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -6,31 +6,32 @@ import { GrDocumentCsv } from 'react-icons/gr';
 import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 
-//internal lib import
-import PageTitle from '../../../components/PageTitle';
-import Table from '../../../components/Table';
-import exportFromJson from '../../../utils/exportFromJson';
-import LoadingData from '../../../components/common/LoadingData';
-import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
-import AleartMessage from '../../../utils/AleartMessage';
-import CostSectionCreateUpdate from './CostSectionCreateUpdate';
+//Internal Lib Import
+import PageTitle from '../../components/PageTitle';
+import Table from '../../components/Table';
+import exportFromJson from '../../utils/exportFromJson';
+import LoadingData from '../../components/common/LoadingData';
+import ErrorDataLoad from '../../components/common/ErrorDataLoad';
+import AleartMessage from '../../utils/AleartMessage';
 
 //api services
 
-import { useGetAllCostSectionQuery, useCostSectionDeleteMutation } from '../../../redux/services/costSectionService';
-import { useGetStoresQuery } from '../../../redux/services/storeService';
+import { useStaffListQuery, useStaffDeleteMutation } from '../../redux/services/staffService';
+
+import CustomerCreateUpdateModal from './CustomerCreateUpdateModal';
+import DateFormatter from '../../utils/DateFormatter';
 
 // main component
-const CostSection = () => {
+const Users = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '' });
+    const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-    const [costSectionDelete] = useCostSectionDeleteMutation();
-    const { data, isLoading, isError } = useGetAllCostSectionQuery();
-    const { data: store, isLoading: isLoaded, isError: isErr } = useGetStoresQuery();
-    console.log(store);
+
+    const [staffDelete] = useStaffDeleteMutation();
+
+    const { data: staffs, isLoading, isError } = useStaffListQuery();
 
     /**
      * Show/hide the modal
@@ -38,7 +39,7 @@ const CostSection = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '' });
+        setDefaultValues({ name: '', status: '' });
         setModal(!modal);
     };
 
@@ -50,8 +51,13 @@ const CostSection = () => {
     const ActionColumn = ({ row }) => {
         const edit = () => {
             toggle();
-            setEditData(row?.original);
-            setDefaultValues(row?.original);
+            let { reference, ...updateData } = { ...row.original };
+            updateData.refName = row.original.reference?.name || '';
+            updateData.refAddress = row.original.reference?.address || '';
+            updateData.refMobile = row.original.reference?.mobile || '';
+            console.log(updateData);
+            setEditData(updateData);
+            setDefaultValues(updateData);
         };
 
         return (
@@ -62,7 +68,7 @@ const CostSection = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, costSectionDelete)}>
+                    onClick={() => AleartMessage.Delete(row?.original._id, staffDelete)}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
@@ -74,17 +80,68 @@ const CostSection = () => {
         {
             Header: '#',
             accessor: 'sl',
-            sort: false,
+            sort: true,
             Cell: ({ row }) => row.index + 1,
             classes: 'table-user',
         },
         {
-            Header: t('cost section name'),
+            Header: t('name'),
             accessor: 'name',
             sort: true,
             Cell: ({ row }) => row.original.name,
             classes: 'table-user',
         },
+        {
+            Header: t("father's name"),
+            accessor: 'fatherName',
+            sort: true,
+            Cell: ({ row }) => row.original.fatherName,
+            classes: 'table-user',
+        },
+        {
+            Header: t('address'),
+            accessor: 'address',
+            sort: true,
+            Cell: ({ row }) => {
+                const splitAddress = row.original.address?.split(',');
+                return splitAddress?.map((item, i) => (
+                    <p className="mb-0" key={i}>
+                        {item}
+                        {i !== splitAddress.length - 1 ? ',' : ''}
+                    </p>
+                ));
+            },
+            classes: 'table-user',
+        },
+        {
+            Header: t('mobile'),
+            accessor: 'mobile',
+            sort: false,
+            Cell: ({ row }) => row.original.mobile,
+            classes: 'table-user',
+        },
+        {
+            Header: t('ledger number'),
+            accessor: 'ledgerNumber',
+            sort: true,
+            Cell: ({ row }) => row.original.ledgerNumber,
+            classes: 'table-user',
+        },
+        {
+            Header: t('due'),
+            accessor: 'due',
+            sort: false,
+            Cell: ({ row }) => row.original.due,
+            classes: 'table-user',
+        },
+        {
+            Header: t('date'),
+            accessor: 'createdAt',
+            sort: false,
+            Cell: ({ row }) => DateFormatter(row.original.createdAt),
+            classes: 'table-user',
+        },
+
         {
             Header: t('action'),
             accessor: 'action',
@@ -113,10 +170,7 @@ const CostSection = () => {
     if (isLoading) {
         return (
             <>
-                <PageTitle
-                    breadCrumbItems={[{ label: t('cost section'), path: '/cost-sections', active: true }]}
-                    title={t('cost sections')}
-                />
+                <PageTitle breadCrumbItems={[{ label: t('users'), path: '/users', active: true }]} title={t('users')} />
                 <Card>
                     <Card.Body>
                         <LoadingData />
@@ -127,10 +181,7 @@ const CostSection = () => {
     } else if (isError) {
         return (
             <>
-                <PageTitle
-                    breadCrumbItems={[{ label: t('cost section'), path: '/cost-sections', active: true }]}
-                    title={t('cost sections')}
-                />
+                <PageTitle breadCrumbItems={[{ label: t('users'), path: '/users', active: true }]} title={t('users')} />
                 <Card>
                     <Card.Body>
                         <ErrorDataLoad />
@@ -141,10 +192,7 @@ const CostSection = () => {
     } else {
         return (
             <>
-                <PageTitle
-                    breadCrumbItems={[{ label: t('cost section'), path: '/cost-sections', active: true }]}
-                    title={t('cost sections')}
-                />
+                <PageTitle breadCrumbItems={[{ label: t('users'), path: '/users', active: true }]} title={t('users')} />
                 <Row>
                     <Col xs={12}>
                         <Card>
@@ -152,7 +200,7 @@ const CostSection = () => {
                                 <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add cost section')}
+                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add customer')}
                                         </Button>
                                     </Col>
 
@@ -186,7 +234,7 @@ const CostSection = () => {
 
                                 <Table
                                     columns={columns}
-                                    data={data.data}
+                                    data={staffs}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}
@@ -201,10 +249,10 @@ const CostSection = () => {
                         </Card>
                     </Col>
                 </Row>
-                <CostSectionCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <CustomerCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }
 };
 
-export default CostSection;
+export default Users;

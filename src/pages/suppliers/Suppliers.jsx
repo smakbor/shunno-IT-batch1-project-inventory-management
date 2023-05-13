@@ -156,30 +156,37 @@ const Suppliers = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('suppliers'), path: '/user-role', active: true }]}
+                    breadCrumbItems={[{ label: t('suppliers'), path: '/suppliers', active: true }]}
                     title={t('suppliers')}
                 />
-                <LoadingData />
+                <Card>
+                    <Card.Body>
+                        <LoadingData />
+                    </Card.Body>
+                </Card>
             </>
         );
     } else if (isError) {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('suppliers'), path: '/user-role', active: true }]}
+                    breadCrumbItems={[{ label: t('suppliers'), path: '/suppliers', active: true }]}
                     title={t('suppliers')}
                 />
-                <ErrorDataLoad />
+                <Card>
+                    <Card.Body>
+                        <ErrorDataLoad />
+                    </Card.Body>
+                </Card>
             </>
         );
     } else {
         return (
             <>
-                {/* <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('category')}
-                /> */}
-
+                <PageTitle
+                    breadCrumbItems={[{ label: t('suppliers'), path: '/suppliers', active: true }]}
+                    title={t('suppliers')}
+                />
                 <Row>
                     <Col xs={12}>
                         <Card>
@@ -236,7 +243,6 @@ const Suppliers = () => {
                         </Card>
                     </Col>
                 </Row>
-                {/* <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} /> */}
                 <SupplierCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );

@@ -5,16 +5,15 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import Select from 'react-select';
 
 //Internal Lib Import
 import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
-import slugify from '../../../helpers/slugify';
+
 //api services
 import { useCategoryCreateMutation, useCategoryUpdateMutation } from '../../../redux/services/categoryService';
 
-const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
+const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
     const [categoryCreate, { isLoading, isSuccess }] = useCategoryCreateMutation();
     const [categoryUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCategoryUpdateMutation();
@@ -116,4 +115,4 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
     );
 };
 
-export default ModalCreateUpdate;
+export default CategoryCreateUpdate;

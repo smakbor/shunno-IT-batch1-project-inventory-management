@@ -8,15 +8,17 @@ const Inbox = lazy(() => import('../pages/message/Inbox.jsx'));
 const Warranty = lazy(() => import('../pages/products/warranty/Warranty.jsx'));
 const Suppliers = lazy(() => import('../pages/suppliers/Suppliers.jsx'));
 const Customers = lazy(() => import('../pages/customers/Customers.jsx'));
-const UnitPage = lazy(() => import('../pages/products/unit/UnitPage.jsx'));
-const UserRolePage = lazy(() => import('../pages/Permissions/UserRolePage'));
-const ALLPage = lazy(() => import('../pages/Permissions/PermissionsPage.jsx'));
-const CategoryPage = lazy(() => import('../pages/products/category/CategoryPage'));
+const Units = lazy(() => import('../pages/products/unit/Units.jsx'));
+const UserRolePage = lazy(() => import('../pages/permissions/UserRolePage.jsx'));
+const Permissions = lazy(() => import('../pages/permissions/Permissions.jsx'));
+const Categories = lazy(() => import('../pages/products/category/Categories'));
 const Manufacturer = lazy(() => import('../pages/products/manufacturer/Manufacturer'));
 const CostSection = lazy(() => import('../pages/expenditure/costSection/CostSection.jsx'));
 const Sent = lazy(() => import('../pages/message/Sent.jsx'));
 const Details = lazy(() => import('../pages/message/Details.jsx'));
 const Expenditure = lazy(() => import('../pages/expenditure/expenditure/Expenditure.jsx'));
+const Users = lazy(() => import('../pages/settings/Users.jsx'));
+
 const privateRoutes = [
     {
         path: '/dashboard',
@@ -32,13 +34,13 @@ const privateRoutes = [
     },
     {
         path: '/products/categories',
-        element: <LazyLoad component={CategoryPage} />,
+        element: <LazyLoad component={Categories} />,
         roles: ['ALL'],
         routePermission: 'ALL',
     },
     {
         path: '/products/units',
-        element: <LazyLoad component={UnitPage} />,
+        element: <LazyLoad component={Units} />,
         roles: ['ALL'],
         routePermission: 'ALL',
     },
@@ -116,13 +118,13 @@ const privateRoutes = [
     },
     {
         path: '/permissions',
-        element: <LazyLoad component={ALLPage} />,
+        element: <LazyLoad component={Permissions} />,
         roles: ['ALL'],
         routePermission: 'ALL',
     },
     {
         path: '/users',
-        element: <LazyLoad component={ALLPage} />,
+        element: <LazyLoad component={Users} />,
         roles: ['ALL'],
         routePermission: 'ALL',
     },

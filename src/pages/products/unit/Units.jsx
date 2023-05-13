@@ -1,5 +1,5 @@
 //External Lib Import
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { GrDocumentCsv } from 'react-icons/gr';
@@ -12,34 +12,21 @@ import Table from '../../../components/Table';
 import exportFromJson from '../../../utils/exportFromJson';
 import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
-import DateFormatter from '../../../utils/DateFormatter';
+import AleartMessage from '../../../utils/AleartMessage';
+import UnitCreateUpdate from './UnitCreateUpdate';
 
 //api services
-import { useCategoryDeleteMutation, useGetCategoriesQuery } from '../../../redux/services/categoryService';
-
-import AleartMessage from '../../../utils/AleartMessage';
-import ModalCreateUpdate from './ModalCreateUpdate';
-import { useGetSubCategoriesQuery, useSubCategoryDeleteMutation } from '../../../redux/services/subCategory';
-import SubCategoryCreateUpdateModal from '../subCategory/SubCreateUpdateModal';
+import { useGetUnitsQuery, useUnitDeleteMutation } from '../../../redux/services/unitService';
 
 // main component
-const CategoryPage = () => {
+const Units = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
-    const [subCategoryDefaultValues, setSubCategoryDefaultValues] = useState({
-        name: '',
-        status: true,
-        categoryID: '',
-    });
+    const [defaultValues, setDefaultValues] = useState({ name: '' });
 
     const [modal, setModal] = useState(false);
-    const [subCategoryModal, setSubCategoryModal] = useState(false);
     const [editData, setEditData] = useState(false);
-    const [subCategoryEditData, setSubCategoryEditData] = useState(false);
-    const [categoryDelete] = useCategoryDeleteMutation();
-    const { data, isLoading, isError } = useGetCategoriesQuery();
-    const { data: subCategory, isLoading: loading, isError: error } = useGetSubCategoriesQuery();
-    const [subCategoryDelete] = useSubCategoryDeleteMutation();
+    const [unitDelete] = useUnitDeleteMutation();
+    const { data, isLoading, isError } = useGetUnitsQuery();
 
     /**
      * Show/hide the modal
@@ -50,17 +37,11 @@ const CategoryPage = () => {
         setDefaultValues({ name: '', status: true });
         setModal(!modal);
     };
-    const subCategoryShowModal = (id) => {
-        setSubCategoryEditData(false);
-        setSubCategoryDefaultValues({ name: '', status: true, categoryID: id });
-        setSubCategoryModal(true);
-    };
+
     const toggle = (e) => {
         setModal(!modal);
     };
-    const subCategoryModalToggle = () => {
-        setSubCategoryModal(!subCategoryModal);
-    };
+
     /* action column render */
     const ActionColumn = ({ row }) => {
         const edit = () => {
@@ -71,104 +52,55 @@ const CategoryPage = () => {
 
         return (
             <>
-                <i
-                    className="mdi mdi-plus-circle me-2"
-                    style={{ fontSize: '1.3rem' }}
-                    onClick={() => subCategoryShowModal(row.original._id)}
-                />
-
                 <span role="button" className="action-icon text-warning" onClick={edit}>
                     <i className="mdi mdi-square-edit-outline"></i>
                 </span>
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, categoryDelete)}>
+                    onClick={() => AleartMessage.Delete(row?.original._id, unitDelete)}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
         );
     };
-    const SubCategoryActionColumn = ({ row }) => {
-        return (
-            <>
-                {subCategory?.data?.map((item) => {
-                    const edit = () => {
-                        setSubCategoryModal(true);
-                        setSubCategoryEditData(item._id);
-                        setSubCategoryDefaultValues(item);
-                    };
-
-                    if (item.categoryID === row.original._id) {
-                        return (
-                            <>
-                                <span role="button" className="action-icon text-warning" onClick={edit}>
-                                    <i className="mdi mdi-square-edit-outline"></i>
-                                </span>
-
-                                <span
-                                    role="button"
-                                    className="action-icon text-danger"
-                                    onClick={() => AleartMessage.Delete(item._id, subCategoryDelete)}>
-                                    <i className="mdi mdi-delete"></i>
-                                </span>
-
-                                <span>{item.name}</span>
-                                <br />
-                            </>
-                        );
-                    }
-                })}
-            </>
-        );
-    };
 
     // get all columns
-    const columns = useMemo(
-        () => [
-            {
-                Header: '#',
-                accessor: 'sl',
-                sort: true,
-                Cell: ({ row }) => row.index + 1,
-                classes: 'table-user',
-            },
-            {
-                Header: t('category name'),
-                accessor: 'name',
-                sort: true,
-                Cell: ({ row }) => row.original.name,
-                classes: 'table-user',
-            },
-            {
-                Header: t('status'),
-                accessor: 'status',
-                sort: true,
-                Cell: ({ row }) =>
-                    row.original.status === 'ACTIVE' ? (
-                        <div className="badge bg-success">{t('active')}</div>
-                    ) : (
-                        <div className="badge bg-danger">{t('inactive')}</div>
-                    ),
-                classes: 'table-user',
-            },
-            {
-                Header: t('sub category'),
-                accessor: '_id',
-                sort: false,
-                Cell: SubCategoryActionColumn,
-                classes: 'table-user',
-            },
-            {
-                Header: t('action'),
-                accessor: 'action',
-                sort: false,
-                classes: 'table-action',
-                Cell: ActionColumn,
-            },
-        ],
-        [subCategory]
-    );
+    const columns = [
+        {
+            Header: '#',
+            accessor: 'sl',
+            sort: false,
+            Cell: ({ row }) => row.index + 1,
+            classes: 'table-user',
+        },
+        {
+            Header: t('unit name'),
+            accessor: 'name',
+            sort: true,
+            Cell: ({ row }) => row.original.name,
+            classes: 'table-user',
+        },
+        {
+            Header: t('status'),
+            accessor: 'status',
+            sort: true,
+            Cell: ({ row }) =>
+                row.original.status === 'ACTIVE' ? (
+                    <div className="badge bg-success">{t('active')}</div>
+                ) : (
+                    <div className="badge bg-danger">{t('inactive')}</div>
+                ),
+            classes: 'table-user',
+        },
+        {
+            Header: t('action'),
+            accessor: 'action',
+            sort: false,
+            classes: 'table-action',
+            Cell: ActionColumn,
+        },
+    ];
 
     // get pagelist to display
     const sizePerPageList = [
@@ -221,7 +153,7 @@ const CategoryPage = () => {
                                 <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add category')}
+                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add unit')}
                                         </Button>
                                     </Col>
 
@@ -270,19 +202,10 @@ const CategoryPage = () => {
                         </Card>
                     </Col>
                 </Row>
-                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
-                <SubCategoryCreateUpdateModal
-                    {...{
-                        setSubCategoryModal,
-                        subCategoryModal,
-                        subCategoryModalToggle,
-                        subCategoryEditData,
-                        subCategoryDefaultValues,
-                    }}
-                />
+                <UnitCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }
 };
 
-export default CategoryPage;
+export default Units;

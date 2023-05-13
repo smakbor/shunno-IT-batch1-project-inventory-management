@@ -12,21 +12,22 @@ import Table from '../../../components/Table';
 import exportFromJson from '../../../utils/exportFromJson';
 import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
-import AleartMessage from '../../../utils/AleartMessage';
-import ModalCreateUpdate from './ModalCreateUpdate';
+import DateFormatter from '../../../utils/DateFormatter';
 
 //api services
-import { useGetUnitsQuery, useUnitDeleteMutation } from '../../../redux/services/unitService';
+import { useCategoryDeleteMutation, useCategoryListQuery } from '../../../redux/services/categoryService';
+import AleartMessage from '../../../utils/AleartMessage';
+import SubCreateUpdateModal from './SubCreateUpdateModal';
 
 // main component
-const UnitPage = () => {
+const SubCategories = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '' });
+    const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-    const [unitDelete] = useUnitDeleteMutation();
-    const { data, isLoading, isError } = useGetUnitsQuery();
+    const [categoryDelete] = useCategoryDeleteMutation();
+    const { data, isLoading, isError } = useCategoryListQuery();
 
     /**
      * Show/hide the modal
@@ -34,7 +35,7 @@ const UnitPage = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: true });
+        setDefaultValues({ name: '', status: '' });
         setModal(!modal);
     };
 
@@ -58,7 +59,7 @@ const UnitPage = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, unitDelete)}>
+                    onClick={() => AleartMessage.Delete(row?.original._id, categoryDelete)}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
@@ -70,12 +71,12 @@ const UnitPage = () => {
         {
             Header: '#',
             accessor: 'sl',
-            sort: false,
+            sort: true,
             Cell: ({ row }) => row.index + 1,
             classes: 'table-user',
         },
         {
-            Header: t('unit name'),
+            Header: t('category name'),
             accessor: 'name',
             sort: true,
             Cell: ({ row }) => row.original.name,
@@ -86,11 +87,18 @@ const UnitPage = () => {
             accessor: 'status',
             sort: true,
             Cell: ({ row }) =>
-                row.original.status === 'ACTIVE' ? (
+                row.original.status ? (
                     <div className="badge bg-success">{t('active')}</div>
                 ) : (
                     <div className="badge bg-danger">{t('inactive')}</div>
                 ),
+            classes: 'table-user',
+        },
+        {
+            Header: t('created date'),
+            accessor: 'createdAt',
+            sort: true,
+            Cell: ({ row }) => DateFormatter(row?.original?.createdAt),
             classes: 'table-user',
         },
         {
@@ -153,7 +161,7 @@ const UnitPage = () => {
                                 <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add unit')}
+                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add category')}
                                         </Button>
                                     </Col>
 
@@ -202,10 +210,10 @@ const UnitPage = () => {
                         </Card>
                     </Col>
                 </Row>
-                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <SubCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }
 };
 
-export default UnitPage;
+export default SubCategories;
