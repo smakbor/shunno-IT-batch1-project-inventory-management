@@ -10,6 +10,7 @@ const settingReducer = createSlice({
         language: SessionHelper.getLanguage(),
         isLoading: false,
         customLoader: false,
+        activeStore: SessionHelper.getActiveStore() || undefined,
     },
     reducers: {
         changeLanguage(state, action) {

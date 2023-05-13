@@ -66,8 +66,9 @@ const FormInput = ({
     containerClass,
     refCallback,
     children,
+    required,
     ...otherProps
-}: FormInputProps): React$Element<React$FragmentType> => {
+}) => {
     // handle input type
     const comp = type === 'textarea' ? 'textarea' : type === 'select' ? 'select' : 'input';
 
@@ -83,9 +84,13 @@ const FormInput = ({
                                 {label ? (
                                     <>
                                         {' '}
-                                        <Form.Label className={labelClassName} htmlFor={name}>{label}</Form.Label> {children}{' '}
+                                        <Form.Label className={labelClassName} htmlFor={name}>
+                                            {label}
+                                        </Form.Label>{' '}
+                                        {children}{' '}
                                     </>
-                                ) : null}
+                                ) : null}{' '}
+                                {required && <span className="text-danger">*</span>}
                                 <PasswordInput
                                     name={name}
                                     placeholder={placeholder}
@@ -94,7 +99,6 @@ const FormInput = ({
                                     register={register}
                                     className={className}
                                 />
-
                                 {errors && errors[name] ? (
                                     <Form.Control.Feedback type="invalid" className="d-block">
                                         {errors[name]['message']}
@@ -107,8 +111,12 @@ const FormInput = ({
                             {type === 'select' ? (
                                 <>
                                     <Form.Group className={containerClass}>
-                                        {label ? <Form.Label className={labelClassName} htmlFor={name}>{label}</Form.Label> : null}
-
+                                        {label ? (
+                                            <Form.Label className={labelClassName} htmlFor={name}>
+                                                {label}
+                                            </Form.Label>
+                                        ) : null}{' '}
+                                        {required && <span className="text-danger">*</span>}
                                         <Form.Select
                                             type={type}
                                             placeholder={placeholder}
@@ -125,7 +133,6 @@ const FormInput = ({
                                             {...otherProps}>
                                             {children}
                                         </Form.Select>
-
                                         {errors && errors[name] ? (
                                             <Form.Control.Feedback type="invalid">
                                                 {errors[name]['message']}
@@ -135,7 +142,7 @@ const FormInput = ({
                                 </>
                             ) : (
                                 <>
-                                    {(type === 'checkbox' || type === 'radio') ? (
+                                    {type === 'checkbox' || type === 'radio' ? (
                                         <>
                                             <Form.Group className={containerClass}>
                                                 <Form.Check
@@ -161,8 +168,12 @@ const FormInput = ({
                                         </>
                                     ) : (
                                         <Form.Group className={containerClass}>
-                                            {label ? <Form.Label className={labelClassName} htmlFor={name}>{label}</Form.Label> : null}
-
+                                            {label ? (
+                                                <Form.Label className={labelClassName} htmlFor={name}>
+                                                    {label}
+                                                </Form.Label>
+                                            ) : null}{' '}
+                                            {required && <span className="text-danger">*</span>}
                                             <Form.Control
                                                 type={type}
                                                 placeholder={placeholder}
@@ -179,7 +190,6 @@ const FormInput = ({
                                                 autoComplete={name}>
                                                 {children ? children : null}
                                             </Form.Control>
-
                                             {errors && errors[name] ? (
                                                 <Form.Control.Feedback type="invalid">
                                                     {errors[name]['message']}

@@ -16,7 +16,6 @@ class SessionHelper {
     static setLanguage(language) {
         return localStorage.setItem('i18nextLng', language);
     }
-
     static getAccessToken() {
         return localStorage.getItem('hnfeAccessToken');
     }
@@ -26,6 +25,9 @@ class SessionHelper {
     }
     static removeTokens() {
         localStorage.removeItem('hnfeAccessToken');
+    }
+    static getActiveStore() {
+        return JSON.parse(localStorage.getItem('activeStore'));
     }
 }
 

@@ -1,10 +1,11 @@
 //External Lib Import
 import React, { useState } from 'react';
-import { Row, Col, Card, Button } from 'react-bootstrap';
+import { Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { GrDocumentCsv } from 'react-icons/gr';
 import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
+import classNames from 'classnames';
 
 //Internal Lib Import
 import PageTitle from '../../components/PageTitle';
@@ -18,7 +19,7 @@ import AleartMessage from '../../utils/AleartMessage';
 
 import { useStaffListQuery, useStaffDeleteMutation } from '../../redux/services/staffService';
 
-import CustomerCreateUpdateModal from './CustomerCreateUpdateModal';
+import UserCreateUpdateModal from './UserCreateUpdateModal';
 import DateFormatter from '../../utils/DateFormatter';
 
 // main component
@@ -62,6 +63,9 @@ const Users = () => {
 
         return (
             <>
+                <span role="button" className="action-icon text-info" onClick={edit}>
+                    <i className="mdi mdi-eye"></i>
+                </span>
                 <span role="button" className="action-icon text-warning" onClick={edit}>
                     <i className="mdi mdi-square-edit-outline"></i>
                 </span>
@@ -88,64 +92,58 @@ const Users = () => {
             Header: t('name'),
             accessor: 'name',
             sort: true,
-            Cell: ({ row }) => row.original.name,
+            Cell: ({ row }) => row.original.name || 'NA',
             classes: 'table-user',
         },
         {
-            Header: t("father's name"),
-            accessor: 'fatherName',
+            Header: t('mobile'),
+            accessor: 'mobile',
             sort: true,
-            Cell: ({ row }) => row.original.fatherName,
+            Cell: ({ row }) => row.original.mobile || 'NA',
             classes: 'table-user',
         },
         {
             Header: t('address'),
             accessor: 'address',
             sort: true,
-            Cell: ({ row }) => {
-                const splitAddress = row.original.address?.split(',');
-                return splitAddress?.map((item, i) => (
-                    <p className="mb-0" key={i}>
-                        {item}
-                        {i !== splitAddress.length - 1 ? ',' : ''}
-                    </p>
-                ));
-            },
-            classes: 'table-user',
-        },
-        {
-            Header: t('mobile'),
-            accessor: 'mobile',
-            sort: false,
-            Cell: ({ row }) => row.original.mobile,
-            classes: 'table-user',
-        },
-        {
-            Header: t('ledger number'),
-            accessor: 'ledgerNumber',
-            sort: true,
-            Cell: ({ row }) => row.original.ledgerNumber,
+            Cell: ({ row }) => row.original.address || 'NA',
+
             classes: 'table-user',
         },
         {
             Header: t('due'),
             accessor: 'due',
-            sort: false,
-            Cell: ({ row }) => row.original.due,
+            sort: true,
+            Cell: ({ row }) => row.original.due || 'NA',
             classes: 'table-user',
         },
         {
-            Header: t('date'),
+            Header: t('created on'),
             accessor: 'createdAt',
-            sort: false,
+            sort: true,
             Cell: ({ row }) => DateFormatter(row.original.createdAt),
             classes: 'table-user',
         },
-
+        {
+            Header: t('status'),
+            accessor: 'status',
+            sort: true,
+            Cell: ({ row }) => (
+                <span
+                    className={classNames('badge', {
+                        'badge-success-lighten': row.original.status === 'ACTIVE',
+                        'badge-danger-lighten': row.original.status === 'BLOCKED',
+                        'badge-danger-lighten': row.original.status === 'BANNED',
+                    })}>
+                    {row.original.status}
+                </span>
+            ),
+            classes: 'table-user',
+        },
         {
             Header: t('action'),
             accessor: 'action',
-            sort: false,
+            sort: true,
             classes: 'table-action',
             Cell: ActionColumn,
         },
@@ -200,7 +198,7 @@ const Users = () => {
                                 <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add customer')}
+                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add user')}
                                         </Button>
                                     </Col>
 
@@ -249,7 +247,7 @@ const Users = () => {
                         </Card>
                     </Col>
                 </Row>
-                <CustomerCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <UserCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }

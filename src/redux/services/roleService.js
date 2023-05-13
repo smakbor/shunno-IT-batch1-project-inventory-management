@@ -8,7 +8,7 @@ export const roleService = apiService.injectEndpoints({
                 url: `role/${storeID}`,
                 method: 'GET',
             }),
-            transformResponse: ({ data }) => data,
+            transformResponse: ({ data }) => data || [],
         }),
         roleDropDown: builder.query({
             query: (storeID) => ({
