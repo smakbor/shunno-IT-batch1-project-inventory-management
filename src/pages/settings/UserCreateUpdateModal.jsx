@@ -9,16 +9,22 @@ import classNames from 'classnames';
 //Internal Lib Import
 import { FormInput, VerticalForm } from '../../components';
 import removeEmptyObj from '../../helpers/removeEmptyObj';
+import { useRoleListQuery } from '../../redux/services/roleService';
 
 //api services
 
-import { useCustomerCreateMutation, useCustomerUpdateMutation } from '../../redux/services/customerService';
+import { useStaffCreateMutation, useStaffUpdateMutation } from '../../redux/services/staffService';
+import { useSelector } from 'react-redux';
 
-const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
+const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
+    const { activeStore } = useSelector((state) => state.setting);
+    const { data: allRoles } = useRoleListQuery(activeStore?._id, {
+        skip: !activeStore._id,
+    });
 
-    const [customerCreate, { isLoading, isSuccess }] = useCustomerCreateMutation();
-    const [customerUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCustomerUpdateMutation();
+    const [staffCreate, { isLoading, isSuccess }] = useStaffCreateMutation();
+    const [staffUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useStaffUpdateMutation();
 
     /*
      * form validation schema
@@ -39,7 +45,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
         const data = { reference: {} };
         data.name = formData.name;
         data.fatherName = formData.fatherName;
-        data.customerType = formData.customerType;
+        data.StaffType = formData.StaffType;
         data.address = formData.address;
         data.mobile = formData.mobile;
         data.email = formData.email;
@@ -51,11 +57,11 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
         data.reference.address = formData.refAddress;
 
         if (!editData) {
-            customerCreate(removeEmptyObj(data));
+            staffCreate(removeEmptyObj(data));
         } else {
             const postBody = removeEmptyObj(data);
             console.log(postBody);
-            customerUpdate({ id: editData._id, postBody });
+            staffUpdate({ id: editData._id, postBody });
         }
     };
 
@@ -70,36 +76,34 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             <Card.Body>
                 <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false} size="lg">
                     <Modal.Header onHide={toggle} closeButton>
-                        <h4 className="modal-title">{editData ? t('update customer') : t('create customer')}</h4>
+                        <h4 className="modal-title">{editData ? t('update user') : t('create user')}</h4>
                     </Modal.Header>
 
                     <Modal.Body>
                         <VerticalForm onSubmit={onSubmit} resolver={schemaResolver} defaultValues={defaultValues}>
                             <FormInput
-                                name="customerType"
+                                name="roleID"
                                 type="select"
-                                label="select customer type"
-                                col={'col-4'}
-                                containerClass={'mb-3'}>
-                                <option value="">Select Customer Type</option>
-                                <option value="retail">Retail</option>
-                                <option value="wholesale">Wholesale</option>
+                                label={t('assign user role')}
+                                col={'col-12 col-md-6 col-lg-4'}
+                                containerClass={'mb-3'}
+                                required={true}>
+                                <option value="">{t('assign user role')}</option>
+                                {allRoles &&
+                                    allRoles.map((role) => (
+                                        <option key={role.key} value={role._id}>
+                                            {role.name}
+                                        </option>
+                                    ))}
                             </FormInput>
                             <FormInput
-                                label={t('customer name')}
+                                label={t('name')}
                                 type="text"
                                 name="name"
-                                placeholder={t('please enter customer name')}
+                                placeholder={t('please enter name')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
-                            />
-                            <FormInput
-                                label={t('father name')}
-                                type="text"
-                                name="fatherName"
-                                placeholder={t('please enter father name')}
-                                containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
+                                required={true}
                             />
                             <FormInput
                                 label={t('mobile')}
@@ -107,7 +111,16 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="mobile"
                                 placeholder={t('please enter mobile')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
+                                required={true}
+                            />
+                            <FormInput
+                                label={t('father name')}
+                                type="text"
+                                name="fatherName"
+                                placeholder={t('please enter father name')}
+                                containerClass={'mb-3'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('email')}
@@ -115,7 +128,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="email"
                                 placeholder={t('please enter email')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('nid')}
@@ -123,7 +136,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="nid"
                                 placeholder={t('please enter nid')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('address')}
@@ -131,7 +144,31 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="address"
                                 placeholder={t('please enter address')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
+                            />
+                            <FormInput
+                                label={t('thana')}
+                                type="text"
+                                name="thana"
+                                placeholder={t('please enter thana')}
+                                containerClass={'mb-3'}
+                                col={'col-12 col-md-6 col-lg-4'}
+                            />
+                            <FormInput
+                                label={t('district')}
+                                type="text"
+                                name="district"
+                                placeholder={t('please enter district')}
+                                containerClass={'mb-3'}
+                                col={'col-12 col-md-6 col-lg-4'}
+                            />
+                            <FormInput
+                                label={t('salary')}
+                                type="text"
+                                name="salary"
+                                placeholder={t('please enter salary')}
+                                containerClass={'mb-3'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('due')}
@@ -139,44 +176,60 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="due"
                                 placeholder={t('please enter due')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
-                                label={t('ledger number')}
+                                label={t('remarks')}
                                 type="text"
-                                name="ledgerNumber"
-                                placeholder={t('please enter ledger number')}
+                                name="remarks"
+                                placeholder={t('please enter remarks')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('reference name')}
                                 type="text"
-                                name="refName"
+                                name="reference.name"
                                 placeholder={t('please enter reference name')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('reference mobile')}
                                 type="text"
-                                name="refMobile"
+                                name="reference.mobile"
                                 placeholder={t('please enter reference mobile')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('reference address')}
                                 type="text"
-                                name="refAddress"
+                                name="reference.address"
                                 placeholder={t('please enter reference address')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
-
-                            <div className="mb-3 text-end">
+                            <FormInput
+                                label={t('reference nid')}
+                                type="text"
+                                name="reference.nid"
+                                placeholder={t('please enter reference nid')}
+                                containerClass={'mb-3'}
+                                col={'col-12 col-md-6 col-lg-4'}
+                            />
+                            <FormInput
+                                label={t('reference relation')}
+                                type="text"
+                                name="reference.relation"
+                                placeholder={t('please enter reference relation')}
+                                containerClass={'mb-3'}
+                                col={'col-12 col-md-6 col-lg-4'}
+                            />
+                            <div col={'col-12 col-md-6 col-lg-4'}></div>
+                            <div className="mb-3">
                                 <Button variant="primary" type="submit">
-                                    {editData ? t('update manufacturer') : t('create manufacturer')}
+                                    {editData ? t('update user') : t('create user')}
                                     &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
                                 </Button>
                             </div>
@@ -188,4 +241,4 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
     );
 };
 
-export default CustomerCreateUpdateModal;
+export default StaffCreateUpdateModal;
