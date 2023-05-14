@@ -5,15 +5,15 @@ import { apiService } from '../api/apiService';
 export const unitService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         unitList: builder.query({
-            query: () => ({
-                url: `units`,
+            query: (storeID) => ({
+                url: `units/${storeID}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         unitCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `units`,
+            query: ({ storeID, postBody }) => ({
+                url: `units/${storeID}`,
                 method: 'POST',
                 body: postBody,
             }),

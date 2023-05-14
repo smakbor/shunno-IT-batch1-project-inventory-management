@@ -28,7 +28,7 @@ const Categories = () => {
     const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
     const [subCategoryDefaultValues, setSubCategoryDefaultValues] = useState({
         name: '',
-        status: 'true',
+        status: 'ACTIVE',
         categoryID: '',
     });
 
@@ -57,7 +57,7 @@ const Categories = () => {
     };
     const subCategoryShowModal = (id) => {
         setSubCategoryEditData(false);
-        setSubCategoryDefaultValues({ name: '', status: true, categoryID: id });
+        setSubCategoryDefaultValues({ name: '', status: 'ACTIVE', categoryID: id });
         setSubCategoryModal(true);
     };
     const toggle = (e) => {

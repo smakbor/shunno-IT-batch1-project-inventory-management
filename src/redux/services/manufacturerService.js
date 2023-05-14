@@ -5,15 +5,15 @@ import { apiService } from '../api/apiService';
 export const manufacturerService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         manufacturerList: builder.query({
-            query: () => ({
-                url: `manufacturers`,
+            query: (storeID) => ({
+                url: `manufacturers/${storeID}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         manufacturerCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `manufacturers`,
+            query: ({ storeID, postBody }) => ({
+                url: `manufacturers/${storeID}`,
                 method: 'POST',
                 body: postBody,
             }),

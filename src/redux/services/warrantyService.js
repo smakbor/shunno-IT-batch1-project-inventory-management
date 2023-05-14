@@ -1,19 +1,18 @@
 //Internal Lib Import
-
 import { apiService } from '../api/apiService';
 
 export const warrantyService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         warrantyList: builder.query({
-            query: () => ({
-                url: `warranties`,
+            query: (storeID) => ({
+                url: `warranties/${storeID}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         warrantyCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `warranties`,
+            query: ({ storeID, postBody }) => ({
+                url: `warranties/${storeID}`,
                 method: 'POST',
                 body: postBody,
             }),

@@ -7,30 +7,32 @@ import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 
 //Internal Lib Import
-import PageTitle from '../../components/PageTitle';
-import Table from '../../components/Table';
-import exportFromJson from '../../utils/exportFromJson';
-import LoadingData from '../../components/common/LoadingData';
-import ErrorDataLoad from '../../components/common/ErrorDataLoad';
-import AleartMessage from '../../utils/AleartMessage';
+import PageTitle from '../../../components/PageTitle';
+import Table from '../../../components/Table';
+import exportFromJson from '../../../utils/exportFromJson';
+import LoadingData from '../../../components/common/LoadingData';
+import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
+import AleartMessage from '../../../utils/AleartMessage';
 
 //api services
 
-import { useSupplierListQuery, useSupplierDeleteMutation } from '../../redux/services/suppliersService';
+import { useSupplierListQuery, useSupplierDeleteMutation } from '../../../redux/services/suppliersService';
 import SupplierCreateUpdateModal from './SupplierCreateUpdateModal';
+import { useSelector } from 'react-redux';
 
 // main component
 const Suppliers = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
+    const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-
+    const storeID = useSelector(state => state.setting.activeStore._id)
     const [supplierDelete] = useSupplierDeleteMutation();
 
-    const { data, isLoading, isError } = useSupplierListQuery();
-
+    const { data, isLoading, isError } = useSupplierListQuery(storeID, {
+        skip: !storeID
+    });
     /**
      * Show/hide the modal
      */
@@ -228,7 +230,7 @@ const Suppliers = () => {
 
                                 <Table
                                     columns={columns}
-                                    data={data.data}
+                                    data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}

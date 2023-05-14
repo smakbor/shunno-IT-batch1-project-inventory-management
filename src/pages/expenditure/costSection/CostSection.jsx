@@ -19,6 +19,7 @@ import CostSectionCreateUpdate from './CostSectionCreateUpdate';
 
 import { useCostSectionListQuery, useCostSectionDeleteMutation } from '../../../redux/services/costSectionService';
 import { useStoreListQuery } from '../../../redux/services/storeService';
+import { useSelector } from 'react-redux';
 
 // main component
 const CostSection = () => {
@@ -27,10 +28,11 @@ const CostSection = () => {
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
+    const storeID = useSelector(state => state.setting.activeStore._id)
     const [costSectionDelete] = useCostSectionDeleteMutation();
-    const { data, isLoading, isError } = useCostSectionListQuery();
-    const { data: store, isLoading: isLoaded, isError: isErr } = useStoreListQuery();
-    console.log(store);
+    const { data, isLoading, isError } = useCostSectionListQuery(storeID, {
+        skip: !storeID
+    });
 
     /**
      * Show/hide the modal
@@ -186,7 +188,7 @@ const CostSection = () => {
 
                                 <Table
                                     columns={columns}
-                                    data={data.data}
+                                    data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}

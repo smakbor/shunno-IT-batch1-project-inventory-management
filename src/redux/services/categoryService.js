@@ -19,7 +19,7 @@ export const categoryService = apiService.injectEndpoints({
             async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('categoryList', undefined, (draft) => {
-                        draft.data.push(postBody);
+                        draft.push(postBody);
                     })
                 );
                 try {

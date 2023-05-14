@@ -13,10 +13,11 @@ import removeEmptyObj from '../../../helpers/removeEmptyObj';
 //api services
 
 import { useCustomerCreateMutation, useCustomerUpdateMutation } from '../../../redux/services/customerService';
+import { useSelector } from 'react-redux';
 
 const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
-
+    const storeID = useSelector(state => state.setting.activeStore._id)
     const [customerCreate, { isLoading, isSuccess }] = useCustomerCreateMutation();
     const [customerUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCustomerUpdateMutation();
 
@@ -51,10 +52,9 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
         data.reference.address = formData.refAddress;
 
         if (!editData) {
-            customerCreate(removeEmptyObj(data));
+            customerCreate({ storeID, postBody: removeEmptyObj(data) });
         } else {
             const postBody = removeEmptyObj(data);
-            console.log(postBody);
             customerUpdate({ id: editData._id, postBody });
         }
     };
@@ -82,8 +82,8 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 col={'col-4'}
                                 containerClass={'mb-3'}>
                                 <option value="">Select Customer Type</option>
-                                <option value="retail">Retail</option>
-                                <option value="wholesale">Wholesale</option>
+                                <option value="RETAIL">Retail</option>
+                                <option value="WHOLESALE">Wholesale</option>
                             </FormInput>
                             <FormInput
                                 label={t('customer name')}
@@ -103,7 +103,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                             />
                             <FormInput
                                 label={t('mobile')}
-                                type="text"
+                                type="tel"
                                 name="mobile"
                                 placeholder={t('please enter mobile')}
                                 containerClass={'mb-3'}
@@ -111,7 +111,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                             />
                             <FormInput
                                 label={t('email')}
-                                type="text"
+                                type="email"
                                 name="email"
                                 placeholder={t('please enter email')}
                                 containerClass={'mb-3'}
@@ -135,7 +135,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                             />
                             <FormInput
                                 label={t('due')}
-                                type="text"
+                                type="number"
                                 name="due"
                                 placeholder={t('please enter due')}
                                 containerClass={'mb-3'}

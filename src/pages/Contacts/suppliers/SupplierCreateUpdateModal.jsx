@@ -5,18 +5,19 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import Select from 'react-select';
 
 //Internal Lib Import
-import { FormInput, VerticalForm } from '../../components';
-import removeEmptyObj from '../../helpers/removeEmptyObj';
+import { FormInput, VerticalForm } from '../../../components';
+import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 //api services
 
-import { useSupplierCreateMutation, useSupplierUpdateMutation } from '../../redux/services/suppliersService';
+import { useSupplierCreateMutation, useSupplierUpdateMutation } from '../../../redux/services/suppliersService';
+import { useSelector } from 'react-redux';
 
 const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
+    const storeID = useSelector(state => state.setting.activeStore._id)
     const [supplierCreate, { isLoading, isSuccess }] = useSupplierCreateMutation();
     const [supplierUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useSupplierUpdateMutation();
 
@@ -50,7 +51,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
         data.due = formData?.due;
         data.storeID = '602e42e46ebade5b1c7cf45f';
         if (!editData) {
-            supplierCreate(removeEmptyObj(data));
+            supplierCreate({ storeID, postBody: removeEmptyObj(data) });
         } else {
             const updatedData = { ...editData, ...data };
             const postBody = removeEmptyObj(updatedData);

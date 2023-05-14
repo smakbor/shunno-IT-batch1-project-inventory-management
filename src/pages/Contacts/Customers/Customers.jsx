@@ -20,25 +20,29 @@ import { useCustomerListQuery, useCustomerDeleteMutation } from '../../../redux/
 
 import CustomerCreateUpdateModal from './CustomerCreateUpdateModal';
 import DateFormatter from '../../../utils/DateFormatter';
+import { useSelector } from 'react-redux';
 
 // main component
 const Customers = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
+    const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
 
+    const storeID = useSelector(state => state.setting.activeStore._id)
     const [customerDelete] = useCustomerDeleteMutation();
 
-    const { data, isLoading, isError } = useCustomerListQuery();
+    const { data, isLoading, isError } = useCustomerListQuery(storeID, {
+        skip: !storeID
+    });
     /**
      * Show/hide the modal
      */
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: '' });
+        setDefaultValues({ name: '', status: 'ACTIVE' });
         setModal(!modal);
     };
 

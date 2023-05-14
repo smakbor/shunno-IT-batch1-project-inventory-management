@@ -5,15 +5,15 @@ import { apiService } from '../api/apiService';
 export const costSectionService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         costSectionList: builder.query({
-            query: () => ({
-                url: `cost-sections`,
+            query: (storeID) => ({
+                url: `cost-sections/${storeID}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         costSectionCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `cost-sections`,
+            query: ({ storeID, postBody }) => ({
+                url: `cost-sections/${storeID}`,
                 method: 'POST',
                 body: postBody,
             }),

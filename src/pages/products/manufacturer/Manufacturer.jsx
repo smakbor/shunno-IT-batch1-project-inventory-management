@@ -20,18 +20,23 @@ import AleartMessage from '../../../utils/AleartMessage';
 
 import { useManufacturerListQuery, useManufacturerDeleteMutation } from '../../../redux/services/manufacturerService';
 import ManufacturerCreateUpdateModal from './ManufacturerCreateUpdateModal';
+import { useSelector } from 'react-redux';
 
 // main component
 const Manufacturer = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
+    const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-
+    const storeID = useSelector(state => state.setting.activeStore._id)
     const [manufacturerDelete] = useManufacturerDeleteMutation();
 
-    const { data, isLoading, isError } = useManufacturerListQuery();
+    const { data, isLoading, isError } = useManufacturerListQuery(
+        storeID, {
+        skip: !storeID
+    }
+    );
 
     /**
      * Show/hide the modal
@@ -39,14 +44,13 @@ const Manufacturer = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: '' });
+        setDefaultValues({ name: '', status: 'ACTIVE' });
         setModal(!modal);
     };
 
     const toggle = (e) => {
         setModal(!modal);
     };
-    console.log(editData);
 
     /* action column render */
     const ActionColumn = ({ row }) => {
@@ -130,8 +134,8 @@ const Manufacturer = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('manufacturers'), path: '/products/manufacturers', active: true }]}
+                    title={t('manufacturers')}
                 />
                 <LoadingData />
             </>
@@ -140,8 +144,8 @@ const Manufacturer = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('manufacturers'), path: '/products/manufacturers', active: true }]}
+                    title={t('manufacturers')}
                 />
                 <ErrorDataLoad />
             </>
@@ -149,10 +153,10 @@ const Manufacturer = () => {
     } else {
         return (
             <>
-                {/* <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('category')}
-                /> */}
+                <PageTitle
+                    breadCrumbItems={[{ label: t('manufacturers'), path: '/products/manufacturers', active: true }]}
+                    title={t('manufacturers')}
+                />
 
                 <Row>
                     <Col xs={12}>
@@ -195,7 +199,7 @@ const Manufacturer = () => {
 
                                 <Table
                                     columns={columns}
-                                    data={data.data}
+                                    data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}

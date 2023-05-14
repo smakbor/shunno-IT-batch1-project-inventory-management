@@ -12,11 +12,12 @@ import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 //api services
-import { useUnitCreateMutation, useUnitUpdateMutation } from '../../../redux/services/unitService';
 import { useWarrantyCreateMutation, useWarrantyUpdateMutation } from '../../../redux/services/warrantyService';
+import { useSelector } from 'react-redux';
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
+    const storeID = useSelector(state => state.setting.activeStore._id)
     const [warrantyCreate, { isLoading, isSuccess }] = useWarrantyCreateMutation();
     const [warrantyUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useWarrantyUpdateMutation();
 
@@ -39,7 +40,7 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
         data.status = formData.status;
 
         if (!editData) {
-            warrantyCreate(removeEmptyObj(data));
+            warrantyCreate({ storeID, postBody: removeEmptyObj(data) });
         } else {
             const updatedData = { ...editData, ...data }
             const postBody = removeEmptyObj(updatedData);

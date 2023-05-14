@@ -5,15 +5,15 @@ import { apiService } from '../api/apiService';
 export const customerService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         customerList: builder.query({
-            query: () => ({
-                url: `customers`,
+            query: (storeID) => ({
+                url: `customers/${storeID}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         customerCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `customers`,
+            query: ({ storeID, postBody }) => ({
+                url: `customers/${storeID}`,
                 method: 'POST',
                 body: postBody,
             }),

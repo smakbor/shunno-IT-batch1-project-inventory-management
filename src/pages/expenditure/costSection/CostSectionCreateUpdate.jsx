@@ -14,9 +14,11 @@ import removeEmptyObj from '../../../helpers/removeEmptyObj';
 //api services
 
 import { useCostSectionCreateMutation, useCostSectionUpdateMutation } from '../../../redux/services/costSectionService';
+import { useSelector } from 'react-redux';
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
+    const storeID = useSelector(state => state.setting.activeStore._id)
     const [costSectionCreate, { isLoading, isSuccess }] = useCostSectionCreateMutation();
     const [costSectionUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCostSectionUpdateMutation();
 
@@ -37,7 +39,7 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
         data.name = formData.name;
 
         if (!editData) {
-            costSectionCreate(removeEmptyObj(data));
+            costSectionCreate({ storeID, postBody: removeEmptyObj(data) });
         } else {
             const updatedData = { ...editData, ...data };
 

@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 // main component
 const Customers = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
+    const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(null);
@@ -35,7 +35,7 @@ const Customers = () => {
 
     const addShowModal = () => {
         setEditData(null);
-        setDefaultValues({ name: '', status: true });
+        setDefaultValues({ name: '', status: 'ACTIVE' });
         setModal(!modal);
     };
 

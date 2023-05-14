@@ -25,7 +25,7 @@ import DateFormatter from '../../utils/DateFormatter';
 // main component
 const Users = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '', status: true });
+    const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
@@ -40,7 +40,7 @@ const Users = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: '' });
+        setDefaultValues({ name: '', status: 'ACTIVE' });
         setModal(!modal);
     };
 

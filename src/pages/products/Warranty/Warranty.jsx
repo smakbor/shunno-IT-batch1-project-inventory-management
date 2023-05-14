@@ -18,6 +18,7 @@ import WarrantyCreateUpdate from './WarrantyCreateUpdate';
 //api services
 
 import { useWarrantyListQuery, useWarrantyDeleteMutation } from '../../../redux/services/warrantyService';
+import { useSelector } from 'react-redux';
 
 // main component
 const Warranty = () => {
@@ -26,8 +27,9 @@ const Warranty = () => {
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
+    const storeID = useSelector(state => state.setting.activeStore._id)
     const [warrantyDelete] = useWarrantyDeleteMutation();
-    const { data, isLoading, isError } = useWarrantyListQuery();
+    const { data, isLoading, isError } = useWarrantyListQuery(storeID);
 
     /**
      * Show/hide the modal
@@ -35,7 +37,7 @@ const Warranty = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: true });
+        setDefaultValues({ name: '', status: 'ACTIVE' });
         setModal(!modal);
     };
 
@@ -123,8 +125,8 @@ const Warranty = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('warranties'), path: '/products/warranties', active: true }]}
+                    title={t('warranties')}
                 />
                 <LoadingData />
             </>
@@ -133,8 +135,8 @@ const Warranty = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('warranties'), path: '/products/warranties', active: true }]}
+                    title={t('warranties')}
                 />
                 <ErrorDataLoad />
             </>
@@ -142,10 +144,10 @@ const Warranty = () => {
     } else {
         return (
             <>
-                {/* <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('category')}
-                /> */}
+                <PageTitle
+                    breadCrumbItems={[{ label: t('warranties'), path: '/products/warranties', active: true }]}
+                    title={t('warranties')}
+                />
 
                 <Row>
                     <Col xs={12}>
@@ -188,7 +190,7 @@ const Warranty = () => {
 
                                 <Table
                                     columns={columns}
-                                    data={data.data}
+                                    data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}

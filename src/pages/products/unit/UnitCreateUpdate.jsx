@@ -13,12 +13,13 @@ import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 //api services
 import { useUnitCreateMutation, useUnitUpdateMutation } from '../../../redux/services/unitService';
+import { useSelector } from 'react-redux';
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
     const [unitCreate, { isLoading, isSuccess }] = useUnitCreateMutation();
     const [unitUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useUnitUpdateMutation();
-
+    const storeID = useSelector(state => state.setting.activeStore._id)
     /*
      * form validation schema
      */
@@ -38,7 +39,9 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
         data.status = formData.status;
 
         if (!editData) {
-            unitCreate(removeEmptyObj(data));
+            unitCreate({
+                storeID, postBody: removeEmptyObj(data)
+            });
         } else {
             const updatedData = { ...editData, ...data }
             const postBody = removeEmptyObj(updatedData);

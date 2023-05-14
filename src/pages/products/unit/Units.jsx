@@ -17,6 +17,7 @@ import UnitCreateUpdate from './UnitCreateUpdate';
 
 //api services
 import { useUnitListQuery, useUnitDeleteMutation } from '../../../redux/services/unitService';
+import { useSelector } from 'react-redux';
 
 // main component
 const Units = () => {
@@ -25,8 +26,11 @@ const Units = () => {
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
+    const storeID = useSelector(state => state.setting.activeStore._id)
     const [unitDelete] = useUnitDeleteMutation();
-    const { data, isLoading, isError } = useUnitListQuery();
+    const { data, isLoading, isError } = useUnitListQuery(storeID, {
+        skip: !storeID
+    });
 
     /**
      * Show/hide the modal
@@ -34,7 +38,7 @@ const Units = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: true });
+        setDefaultValues({ name: '', status: 'ACTIVE' });
         setModal(!modal);
     };
 
