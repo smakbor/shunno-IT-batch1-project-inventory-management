@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 
 //Internal Lib Import
 import { FormInput, VerticalForm } from '../../components';
@@ -12,9 +13,7 @@ import removeEmptyObj from '../../helpers/removeEmptyObj';
 import { useRoleListQuery } from '../../redux/services/roleService';
 
 //api services
-
 import { useStaffCreateMutation, useStaffUpdateMutation } from '../../redux/services/staffService';
-import { useSelector } from 'react-redux';
 
 const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
@@ -31,35 +30,58 @@ const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValu
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter manufacturer name')).min(3, t('minimum containing 3 letter')),
+            name: yup.string().required(t('please enter name')).max(40, t('maximum containing 40 letter')),
+            roleID: yup.string().required(t('please select role')),
+            mobile: yup
+                .string()
+                .required(t('please enter mobile'))
+                .matches(/(^(\+88|0088|88)?(01){1}[3456789]{1}(\d){8})$/, t('write 11 digit mobile number')),
+            status: yup.string().required(t('please select status')),
+            password: yup
+                .string()
+                .required(t('please enter password'))
+                .min(8, t('password must be at least 8 characters'))
+                .matches(
+                    /^(?=.*[0-9])(?=.*[a-zA-Z])(?=\S+$).{6,20}$/,
+                    'password must contain at least 1 letter and 1 number'
+                ),
+            confirmPassword: yup.string().oneOf([yup.ref('password'), null], t('passwords must match')),
+            fatherName: yup.string(),
+            email: yup.string().email(t('not a proper email')),
+            nid: yup.string(),
+            address: yup.string(),
+            thana: yup.string(),
+            district: yup.string(),
+            salary: yup.string(),
+            due: yup.string(),
+            remarks: yup.string(),
+            reference: yup
+                .object({
+                    name: yup.string(),
+                    mobile: yup
+                        .string()
+                        .matches(/(^$|^(\+88|0088|88)?(01){1}[3456789]{1}(\d){8})$/, t('write 11 digit mobile number'))
+                        .nullable()
+                        .notRequired(),
+                    address: yup.string(),
+                    nid: yup.string(),
+                    relation: yup.string(),
+                })
+                .required(),
         })
     );
-
-    //slugify
 
     /*
      * handle form submission
      */
 
     const onSubmit = (formData) => {
-        const data = { reference: {} };
-        data.name = formData.name;
-        data.fatherName = formData.fatherName;
-        data.StaffType = formData.StaffType;
-        data.address = formData.address;
-        data.mobile = formData.mobile;
-        data.email = formData.email;
-        data.due = formData.due;
-        data.ledgerNumber = formData.ledgerNumber;
-        data.nid = formData.nid;
-        data.reference.name = formData.refName;
-        data.reference.mobile = formData.refMobile;
-        data.reference.address = formData.refAddress;
-
+        formData.storeID = activeStore._id;
+        delete formData.confirmPassword;
         if (!editData) {
-            staffCreate(removeEmptyObj(data));
+            staffCreate(removeEmptyObj(formData));
         } else {
-            const postBody = removeEmptyObj(data);
+            const postBody = removeEmptyObj(formData);
             console.log(postBody);
             staffUpdate({ id: editData._id, postBody });
         }
@@ -78,20 +100,19 @@ const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValu
                     <Modal.Header onHide={toggle} closeButton>
                         <h4 className="modal-title">{editData ? t('update user') : t('create user')}</h4>
                     </Modal.Header>
-
                     <Modal.Body>
                         <VerticalForm onSubmit={onSubmit} resolver={schemaResolver} defaultValues={defaultValues}>
                             <FormInput
                                 name="roleID"
                                 type="select"
-                                label={t('assign user role')}
+                                label={t('select user role')}
                                 col={'col-12 col-md-6 col-lg-4'}
                                 containerClass={'mb-3'}
                                 required={true}>
-                                <option value="">{t('assign user role')}</option>
+                                <option value="">{t('select user role')}</option>
                                 {allRoles &&
                                     allRoles.map((role) => (
-                                        <option key={role.key} value={role._id}>
+                                        <option key={role._id} value={role._id}>
                                             {role.name}
                                         </option>
                                     ))}
@@ -115,26 +136,44 @@ const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValu
                                 required={true}
                             />
                             <FormInput
-                                label={t('father name')}
-                                type="text"
-                                name="fatherName"
-                                placeholder={t('please enter father name')}
-                                containerClass={'mb-3'}
+                                name="status"
+                                type="select"
+                                label={t('select user status')}
                                 col={'col-12 col-md-6 col-lg-4'}
-                            />
+                                containerClass={'mb-3'}
+                                required={true}>
+                                <option value="">{t('select user role')}</option>
+                                <option value="ACTIVE">{t('ACTIVE')}</option>
+                                <option value="BLOCKED">{t('BLOCKED')}</option>
+                                <option value="BANNED">{t('BANNED')}</option>
+                            </FormInput>
+                            {!editData && (
+                                <FormInput
+                                    label={t('password')}
+                                    type="password"
+                                    name="password"
+                                    placeholder={t('please enter password')}
+                                    containerClass={'mb-3'}
+                                    col={'col-12 col-md-6 col-lg-4'}
+                                    required={true}
+                                />
+                            )}
+                            {!editData && (
+                                <FormInput
+                                    label={t('confirm password')}
+                                    type="password"
+                                    name="confirmPassword"
+                                    placeholder={t('please enter confirm password')}
+                                    containerClass={'mb-3'}
+                                    col={'col-12 col-md-6 col-lg-4'}
+                                    required={true}
+                                />
+                            )}
                             <FormInput
                                 label={t('email')}
-                                type="text"
+                                type="email"
                                 name="email"
                                 placeholder={t('please enter email')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('nid')}
-                                type="text"
-                                name="nid"
-                                placeholder={t('please enter nid')}
                                 containerClass={'mb-3'}
                                 col={'col-12 col-md-6 col-lg-4'}
                             />
@@ -143,6 +182,22 @@ const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValu
                                 type="text"
                                 name="address"
                                 placeholder={t('please enter address')}
+                                containerClass={'mb-3'}
+                                col={'col-12 col-md-6 col-lg-4'}
+                            />
+                            <FormInput
+                                label={t('father name')}
+                                type="text"
+                                name="fatherName"
+                                placeholder={t('please enter father name')}
+                                containerClass={'mb-3'}
+                                col={'col-12 col-md-6 col-lg-4'}
+                            />
+                            <FormInput
+                                label={t('nid')}
+                                type="text"
+                                name="nid"
+                                placeholder={t('please enter nid')}
                                 containerClass={'mb-3'}
                                 col={'col-12 col-md-6 col-lg-4'}
                             />
@@ -193,6 +248,7 @@ const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValu
                                 placeholder={t('please enter reference name')}
                                 containerClass={'mb-3'}
                                 col={'col-12 col-md-6 col-lg-4'}
+                                nested={true}
                             />
                             <FormInput
                                 label={t('reference mobile')}
@@ -201,6 +257,7 @@ const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValu
                                 placeholder={t('please enter reference mobile')}
                                 containerClass={'mb-3'}
                                 col={'col-12 col-md-6 col-lg-4'}
+                                nested={true}
                             />
                             <FormInput
                                 label={t('reference address')}
@@ -209,6 +266,7 @@ const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValu
                                 placeholder={t('please enter reference address')}
                                 containerClass={'mb-3'}
                                 col={'col-12 col-md-6 col-lg-4'}
+                                nested={true}
                             />
                             <FormInput
                                 label={t('reference nid')}
@@ -217,6 +275,7 @@ const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValu
                                 placeholder={t('please enter reference nid')}
                                 containerClass={'mb-3'}
                                 col={'col-12 col-md-6 col-lg-4'}
+                                nested={true}
                             />
                             <FormInput
                                 label={t('reference relation')}
@@ -225,9 +284,10 @@ const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValu
                                 placeholder={t('please enter reference relation')}
                                 containerClass={'mb-3'}
                                 col={'col-12 col-md-6 col-lg-4'}
+                                nested={true}
                             />
                             <div col={'col-12 col-md-6 col-lg-4'}></div>
-                            <div className="mb-3">
+                            <div className="mb-3 col-12" col={'col-12'}>
                                 <Button variant="primary" type="submit">
                                     {editData ? t('update user') : t('create user')}
                                     &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}

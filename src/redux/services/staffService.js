@@ -5,14 +5,14 @@ export const staffService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         staffList: builder.query({
             query: (storeID) => ({
-                url: `staffs`, ///${storeID}
+                url: `staffs/${storeID}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         staffCreate: builder.mutation({
             query: (postBody) => ({
-                url: `staffs`,
+                url: `staffs/${postBody.storeID}`,
                 method: 'POST',
                 body: postBody,
             }),
@@ -45,7 +45,7 @@ export const staffService = apiService.injectEndpoints({
         }),
         staffDelete: builder.mutation({
             query: ({ id, storeID }) => ({
-                url: `staffs/${id}`, //staffs/${id}/${storeID}
+                url: `staffs/${id}`,
                 method: 'DELETE',
             }),
             onQueryStarted({ id, storeID }, { queryFulfilled, dispatch }) {
