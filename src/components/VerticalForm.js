@@ -1,5 +1,5 @@
 // @flow
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 
@@ -35,19 +35,21 @@ const VerticalForm = ({
                 {Array.isArray(children)
                     ? children.map((child, i) => {
                           return (
-                              <Col className={child.props.col} key={i}>
-                                  {child.props && child.props.name
-                                      ? React.createElement(child.type, {
-                                            ...{
-                                                ...child.props,
-                                                register,
-                                                key: child.props.name,
-                                                errors,
-                                                control,
-                                            },
-                                        })
-                                      : child}
-                              </Col>
+                              child.props && (
+                                  <Col className={child.props.col} key={i}>
+                                      {child.props && child.props.name
+                                          ? React.createElement(child.type, {
+                                                ...{
+                                                    ...child.props,
+                                                    register,
+                                                    key: child.props.name,
+                                                    errors,
+                                                    control,
+                                                },
+                                            })
+                                          : child}
+                                  </Col>
+                              )
                           );
                       })
                     : children}

@@ -6,6 +6,7 @@ import { GrDocumentCsv } from 'react-icons/gr';
 import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 
 //Internal Lib Import
 import PageTitle from '../../components/PageTitle';
@@ -16,23 +17,26 @@ import ErrorDataLoad from '../../components/common/ErrorDataLoad';
 import AleartMessage from '../../utils/AleartMessage';
 
 //api services
-
 import { useStaffListQuery, useStaffDeleteMutation } from '../../redux/services/staffService';
-
 import UserCreateUpdateModal from './UserCreateUpdateModal';
 import DateFormatter from '../../utils/DateFormatter';
 
 // main component
 const Users = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
-
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
+    const { activeStore } = useSelector((state) => state.setting);
+    const {
+        data: staffs,
+        isLoading,
+        isError,
+    } = useStaffListQuery(activeStore?._id, {
+        skip: !activeStore._id,
+    });
 
+    const [defaultValues, setDefaultValues] = useState({ roleID: '', status: 'ACTIVE' });
     const [staffDelete] = useStaffDeleteMutation();
-
-    const { data: staffs, isLoading, isError } = useStaffListQuery();
 
     /**
      * Show/hide the modal
@@ -52,13 +56,8 @@ const Users = () => {
     const ActionColumn = ({ row }) => {
         const edit = () => {
             toggle();
-            let { reference, ...updateData } = { ...row.original };
-            updateData.refName = row.original.reference?.name || '';
-            updateData.refAddress = row.original.reference?.address || '';
-            updateData.refMobile = row.original.reference?.mobile || '';
-            console.log(updateData);
-            setEditData(updateData);
-            setDefaultValues(updateData);
+            setEditData(row?.original);
+            setDefaultValues(row?.original);
         };
 
         return (
@@ -72,7 +71,9 @@ const Users = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, staffDelete)}>
+                    onClick={() =>
+                        AleartMessage.Delete({ id: row?.original._id, storeID: row?.original.storeID }, staffDelete)
+                    }>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
