@@ -5,15 +5,15 @@ import { apiService } from '../api/apiService';
 export const expenditureService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         expenditureList: builder.query({
-            query: () => ({
-                url: `expenditures`,
+            query: (storeID) => ({
+                url: `expenditures/${storeID}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         expenditureCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `expenditures`,
+            query: ({ storeID, postBody }) => ({
+                url: `expenditures/${storeID}`,
                 method: 'POST',
                 body: postBody,
             }),

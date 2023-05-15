@@ -125,6 +125,12 @@ const MENU_ITEMS = () => {
                     url: '/users',
                     parentKey: 'settings',
                 },
+                {
+                    key: 'ui',
+                    label: 'ui',
+                    url: '/settings/ui',
+                    parentKey: 'settings',
+                },
             ],
         },
     ];

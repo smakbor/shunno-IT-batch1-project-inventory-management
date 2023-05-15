@@ -26,7 +26,13 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter manufacturer name')).min(3, t('minimum containing 3 letter')),
+            name: yup.string().required(t('please enter customer name')).min(3, t('minimum containing 3 letter')),
+            fatherName: yup.string(),
+            address: yup.string(),
+            mobile: yup.string().required(t('enter mobile number')).matches(/^(?:\+?88|0088)?01[3-9]\d{8}$/
+            ),
+            email: yup.string().email(),
+            nid: yup.string()
         })
     );
 
@@ -81,7 +87,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="company"
                                 placeholder={t('please enter company name')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('name')}
@@ -89,15 +95,17 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="name"
                                 placeholder={t('please enter supplier name')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
+                                required={true}
                             />
                             <FormInput
                                 label={t('mobile')}
-                                type="tel"
+                                type="number"
                                 name="mobile"
                                 placeholder={t('please enter mobile number')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
+                                required={true}
                             />
                             <FormInput
                                 label={t('email')}
@@ -105,7 +113,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="email"
                                 placeholder={t('please enter supplier email')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('NID')}
@@ -113,7 +121,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="nid"
                                 placeholder={t('please enter supplier nid')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('address')}
@@ -121,7 +129,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="address"
                                 placeholder={t('please enter supplier address')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('father name')}
@@ -129,7 +137,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="fatherName"
                                 placeholder={t('please enter father name')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('remarks')}
@@ -137,7 +145,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="remarks"
                                 placeholder={t('please enter remarks')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('thana')}
@@ -145,7 +153,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="thana"
                                 placeholder={t('please enter thana')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('district')}
@@ -153,7 +161,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="district"
                                 placeholder={t('please enter district')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('previous due')}
@@ -161,7 +169,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="due"
                                 placeholder={t('please enter supplier previous due')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('reference name')}
@@ -169,7 +177,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="referenceName"
                                 placeholder={t('please enter reference name')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('reference mobile')}
@@ -177,7 +185,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="referenceMobile"
                                 placeholder={t('please enter supplier mobile')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('reference address')}
@@ -185,7 +193,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="referenceAddress"
                                 placeholder={t('please enter reference address')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('reference nid')}
@@ -193,7 +201,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="referenceNid"
                                 placeholder={t('please enter reference nid')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('reference relation')}
@@ -201,7 +209,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="referenceRelation"
                                 placeholder={t('please enter reference address')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <div className="mb-3 text-end">
                                 <Button variant="primary" type="submit">

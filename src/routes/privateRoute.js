@@ -3,6 +3,7 @@ import { lazy } from 'react';
 
 //Internal Lib Import
 import LazyLoad from '../components/common/LazyLoad.jsx';
+const Ui = lazy(() => import('../pages/settings/Ui.jsx'));
 const Trash = lazy(() => import('../pages/message/Trash.jsx'));
 const Inbox = lazy(() => import('../pages/message/Inbox.jsx'));
 const Warranty = lazy(() => import('../pages/products/warranty/Warranty.jsx'));
@@ -125,6 +126,12 @@ const privateRoutes = [
     {
         path: '/users',
         element: <LazyLoad component={Users} />,
+        roles: ['ALL'],
+        routePermission: 'ALL',
+    },
+    {
+        path: '/settings/ui',
+        element: <LazyLoad component={Ui} />,
         roles: ['ALL'],
         routePermission: 'ALL',
     },

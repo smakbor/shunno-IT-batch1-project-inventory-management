@@ -14,9 +14,15 @@ import removeEmptyObj from '../../../helpers/removeEmptyObj';
 //api services
 
 import { useExpenditureCreateMutation, useExpenditureUpdateMutation } from '../../../redux/services/expenditureService';
+import { useSelector } from 'react-redux';
+import { useStaffListQuery } from '../../../redux/services/staffService';
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues, costSectionData }) => {
     const { t } = useTranslation();
+    const storeID = useSelector(state => state.setting.activeStore._id);
+    const { data: staffList } = useStaffListQuery(storeID, {
+        skip: !storeID
+    })
     const [expenditureCreate, { isLoading, isSuccess }] = useExpenditureCreateMutation();
     const [expenditureUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useExpenditureUpdateMutation();
 
@@ -25,7 +31,8 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues, c
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter expenditure')).min(2, t('minimum containing 2 letters')),
+            staffID: yup.string().required(t('select employee')),
+            purposeID: yup.string().required(t('select cost section')),
         })
     );
 
@@ -33,12 +40,19 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues, c
      * handle form submission
      */
     const onSubmit = (formData) => {
+        console.log(formData)
         const data = {};
-        data.name = formData.name;
-        data.status = formData.status;
+        data.staffID = formData.staffID;
+        const foundStaff = staffList?.find(staff => staff._id == formData.staffID)
+        const foundPurpose = costSectionData?.find(cost => cost._id == formData.purposeID)
+        data.staffName = foundStaff?.name;
+        data.amount = parseFloat(formData.amount);
+        data.purposeID = formData.purposeID;
+        data.purposeName = foundPurpose?.name;
+        data.remarks = formData.remarks;
 
         if (!editData) {
-            expenditureCreate(removeEmptyObj(data));
+            expenditureCreate({ storeID, postBody: removeEmptyObj(data) });
         } else {
             const postBody = removeEmptyObj(data);
             expenditureUpdate({ id: editData._id, postBody });
@@ -62,24 +76,29 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues, c
                     <Modal.Body>
                         <VerticalForm onSubmit={onSubmit} resolver={schemaResolver} defaultValues={defaultValues}>
                             <FormInput
-                                name="select employee"
+                                name="staffID"
                                 type="select"
                                 label={t('employee')}
-                                defaultValue="ACTIVE"
+                                defaultValue=""
                                 col={'col-12'}
                                 containerClass={'mb-3'}>
-                                <option value="ACTIVE">Active</option>
-                                <option value="INACTIVE">Inactive</option>
+                                <option value="" disabled>{t('select employee')}</option>
+                                {
+                                    staffList && staffList.map(staff =>
+                                        <option key={staff._id} value={staff._id}>{staff.name}</option>
+                                    )
+                                }
                             </FormInput>
                             <FormInput
-                                name="expenditureType"
+                                name="purposeID"
                                 type="select"
-                                label={t('select expenditure')}
-                                defaultValue="ACTIVE"
+                                label={t('select cost section')}
+                                defaultValue=""
                                 col={'col-12'}
                                 containerClass={'mb-3'}>
-                                {costSectionData.data.map((item) => {
-                                    return <option value={item.name}>{item.name}</option>;
+                                <option value="" disabled>{t('select cost section')}</option>
+                                {costSectionData?.map((item) => {
+                                    return <option key={item._id} value={item._id}>{item.name}</option>;
                                 })}
                                 {/* <option value="ACTIVE">Active</option>
                                 <option value="INACTIVE">Inactive</option> */}
@@ -87,16 +106,16 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues, c
 
                             <FormInput
                                 label={t('amount')}
-                                type="text"
+                                type="number"
                                 name="amount"
                                 placeholder={t('please enter amount')}
                                 containerClass={'mb-3'}
                                 col={'col-12'}
                             />
                             <FormInput
-                                label={t('note')}
+                                label={t('remarks')}
                                 type="text"
-                                name="note"
+                                name="remarks"
                                 placeholder={t('please enter note')}
                                 containerClass={'mb-3'}
                                 col={'col-12'}

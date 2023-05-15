@@ -26,7 +26,14 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter manufacturer name')).min(3, t('minimum containing 3 letter')),
+            name: yup.string().required(t('please enter customer name')).min(3, t('minimum containing 3 letter')),
+            fatherName: yup.string(),
+            address: yup.string(),
+            mobile: yup.string().required(t('enter mobile number')).matches(/^(?:\+?88|0088)?01[3-9]\d{8}$/
+                , t('enter valid number')),
+            email: yup.string().email(t('enter valid email')),
+            ledgerNumber: yup.string(),
+            nid: yup.string()
         })
     );
 
@@ -79,7 +86,8 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="customerType"
                                 type="select"
                                 label="select customer type"
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
+                                required={true}
                                 containerClass={'mb-3'}>
                                 <option value="">Select Customer Type</option>
                                 <option value="RETAIL">Retail</option>
@@ -91,7 +99,8 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="name"
                                 placeholder={t('please enter customer name')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
+                                required={true}
                             />
                             <FormInput
                                 label={t('father name')}
@@ -99,15 +108,16 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="fatherName"
                                 placeholder={t('please enter father name')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('mobile')}
-                                type="tel"
+                                type="number"
                                 name="mobile"
                                 placeholder={t('please enter mobile')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                required={true}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('email')}
@@ -115,7 +125,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="email"
                                 placeholder={t('please enter email')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('nid')}
@@ -123,7 +133,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="nid"
                                 placeholder={t('please enter nid')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('address')}
@@ -131,7 +141,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="address"
                                 placeholder={t('please enter address')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('due')}
@@ -139,7 +149,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="due"
                                 placeholder={t('please enter due')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('ledger number')}
@@ -147,7 +157,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="ledgerNumber"
                                 placeholder={t('please enter ledger number')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('reference name')}
@@ -155,7 +165,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="refName"
                                 placeholder={t('please enter reference name')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('reference mobile')}
@@ -163,7 +173,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="refMobile"
                                 placeholder={t('please enter reference mobile')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
                             <FormInput
                                 label={t('reference address')}
@@ -171,7 +181,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                                 name="refAddress"
                                 placeholder={t('please enter reference address')}
                                 containerClass={'mb-3'}
-                                col={'col-4'}
+                                col={'col-12 col-md-6 col-lg-4'}
                             />
 
                             <div className="mb-3 text-end">

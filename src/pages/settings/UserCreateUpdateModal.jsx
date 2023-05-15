@@ -82,7 +82,6 @@ const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValu
             staffCreate(removeEmptyObj(formData));
         } else {
             const postBody = removeEmptyObj(formData);
-            console.log(postBody);
             staffUpdate({ id: editData._id, postBody });
         }
     };

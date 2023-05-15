@@ -124,7 +124,8 @@ const FormInput = ({
                 </Form.Group>
             );
             break;
-        case 'checkbox radio':
+        case 'checkbox':
+        case 'radio':
             return (
                 <Form.Group className={containerClass}>
                     <Form.Check

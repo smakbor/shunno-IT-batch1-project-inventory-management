@@ -17,6 +17,7 @@ import ExpenditureCreateUpdate from './ExpenditureCreateUpdate';
 import { useExpenditureDeleteMutation, useExpenditureListQuery } from '../../../redux/services/expenditureService';
 import DateFormatter from '../../../utils/DateFormatter';
 import { useCostSectionListQuery } from '../../../redux/services/costSectionService';
+import { useSelector } from 'react-redux';
 
 //api services
 
@@ -27,9 +28,14 @@ const Expenditure = () => {
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
+    const storeID = useSelector(state => state.setting.activeStore._id);
     const [expenditureDelete] = useExpenditureDeleteMutation();
-    const { data, isLoading, isError } = useExpenditureListQuery();
-    const { data: costSectionData, isLoading: isLoaded, isError: isErr } = useCostSectionListQuery();
+    const { data, isLoading, isError } = useExpenditureListQuery(storeID, {
+        skip: !storeID
+    });
+    const { data: costSectionData, isLoading: isLoaded, isError: isErr } = useCostSectionListQuery(storeID, {
+        skip: !storeID
+    });
 
     /**
      * Show/hide the modal
@@ -58,12 +64,12 @@ const Expenditure = () => {
                 <span role="button" className="action-icon text-warning" onClick={edit}>
                     <i className="mdi mdi-square-edit-outline"></i>
                 </span>
-                <span
+                {/* <span
                     role="button"
                     className="action-icon text-danger"
                     onClick={() => AleartMessage.Delete(row?.original._id, expenditureDelete)}>
                     <i className="mdi mdi-delete"></i>
-                </span>
+                </span> */}
             </>
         );
     };
@@ -214,7 +220,7 @@ const Expenditure = () => {
 
                                 <Table
                                     columns={columns}
-                                    data={data.data}
+                                    data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}
