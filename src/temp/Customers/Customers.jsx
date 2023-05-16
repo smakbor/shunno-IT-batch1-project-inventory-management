@@ -88,9 +88,9 @@ const Customers = () => {
             sort: true,
             Cell: ({ row }) =>
                 row.original.status ? (
-                    <div className="badge bg-success">Active</div>
+                    <div className="badge badge-success-lighten">Active</div>
                 ) : (
-                    <div className="badge bg-danger">Deactive</div>
+                    <div className="badge badge-danger-lighten">Deactive</div>
                 ),
             classes: 'table-user',
         },

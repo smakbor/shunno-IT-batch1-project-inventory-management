@@ -36,13 +36,17 @@ const Categories = () => {
     const [subCategoryModal, setSubCategoryModal] = useState(false);
     const [editData, setEditData] = useState(false);
     const [subCategoryEditData, setSubCategoryEditData] = useState(false);
-    const storeID = useSelector(state => state.setting.activeStore._id)
+    const storeID = useSelector((state) => state.setting.activeStore._id);
     const [categoryDelete] = useCategoryDeleteMutation();
     const { data, isLoading, isError } = useCategoryListQuery(storeID, {
-        skip: !storeID
+        skip: !storeID,
     });
-    const { data: subCategory, isLoading: loading, isError: error } = useSubCategoryListQuery(storeID, {
-        skip: !storeID
+    const {
+        data: subCategory,
+        isLoading: loading,
+        isError: error,
+    } = useSubCategoryListQuery(storeID, {
+        skip: !storeID,
     });
     const [subCategoryDelete] = useSubCategoryDeleteMutation();
 
@@ -151,9 +155,9 @@ const Categories = () => {
                 sort: true,
                 Cell: ({ row }) =>
                     row.original.status === 'ACTIVE' ? (
-                        <div className="badge bg-success">{t('active')}</div>
+                        <div className="badge badge-success-lighten">{t('active')}</div>
                     ) : (
-                        <div className="badge bg-danger">{t('inactive')}</div>
+                        <div className="badge badge-danger-lighten">{t('inactive')}</div>
                     ),
                 classes: 'table-user',
             },

@@ -9,6 +9,7 @@ import LoadingData from '../../components/common/LoadingData';
 import ErrorDataLoad from '../../components/common/ErrorDataLoad';
 import DateFormatter from '../../utils/DateFormatter';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 //api services
 import { useRoleDeleteMutation, useRoleListQuery } from '../../redux/services/roleService';
@@ -23,14 +24,14 @@ const UserRolePage = () => {
     const [defaultValues, setDefaultValues] = useState({ name: '', visibility: true });
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(null);
-    const { data: profile } = useProfileDetailsQuery() || {};
     const [roleDelete] = useRoleDeleteMutation();
+    const { activeStore } = useSelector((state) => state.setting);
     const {
         data: roles,
         isLoading,
         isError,
-    } = useRoleListQuery(profile?.storeID, {
-        skip: !profile?.storeID,
+    } = useRoleListQuery(activeStore?._id, {
+        skip: !activeStore?._id,
     });
 
     /**
@@ -64,7 +65,7 @@ const UserRolePage = () => {
                     role="button"
                     className="action-icon text-danger"
                     onClick={() =>
-                        AleartMessage.Delete({ id: row?.original._id, storeID: profile?.storeID }, roleDelete)
+                        AleartMessage.Delete({ id: row?.original._id, storeID: activeStore?._id }, roleDelete)
                     }>
                     <i className="mdi mdi-delete"></i>
                 </span>
@@ -94,9 +95,9 @@ const UserRolePage = () => {
             sort: true,
             Cell: ({ row }) =>
                 row.original.visibility ? (
-                    <div className="badge bg-success">{t('active')}</div>
+                    <div className="badge badge-success-lighten">{t('active')}</div>
                 ) : (
-                    <div className="badge bg-danger">{t('inactive')}</div>
+                    <div className="badge badge-danger-lighten">{t('inactive')}</div>
                 ),
             classes: 'table-user',
         },

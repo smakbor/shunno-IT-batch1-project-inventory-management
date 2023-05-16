@@ -71,7 +71,7 @@ const DefaultBadges = () => {
                     h5.Example heading <span className="badge badge-outline-warning">New</span>
                 </h5>
                 <h6>
-                    h6.Example heading <span className="badge bg-danger">New</span>
+                    h6.Example heading <span className="badge badge-danger-lighten">New</span>
                 </h6>
             </Card.Body>
         </Card>

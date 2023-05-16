@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 
 //Internal Lib Import
 import { FormInput, VerticalForm } from '../../components';
@@ -12,11 +13,10 @@ import removeEmptyObj from '../../helpers/removeEmptyObj';
 
 //api services
 import { useRoleCreateMutation, useRoleUpdateMutation } from '../../redux/services/roleService';
-import { useProfileDetailsQuery } from '../../redux/services/profileService';
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
-    const { data: profile } = useProfileDetailsQuery() || {};
+    const { activeStore } = useSelector((state) => state.setting);
     const [roleCreate, { isLoading, isSuccess }] = useRoleCreateMutation();
     const [roleUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useRoleUpdateMutation();
 
@@ -36,11 +36,11 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
     const onSubmit = (formData) => {
         if (!editData) {
             const postBody = removeEmptyObj(formData);
-            postBody['storeID'] = profile.storeID;
+            postBody['storeID'] = activeStore?._id;
             roleCreate(postBody);
         } else {
             const postBody = removeEmptyObj(formData);
-            postBody['storeID'] = profile.storeID;
+            postBody['storeID'] = activeStore?._id;
             roleUpdate({ id: editData._id, postBody });
         }
     };

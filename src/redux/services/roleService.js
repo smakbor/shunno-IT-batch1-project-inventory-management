@@ -19,7 +19,7 @@ export const roleService = apiService.injectEndpoints({
         }),
         roleCreate: builder.mutation({
             query: (postBody) => ({
-                url: `role`,
+                url: `role/${postBody.storeID}`,
                 method: 'POST',
                 body: postBody,
             }),

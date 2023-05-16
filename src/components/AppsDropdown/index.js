@@ -4,44 +4,26 @@ import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 
 // apps icon
-import slackIcon from './icons/slack.png';
-import bitbucketIcon from './icons/bitbucket.png';
-import dribbbleIcon from './icons/dribbble.png';
-import dropboxIcon from './icons/dropbox.png';
-import githubIcon from './icons/github.png';
-import gSuiteIcon from './icons/g-suite.png';
+import bayannoIcon from './icons/52-pay.png';
+import utilitybillIcon from './icons/utility.jpeg';
+import netfeeIcon from './icons/neetfee.png';
 
 // get the apps
 const Apps = [
     {
-        name: 'Slack',
-        icon: slackIcon,
-        redirectTo: '#',
+        name: 'Bayannopay',
+        icon: bayannoIcon,
+        redirectTo: 'https://bayannopay.com',
     },
     {
-        name: 'GitHub',
-        icon: githubIcon,
-        redirectTo: '#',
+        name: 'Utility Bill',
+        icon: utilitybillIcon,
+        redirectTo: 'https://utilitybillbd.com/',
     },
     {
-        name: 'Dribbble',
-        icon: dribbbleIcon,
-        redirectTo: '#',
-    },
-    {
-        name: 'Bitbucket',
-        icon: bitbucketIcon,
-        redirectTo: '#',
-    },
-    {
-        name: 'Dropbox',
-        icon: dropboxIcon,
-        redirectTo: '#',
-    },
-    {
-        name: 'G Suite',
-        icon: gSuiteIcon,
-        redirectTo: '#',
+        name: 'Netfee',
+        icon: netfeeIcon,
+        redirectTo: 'https://netfeebd.com',
     },
 ];
 

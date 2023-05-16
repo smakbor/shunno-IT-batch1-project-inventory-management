@@ -1,6 +1,6 @@
 //External Lib Import
 import React, { useState } from 'react';
-import { Row, Col, Card, Button, Badge } from 'react-bootstrap';
+import { Row, Col, Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { GrDocumentCsv } from 'react-icons/gr';
 import { SiMicrosoftexcel } from 'react-icons/si';
@@ -20,12 +20,15 @@ import AleartMessage from '../../utils/AleartMessage';
 import { useStaffListQuery, useStaffDeleteMutation } from '../../redux/services/staffService';
 import UserCreateUpdateModal from './UserCreateUpdateModal';
 import DateFormatter from '../../utils/DateFormatter';
+import ResetPassModal from './ResetPassModal';
 
 // main component
 const Users = () => {
     const { t } = useTranslation();
     const [modal, setModal] = useState(false);
+    const [modalResetPass, setModalResetPass] = useState(false);
     const [editData, setEditData] = useState(false);
+    const [resetPassData, setRestPassData] = useState(false);
     const { activeStore } = useSelector((state) => state.setting);
     const {
         data: staffs,
@@ -35,7 +38,31 @@ const Users = () => {
         skip: !activeStore._id,
     });
 
-    const [defaultValues, setDefaultValues] = useState({ roleID: '', status: 'ACTIVE' });
+    const valuesDefault = {
+        roleID: '',
+        status: 'ACTIVE',
+        name: '',
+        mobile: '',
+        address: '',
+        fatherName: '',
+        nid: '',
+        thana: '',
+        district: '',
+        salary: '',
+        due: '',
+        remarks: '',
+        reference: {
+            name: '',
+            mobile: '',
+            address: '',
+            nid: '',
+            relation: '',
+        },
+        password: '',
+        dateOfBirth: '',
+        dateOfJoining: '',
+    };
+    const [defaultValues, setDefaultValues] = useState(valuesDefault);
     const [staffDelete] = useStaffDeleteMutation();
 
     /**
@@ -44,12 +71,16 @@ const Users = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: 'ACTIVE' });
+        setDefaultValues(valuesDefault);
         setModal(!modal);
     };
 
     const toggle = (e) => {
         setModal(!modal);
+    };
+
+    const toggleResetPass = (e) => {
+        setModalResetPass(!modalResetPass);
     };
 
     /* action column render */
@@ -60,6 +91,11 @@ const Users = () => {
             setDefaultValues(row?.original);
         };
 
+        const resetPass = () => {
+            toggleResetPass();
+            setRestPassData(row?.original);
+        };
+
         return (
             <>
                 <span role="button" className="action-icon text-info" onClick={edit}>
@@ -68,11 +104,14 @@ const Users = () => {
                 <span role="button" className="action-icon text-warning" onClick={edit}>
                     <i className="mdi mdi-square-edit-outline"></i>
                 </span>
+                <span role="button" className="action-icon" style={{ color: '#fd7e14' }} onClick={resetPass}>
+                    <i className="mdi mdi-key"></i>
+                </span>
                 <span
                     role="button"
                     className="action-icon text-danger"
                     onClick={() =>
-                        AleartMessage.Delete({ id: row?.original._id, storeID: row?.original.storeID }, staffDelete)
+                        AleartMessage.Delete({ id: row?.original._id, storeID: activeStore._id }, staffDelete)
                     }>
                     <i className="mdi mdi-delete"></i>
                 </span>
@@ -202,18 +241,15 @@ const Users = () => {
                                             <i className="mdi mdi-plus-circle me-2"></i> {t('add user')}
                                         </Button>
                                     </Col>
-
                                     <Col sm={7}>
                                         <div className="text-sm-end">
                                             <Button variant="success" className="mb-2 me-1">
                                                 <i className="mdi mdi-cog"></i>
                                             </Button>
-
                                             <Button variant="light" className="mb-2 me-1">
                                                 <BiImport />
                                                 {t('import')}
                                             </Button>
-
                                             <Button
                                                 variant="light"
                                                 className="mb-2 me-1"
@@ -249,6 +285,7 @@ const Users = () => {
                     </Col>
                 </Row>
                 <UserCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <ResetPassModal {...{ modalResetPass, setModalResetPass, toggleResetPass, resetPassData }} />
             </>
         );
     }

@@ -332,19 +332,19 @@ const Badges = () => {
                     </ListGroup.Item>
                     <ListGroup.Item className="d-flex justify-content-between align-items-center">
                         Pending Payments{' '}
-                        <Badge pill className="badge bg-success">
+                        <Badge pill className="badge badge-success-lighten">
                             2
                         </Badge>
                     </ListGroup.Item>
                     <ListGroup.Item className="d-flex justify-content-between align-items-center">
                         Action Needed{' '}
-                        <Badge pill className="badge bg-danger">
+                        <Badge pill className="badge badge-danger-lighten">
                             99+
                         </Badge>
                     </ListGroup.Item>
                     <ListGroup.Item className="d-flex justify-content-between align-items-center">
                         Payments Done{' '}
-                        <Badge pill className="badge bg-success">
+                        <Badge pill className="badge badge-success-lighten">
                             20+
                         </Badge>
                     </ListGroup.Item>

@@ -4,6 +4,9 @@ import { Form, InputGroup } from 'react-bootstrap';
 import classNames from 'classnames';
 import { get } from 'lodash';
 
+//Internal Lib Import
+import HyperDatepicker from '../components/Datepicker';
+
 /* Password Input */
 const PasswordInput = ({ name, placeholder, refCallback, errors, register, className }) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -55,6 +58,8 @@ const FormInput = ({
     children,
     nested,
     required,
+    setValue,
+    watchValue,
     ...otherProps
 }) => {
     // handle input type
@@ -124,7 +129,8 @@ const FormInput = ({
                 </Form.Group>
             );
             break;
-        case 'checkbox radio':
+        case 'checkbox':
+        case 'radio':
             return (
                 <Form.Group className={containerClass}>
                     <Form.Check
@@ -147,6 +153,32 @@ const FormInput = ({
                 </Form.Group>
             );
             break;
+        case 'datePicker':
+            return (
+                <Form.Group className={containerClass}>
+                    {label ? (
+                        <>
+                            {' '}
+                            <Form.Label className={labelClassName} htmlFor={name}>
+                                {label}
+                            </Form.Label>{' '}
+                            {children}{' '}
+                        </>
+                    ) : null}{' '}
+                    {required && <span className="text-danger">*</span>}
+                    <HyperDatepicker
+                        showTimeSelect={false}
+                        hideAddon={true}
+                        value={watchValue ? new Date(watchValue) : null}
+                        onChange={(date) => setValue(name, new Date(date).toDateString())}
+                    />
+                    {errors && errors[name] && !watchValue ? (
+                        <Form.Control.Feedback type="invalid" className="d-block">
+                            {errors[name]['message']}
+                        </Form.Control.Feedback>
+                    ) : null}
+                </Form.Group>
+            );
         default:
             return nested ? (
                 <Form.Group className={containerClass}>
