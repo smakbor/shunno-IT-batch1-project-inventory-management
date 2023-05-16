@@ -27,7 +27,7 @@ const Warranty = () => {
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-    const storeID = useSelector(state => state.setting.activeStore._id)
+    const storeID = useSelector((state) => state.setting.activeStore._id);
     const [warrantyDelete] = useWarrantyDeleteMutation();
     const { data, isLoading, isError } = useWarrantyListQuery(storeID);
 
@@ -90,9 +90,9 @@ const Warranty = () => {
             sort: true,
             Cell: ({ row }) =>
                 row.original.status === 'ACTIVE' ? (
-                    <div className="badge bg-success">{t('active')}</div>
+                    <div className="badge badge-success-lighten">{t('active')}</div>
                 ) : (
-                    <div className="badge bg-danger">{t('inactive')}</div>
+                    <div className="badge badge-danger-lighten">{t('inactive')}</div>
                 ),
             classes: 'table-user',
         },

@@ -25,7 +25,7 @@ const Statistics = (): React$Element<any> => {
                         <h2 className="m-b-20">
                             $<span>46,782</span>
                         </h2>
-                        <span className="badge bg-danger"> -29% </span>{' '}
+                        <span className="badge badge-danger-lighten"> -29% </span>{' '}
                         <span className="text-muted">From previous period</span>
                     </Card.Body>
                 </Card>

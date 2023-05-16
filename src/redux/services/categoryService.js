@@ -40,7 +40,6 @@ export const categoryService = apiService.injectEndpoints({
                 const response = dispatch(
                     apiService.util.updateQueryData('categoryList', undefined, (draft) => {
                         const findIndex = draft.findIndex((item) => item._id === id);
-                        console.log(findIndex)
                         draft[findIndex] = postBody;
                     })
                 );

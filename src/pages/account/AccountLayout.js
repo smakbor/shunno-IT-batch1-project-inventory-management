@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 // images
 import Logo from '../../assets/images/logo.png';
@@ -15,6 +16,7 @@ type AccountLayoutProps = {
 
 const AccountLayout = ({ bottomLinks, children, className }: AccountLayoutProps): React$Element<any> => {
     const { t } = useTranslation();
+    const { accessToken } = useSelector((state) => state.auth);
 
     useEffect(() => {
         if (document.body) document.body.classList.add('authentication-bg');
@@ -33,7 +35,7 @@ const AccountLayout = ({ bottomLinks, children, className }: AccountLayoutProps)
                             <Card>
                                 {/* logo */}
                                 <Card.Header className="pt-4 pb-4 text-center bg-primary">
-                                    <Link to="/">
+                                    <Link to={accessToken ? '/' : '/account/login'}>
                                         <span>
                                             <img src={Logo} alt="" height="18" />
                                         </span>

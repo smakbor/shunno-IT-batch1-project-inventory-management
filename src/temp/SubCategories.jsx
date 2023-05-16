@@ -88,9 +88,9 @@
 //             sort: true,
 //             Cell: ({ row }) =>
 //                 row.original.status ? (
-//                     <div className="badge bg-success">{t('active')}</div>
+//                     <div className="badge badge-success-lighten">{t('active')}</div>
 //                 ) : (
-//                     <div className="badge bg-danger">{t('inactive')}</div>
+//                     <div className="badge badge-danger-lighten">{t('inactive')}</div>
 //                 ),
 //             classes: 'table-user',
 //         },

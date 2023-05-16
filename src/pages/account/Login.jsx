@@ -32,7 +32,7 @@ const Login = () => {
     const { accessToken } = useSelector((state) => state.auth);
     const { t } = useTranslation();
 
-    const [login, { isLoading, isError, error, isSuccess, data }] = useLoginMutation();
+    const [login, { isLoading, isError, error }] = useLoginMutation();
 
     /*
     form validation schema

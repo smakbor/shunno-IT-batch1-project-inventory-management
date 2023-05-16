@@ -20,7 +20,7 @@ export const staffService = apiService.injectEndpoints({
                 queryFulfilled.then(({ data }) => {
                     dispatch(
                         apiService.util.updateQueryData('staffList', storeID, (draft) => {
-                            draft.unshift(data);
+                            draft.unshift(data.data);
                         })
                     );
                 });
@@ -29,7 +29,7 @@ export const staffService = apiService.injectEndpoints({
         staffUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
                 url: `staffs/${id}`,
-                method: 'PATCH',
+                method: 'PUT',
                 body: postBody,
             }),
             onQueryStarted({ id, postBody: { storeID } }, { dispatch, queryFulfilled }) {
@@ -37,11 +37,18 @@ export const staffService = apiService.injectEndpoints({
                     dispatch(
                         apiService.util.updateQueryData('staffList', storeID, (draft) => {
                             const findIndex = draft.findIndex((item) => item._id === id);
-                            draft[findIndex] = data;
+                            draft[findIndex] = data.data;
                         })
                     );
                 });
             },
+        }),
+        staffResetPassword: builder.mutation({
+            query: (password) => ({
+                url: `auth/reset-password`,
+                method: 'PUT',
+                body: { password },
+            }),
         }),
         staffDelete: builder.mutation({
             query: ({ id, storeID }) => ({
@@ -62,5 +69,10 @@ export const staffService = apiService.injectEndpoints({
         }),
     }),
 });
-export const { useStaffListQuery, useStaffCreateMutation, useStaffUpdateMutation, useStaffDeleteMutation } =
-    staffService;
+export const {
+    useStaffListQuery,
+    useStaffCreateMutation,
+    useStaffUpdateMutation,
+    useStaffDeleteMutation,
+    useStaffResetPasswordMutation,
+} = staffService;
