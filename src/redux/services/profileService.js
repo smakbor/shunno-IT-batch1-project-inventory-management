@@ -19,15 +19,12 @@ export const profileService = apiService.injectEndpoints({
             transformResponse: ({ data }) => {
                 return {
                     proprietorID: data.proprietorID,
-                    storeID: data.userDetails.storeID,
-                    role: data.role,
                     mobile: data.mobile,
                     address: data.userDetails.due,
                     name: data.userDetails.name,
                     photo: data.userDetails.photo,
                     recievedSalaries: data.userDetails.recievedSalaries,
                     salary: data.userDetails.salary,
-                    status: data.userDetails.status,
                     permissions: data.userDetails.roleID.permissions,
                 };
             },

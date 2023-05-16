@@ -13,6 +13,8 @@ const ProtectRoute = ({ r, children }) => {
         skip: !accessToken,
     });
 
+    console.log(loginCurrentUser);
+
     if (accessToken || loginCurrentUser) {
         if (r.roles.indexOf('ALL') === -1 && r.roles.indexOf(loginCurrentUser.role) === -1) {
             // role not authorize so go to login page

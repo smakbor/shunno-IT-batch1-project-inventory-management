@@ -29,6 +29,9 @@ class SessionHelper {
     static getActiveStore() {
         return JSON.parse(localStorage.getItem('activeStore'));
     }
+    static removeActiveStore() {
+        localStorage.removeItem('activeStore');
+    }
 }
 
 export default SessionHelper;

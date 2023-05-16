@@ -21,10 +21,10 @@ export const authService = apiService.injectEndpoints({
                 try {
                     const { data } = await queryFulfilled;
                     const {
-                        data: { accessToken },
+                        data: { accessToken, user },
                     } = data || {};
 
-                    dispatch(userLogin(accessToken));
+                    dispatch(userLogin({ accessToken, user }));
                 } catch (error) {
                     dispatch(userLogout());
                 }
@@ -39,7 +39,7 @@ export const authService = apiService.injectEndpoints({
                 try {
                     await queryFulfilled;
                     dispatch(userLogout());
-                } catch (error) {}
+                } catch (error) { }
             },
         }),
         fotgetPassword: builder.mutation({

@@ -14,16 +14,18 @@ import PermissionsTable from './PermissionsTable';
 import { useRoleListQuery } from '../../redux/services/roleService';
 import { useProfileDetailsQuery } from '../../redux/services/profileService';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const Permissions = () => {
     const { t } = useTranslation();
+    const storeID = useSelector(state => state.setting.activeStore._id)
     const { data: profile, isLoading: profileLoad, isError: profileError } = useProfileDetailsQuery() || {};
     const {
         data: allRoles,
         isLoading,
         isError,
-    } = useRoleListQuery(profile?.storeID, {
-        skip: !profile?.storeID,
+    } = useRoleListQuery(storeID, {
+        skip: !storeID,
     });
 
     const [activeRole, setActiveRole] = useState([]);

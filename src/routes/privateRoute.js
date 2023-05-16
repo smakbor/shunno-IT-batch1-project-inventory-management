@@ -3,6 +3,7 @@ import { lazy } from 'react';
 
 //Internal Lib Import
 import LazyLoad from '../components/common/LazyLoad.jsx';
+const Salary = lazy(() => import('../pages/employee/Salary.jsx'));
 const Ui = lazy(() => import('../pages/settings/Ui.jsx'));
 const Trash = lazy(() => import('../pages/message/Trash.jsx'));
 const Inbox = lazy(() => import('../pages/message/Inbox.jsx'));
@@ -24,117 +25,124 @@ const privateRoutes = [
     {
         path: '/dashboard',
         element: <LazyLoad component={UserRolePage} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/customers',
         element: <LazyLoad component={Customers} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/products/categories',
         element: <LazyLoad component={Categories} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/products/units',
         element: <LazyLoad component={Units} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/products/warranty',
         element: <LazyLoad component={Warranty} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/products/manufacturers',
         element: <LazyLoad component={Manufacturer} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/products/warranties',
         element: <LazyLoad component={Warranty} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/suppliers',
         element: <LazyLoad component={Suppliers} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/customers',
         element: <LazyLoad component={Customers} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/costSections',
         element: <LazyLoad component={CostSection} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/messages/details',
         element: <LazyLoad component={Details} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/messages/inbox',
         element: <LazyLoad component={Inbox} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/messages/sent',
         element: <LazyLoad component={Sent} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/messages/trash',
         element: <LazyLoad component={Trash} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/expenditure',
         element: <LazyLoad component={Expenditure} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/user-role',
         element: <LazyLoad component={UserRolePage} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/permissions',
         element: <LazyLoad component={Permissions} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/users',
         element: <LazyLoad component={Users} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
         path: '/settings/ui',
         element: <LazyLoad component={Ui} />,
-        roles: ['ALL'],
+        roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
+    {
+        path: '/salary/:employeeID',
+        element: <LazyLoad component={Salary} />,
+        roles: ['ALL', 'PROPRIETOR'],
+        routePermission: 'ALL',
+    },
+
 ];
 
 export default privateRoutes;
