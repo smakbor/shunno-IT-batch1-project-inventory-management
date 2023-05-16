@@ -8,17 +8,39 @@ import ErrorDataLoad from '../../components/common/ErrorDataLoad';
 import LoadingData from '../../components/common/LoadingData';
 import { FormInput, VerticalForm } from '../../components';
 
-
 const UiElement = ({ data }) => {
     const { t } = useTranslation();
     console.log(data)
-    return Object.keys(data).map((key) => <FormInput
-        name={key}
-        type="checkbox"
-        label={t(key)}
-        col={'col-12 col-md-6 col-lg-4'}
-        containerClass={'mb-3'}
-    />)
+    return Object.keys(data).map((key) => <>
+        <h3>{key}</h3>
+        {
+            typeof (data[key]) === 'object' ?
+                Object.keys(data[key]).map(prop =>
+                    <FormInput
+                        name={prop}
+                        type="checkbox"
+                        label={t(prop)}
+                        col={'col-12 col-md-6 col-lg-4'}
+                        containerClass={'mb-3'}
+                    />
+                ) :
+                <FormInput
+                    name={key}
+                    type="checkbox"
+                    label={t(key)}
+                    col={'col-12 col-md-6 col-lg-4'}
+                    containerClass={'mb-3'}
+                />
+        }
+        {/* // <FormInput
+        //     name={key}
+        //     type="checkbox"
+        //     label={t(key)}
+        //     col={'col-12 col-md-6 col-lg-4'}
+        //     containerClass={'mb-3'}
+        // /> */}
+    </>
+    )
 }
 
 const Ui = () => {
@@ -32,7 +54,6 @@ const Ui = () => {
     if (!isLoading && !isError) {
         keys = Object.entries(data);
     }
-
     if (isLoading)
         return (
             <>
