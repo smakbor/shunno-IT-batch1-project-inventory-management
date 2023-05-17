@@ -125,13 +125,14 @@ button#dropdown-languages {
     bottom: 0;
     cursor: pointer;
     z-index: 500000 !important;
+    background: #fff;
 }
 .indeterminate {
     background-color: #727cf5;
 }
 .indeterminate:before {
     z-index: -100 !important;
-    height: 3px;
+    height: 1.5px;
     content: '';
     position: fixed;
     background-color: inherit;
@@ -144,7 +145,7 @@ button#dropdown-languages {
 }
 .indeterminate:after {
     z-index: -100 !important;
-    height: 3px;
+    height: 1.5px;
     content: '';
     position: fixed;
     background-color: inherit;

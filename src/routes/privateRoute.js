@@ -31,7 +31,7 @@ const privateRoutes = [
     {
         path: '/customers',
         element: <LazyLoad component={Customers} />,
-        roles: ['ALL', 'PROPRIETOR'],
+        roles: ['ALLf', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
     {
@@ -142,7 +142,6 @@ const privateRoutes = [
         roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
-
 ];
 
 export default privateRoutes;

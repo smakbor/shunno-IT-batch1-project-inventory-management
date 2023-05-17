@@ -27,7 +27,6 @@ const ProfileDropdown = (props, _propsState) => {
         setDropdownOpen(!dropdownOpen);
     };
 
-
     return (
         <Dropdown show={dropdownOpen} onToggle={toggleDropdown}>
             <Dropdown.Toggle
