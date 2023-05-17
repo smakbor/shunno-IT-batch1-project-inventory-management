@@ -19,10 +19,10 @@ import { useStaffListQuery } from '../../../redux/services/staffService';
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues, costSectionData }) => {
     const { t } = useTranslation();
-    const storeID = useSelector(state => state.setting.activeStore._id);
+    const storeID = useSelector((state) => state.setting.activeStore._id);
     const { data: staffList } = useStaffListQuery(storeID, {
-        skip: !storeID
-    })
+        skip: !storeID,
+    });
     const [expenditureCreate, { isLoading, isSuccess }] = useExpenditureCreateMutation();
     const [expenditureUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useExpenditureUpdateMutation();
 
@@ -40,30 +40,21 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues, c
      * handle form submission
      */
     const onSubmit = (formData) => {
-        console.log(formData)
-        const data = {};
-        data.staffID = formData.staffID;
-        const foundStaff = staffList?.find(staff => staff._id == formData.staffID)
-        const foundPurpose = costSectionData?.find(cost => cost._id == formData.purposeID)
-        data.staffName = foundStaff?.name;
-        data.amount = parseFloat(formData.amount);
-        data.purposeID = formData.purposeID;
-        data.purposeName = foundPurpose?.name;
-        data.remarks = formData.remarks;
+        formData.storeID = storeID;
+        const postBody = removeEmptyObj(formData);
 
         if (!editData) {
-            expenditureCreate({ storeID, postBody: removeEmptyObj(data) });
+            expenditureCreate({ storeID, postBody });
         } else {
-            const postBody = removeEmptyObj(data);
             expenditureUpdate({ id: editData._id, postBody });
         }
     };
 
-    useEffect(() => {
-        if (isSuccess || updateSuccess) {
-            setModal(false);
-        }
-    }, [isSuccess, updateSuccess]);
+    // useEffect(() => {
+    //     if (isSuccess || updateSuccess) {
+    //        ;
+    //     }
+    // }, [isSuccess, updateSuccess]);
 
     return (
         <Card className={classNames('', { 'd-none': !modal })}>
@@ -82,12 +73,15 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues, c
                                 defaultValue=""
                                 col={'col-12'}
                                 containerClass={'mb-3'}>
-                                <option value="" disabled>{t('select employee')}</option>
-                                {
-                                    staffList && staffList.map(staff =>
-                                        <option key={staff._id} value={staff._id}>{staff.name}</option>
-                                    )
-                                }
+                                <option value="" disabled>
+                                    {t('select employee')}
+                                </option>
+                                {staffList &&
+                                    staffList.map((staff) => (
+                                        <option key={staff._id} value={staff._id}>
+                                            {staff.name}
+                                        </option>
+                                    ))}
                             </FormInput>
                             <FormInput
                                 name="purposeID"
@@ -96,12 +90,16 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues, c
                                 defaultValue=""
                                 col={'col-12'}
                                 containerClass={'mb-3'}>
-                                <option value="" disabled>{t('select cost section')}</option>
+                                <option value="" disabled>
+                                    {t('select cost section')}
+                                </option>
                                 {costSectionData?.map((item) => {
-                                    return <option key={item._id} value={item._id}>{item.name}</option>;
+                                    return (
+                                        <option key={item._id} value={item._id}>
+                                            {item.name}
+                                        </option>
+                                    );
                                 })}
-                                {/* <option value="ACTIVE">Active</option>
-                                <option value="INACTIVE">Inactive</option> */}
                             </FormInput>
 
                             <FormInput
@@ -122,7 +120,7 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues, c
                             />
 
                             <div className="mb-3 text-end">
-                                <Button variant="primary" type="submit">
+                                <Button variant="primary" type="submit" onClick={() => setModal(false)}>
                                     {editData ? t('update') : t('submit')}
                                     &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
                                 </Button>
