@@ -19,7 +19,7 @@ import { useStaffListQuery } from '../../../redux/services/staffService';
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues, costSectionData }) => {
     const { t } = useTranslation();
-    const storeID = useSelector(state => state.setting.activeStore._id);
+    const storeID = useSelector(state => state.setting.activeStore?._id);
     const { data: staffList } = useStaffListQuery(storeID, {
         skip: !storeID
     })

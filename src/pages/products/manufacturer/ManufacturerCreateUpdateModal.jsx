@@ -20,7 +20,7 @@ import { useSelector } from 'react-redux';
 
 const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, editData, defaultValues }) => {
     const { t } = useTranslation();
-    const storeID = useSelector(state => state.setting.activeStore._id)
+    const storeID = useSelector(state => state.setting.activeStore?._id)
     const [manufacturerCreate, { isLoading, isSuccess }] = useManufacturerCreateMutation();
     const [manufacturerUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useManufacturerUpdateMutation();
 

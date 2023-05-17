@@ -18,7 +18,7 @@ import { useSelector } from 'react-redux';
 
 const Permissions = () => {
     const { t } = useTranslation();
-    const storeID = useSelector(state => state.setting.activeStore._id)
+    const storeID = useSelector(state => state.setting.activeStore?._id)
     const { data: profile, isLoading: profileLoad, isError: profileError } = useProfileDetailsQuery() || {};
     const {
         data: allRoles,

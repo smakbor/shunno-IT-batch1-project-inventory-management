@@ -110,6 +110,7 @@ File: Main Css File
 @import 'custom/plugins/ion-rangeslider';
 @import 'custom/plugins/jstree';
 @import 'custom/plugins/frappe-gantt';
+
 button#dropdown-languages {
     box-shadow: none;
 }
@@ -127,9 +128,15 @@ button#dropdown-languages {
     z-index: 500000 !important;
     background: #fff;
 }
+
+.accordion-button {
+    padding: 10px;
+}
+
 .indeterminate {
     background-color: #727cf5;
 }
+
 .indeterminate:before {
     z-index: -100 !important;
     height: 1.5px;
@@ -143,6 +150,7 @@ button#dropdown-languages {
     -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
     animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
 }
+
 .indeterminate:after {
     z-index: -100 !important;
     height: 1.5px;
@@ -158,6 +166,7 @@ button#dropdown-languages {
     -webkit-animation-delay: 1.15s;
     animation-delay: 1.15s;
 }
+
 @-webkit-keyframes indeterminate {
     0% {
         left: -35%;
@@ -174,6 +183,7 @@ button#dropdown-languages {
         right: -90%;
     }
 }
+
 @keyframes indeterminate {
     0% {
         left: -35%;
@@ -190,6 +200,7 @@ button#dropdown-languages {
         right: -90%;
     }
 }
+
 @-webkit-keyframes indeterminate-short {
     0% {
         left: -200%;
@@ -206,6 +217,7 @@ button#dropdown-languages {
         right: -8%;
     }
 }
+
 @keyframes indeterminate-short {
     0% {
         left: -200%;

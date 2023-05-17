@@ -17,7 +17,7 @@ import slugify from '../../../helpers/slugify';
 
 const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
-    const storeID = useSelector(state => state.setting.activeStore._id)
+    const storeID = useSelector(state => state.setting.activeStore?._id)
     const [categoryCreate, { isLoading, isSuccess }] = useCategoryCreateMutation();
     const [categoryUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCategoryUpdateMutation();
 

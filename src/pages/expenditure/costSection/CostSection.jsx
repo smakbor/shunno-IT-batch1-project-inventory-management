@@ -28,7 +28,7 @@ const CostSection = () => {
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-    const storeID = useSelector(state => state.setting.activeStore._id)
+    const storeID = useSelector(state => state.setting.activeStore?._id)
     const [costSectionDelete] = useCostSectionDeleteMutation();
     const { data, isLoading, isError } = useCostSectionListQuery(storeID, {
         skip: !storeID

@@ -18,7 +18,7 @@ import { useSelector } from 'react-redux';
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
-    const storeID = useSelector(state => state.setting.activeStore._id)
+    const storeID = useSelector(state => state.setting.activeStore?._id)
     const [costSectionCreate, { isLoading, isSuccess }] = useCostSectionCreateMutation();
     const [costSectionUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCostSectionUpdateMutation();
 

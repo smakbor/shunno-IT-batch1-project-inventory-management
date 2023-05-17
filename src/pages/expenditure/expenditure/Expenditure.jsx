@@ -28,7 +28,7 @@ const Expenditure = () => {
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-    const storeID = useSelector(state => state.setting.activeStore._id);
+    const storeID = useSelector(state => state.setting.activeStore?._id);
     const [expenditureDelete] = useExpenditureDeleteMutation();
     const { data, isLoading, isError } = useExpenditureListQuery(storeID, {
         skip: !storeID

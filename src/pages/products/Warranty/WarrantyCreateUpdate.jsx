@@ -17,7 +17,7 @@ import { useSelector } from 'react-redux';
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
-    const storeID = useSelector(state => state.setting.activeStore._id)
+    const storeID = useSelector(state => state.setting.activeStore?._id)
     const [warrantyCreate, { isLoading, isSuccess }] = useWarrantyCreateMutation();
     const [warrantyUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useWarrantyUpdateMutation();
 

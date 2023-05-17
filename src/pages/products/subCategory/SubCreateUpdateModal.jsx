@@ -24,7 +24,7 @@ const SubCategoryCreateUpdateModal = ({
     subCategoryEditData,
     subCategoryDefaultValues,
 }) => {
-    const storeID = useSelector(state => state.setting.activeStore._id)
+    const storeID = useSelector(state => state.setting.activeStore?._id)
 
     const { t } = useTranslation();
     const [subCategoryCreate, { isLoading, isSuccess }] = useSubCategoryCreateMutation();
