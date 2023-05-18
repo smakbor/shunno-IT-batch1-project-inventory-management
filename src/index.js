@@ -17,7 +17,7 @@ root.render(
             {/* <React.StrictMode> */}
             <App />
             <CustomLoader />
-            <ApiLoader />
+            {/* <ApiLoader /> */}
             {/* </React.StrictMode> */}
         </Provider>
         <ToastContainer />

@@ -18,7 +18,7 @@ import { useSelector } from 'react-redux';
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
-    const storeID = useSelector(state => state.setting.activeStore?._id)
+    const storeID = useSelector((state) => state.setting.activeStore._id);
     const [costSectionCreate, { isLoading, isSuccess }] = useCostSectionCreateMutation();
     const [costSectionUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCostSectionUpdateMutation();
 
@@ -35,24 +35,15 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
      * handle form submission
      */
     const onSubmit = (formData) => {
-        const data = {};
-        data.name = formData.name;
+        formData.storeID = storeID;
+        const postBody = removeEmptyObj(formData);
 
         if (!editData) {
-            costSectionCreate({ storeID, postBody: removeEmptyObj(data) });
+            costSectionCreate({ postBody });
         } else {
-            const updatedData = { ...editData, ...data };
-
-            const postBody = removeEmptyObj(updatedData);
             costSectionUpdate({ id: editData._id, postBody });
         }
     };
-
-    useEffect(() => {
-        if (isSuccess || updateSuccess) {
-            setModal(false);
-        }
-    }, [isSuccess, updateSuccess]);
 
     return (
         <Card className={classNames('', { 'd-none': !modal })}>
@@ -74,7 +65,7 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
                             />
 
                             <div className="mb-3 text-end">
-                                <Button variant="primary" type="submit">
+                                <Button variant="primary" type="submit" onClick={() => setModal(false)}>
                                     {editData ? t('update') : t('Submit')}
                                     &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
                                 </Button>

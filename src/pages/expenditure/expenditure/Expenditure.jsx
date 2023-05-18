@@ -24,17 +24,21 @@ import { useSelector } from 'react-redux';
 // main component
 const Expenditure = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '' });
+    const [defaultValues, setDefaultValues] = useState({});
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-    const storeID = useSelector(state => state.setting.activeStore?._id);
+    const storeID = useSelector((state) => state.setting.activeStore._id);
     const [expenditureDelete] = useExpenditureDeleteMutation();
     const { data, isLoading, isError } = useExpenditureListQuery(storeID, {
-        skip: !storeID
+        skip: !storeID,
     });
-    const { data: costSectionData, isLoading: isLoaded, isError: isErr } = useCostSectionListQuery(storeID, {
-        skip: !storeID
+    const {
+        data: costSectionData,
+        isLoading: isLoaded,
+        isError: isErr,
+    } = useCostSectionListQuery(storeID, {
+        skip: !storeID,
     });
 
     /**
@@ -43,7 +47,7 @@ const Expenditure = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '' });
+        setDefaultValues({});
         setModal(!modal);
     };
 

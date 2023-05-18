@@ -28,10 +28,10 @@ const CostSection = () => {
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-    const storeID = useSelector(state => state.setting.activeStore?._id)
+    const storeID = useSelector((state) => state.setting.activeStore._id);
     const [costSectionDelete] = useCostSectionDeleteMutation();
     const { data, isLoading, isError } = useCostSectionListQuery(storeID, {
-        skip: !storeID
+        skip: !storeID,
     });
 
     /**
@@ -64,7 +64,7 @@ const CostSection = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, costSectionDelete)}>
+                    onClick={() => AleartMessage.Delete({ id: row?.original._id, storeID }, costSectionDelete)}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
