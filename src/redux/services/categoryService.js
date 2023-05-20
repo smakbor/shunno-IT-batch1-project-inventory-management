@@ -1,6 +1,5 @@
 //Internal Lib Import
 import { apiService } from '../api/apiService';
-
 export const categoryService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         categoryList: builder.query({
@@ -16,7 +15,12 @@ export const categoryService = apiService.injectEndpoints({
                 method: 'POST',
                 body: postBody,
             }),
-            async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
+            async onQueryStarted({ storeID, postBody }, { dispatch, queryFulfilled, queryCache }) {
+                const cachedData = queryCache.getState()
+                console.log(cachedData)
+                // const cachedUnits = apiService.endpoints.unitList.select(storeID)
+                // const { data: cacheData } = useUnitListQuery(cachedUnits)
+                // console.log(cacheData)
                 const response = dispatch(
                     apiService.util.updateQueryData('categoryList', undefined, (draft) => {
                         draft.push(postBody);

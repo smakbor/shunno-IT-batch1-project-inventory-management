@@ -60,7 +60,7 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
             setModal(false);
         }
     }, [isSuccess, updateSuccess]);
-    console.log(defaultValues)
+
     return (
         <Card className={classNames('', { 'd-none': !modal })}>
             <Card.Body>

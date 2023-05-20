@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PageTitle from '../../components/PageTitle';
-import { Button, Card, Col, Row, Tab, Tabs, Accordion } from 'react-bootstrap';
+import { Button, Card, Col, Row, Accordion, Spinner } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useUiListQuery, useUiUpdateMutation } from '../../redux/services/uiService';
 import { useSelector } from 'react-redux';
@@ -119,10 +119,10 @@ const Ui = () => {
                                         // resolver={schemaResolver} 
                                         defaultValues={defaultValues}
                                     >
-                                        <Accordion defaultActiveKey='0' alwaysOpen>
+                                        <Accordion defaultActiveKey={0}>
                                             {
                                                 Object.keys(data).map((key, index) => {
-                                                    if (key !== '_id') {
+                                                    if (key !== '_id' && key !== 'storeUserName') {
                                                         return (
                                                             <Accordion.Item key={index} eventKey={index}>
                                                                 <Accordion.Header >
@@ -139,7 +139,7 @@ const Ui = () => {
                                                                                     errors={errors}
                                                                                     type="checkbox"
                                                                                     label={t(prop)}
-                                                                                    col={'col-6 col-md-6 col-lg-4'}
+                                                                                    col={'col-12 col-md-6 col-lg-4'}
                                                                                     containerClass={'m-3'}
                                                                                 />
                                                                             ) :
@@ -164,7 +164,7 @@ const Ui = () => {
 
                                         <div className="my-3 text-center" col={'col-12'}>
                                             <Button variant='primary' type='submit'>
-                                                {t('submit')}
+                                                {!isUpdating ? t('update') : <>{t('updating')}&nbsp;<Spinner color='primary' size='sm' /></>}
                                             </Button>
                                         </div>
                                     </VerticalForm>
