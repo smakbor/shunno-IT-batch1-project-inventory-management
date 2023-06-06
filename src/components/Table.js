@@ -1,4 +1,4 @@
-//external lib import
+//External Lib Import
 import React, { useRef, useEffect, forwardRef } from 'react';
 import {
     useTable,
@@ -12,7 +12,7 @@ import {
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-//internal lib import
+//Internal Lib Import
 // components
 import Pagination from './Pagination';
 

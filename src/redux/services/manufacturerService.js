@@ -1,30 +1,30 @@
-//internal lib import
+//Internal Lib Import
 
 import { apiService } from '../api/apiService';
 
 export const manufacturerService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getManufacturers: builder.query({
-            query: () => ({
-                url: `manufacturers`,
+        manufacturerList: builder.query({
+            query: (storeID) => ({
+                url: `manufacturers/${storeID}`,
                 method: 'GET',
             }),
+            transformResponse: ({ data }) => data || [],
         }),
         manufacturerCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `manufacturers`,
+            query: ({ storeID, postBody }) => ({
+                url: `manufacturers/${storeID}`,
                 method: 'POST',
                 body: postBody,
             }),
             async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getManufacturers', undefined, (draft) => {
-                        draft.data.push(postBody);
+                        draft.push(postBody);
                     })
                 );
                 try {
                     await queryFulfilled;
-
                 } catch {
                     response.undo();
                 }
@@ -40,15 +40,14 @@ export const manufacturerService = apiService.injectEndpoints({
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getManufacturers', undefined, (draft) => {
-                        const findIndex = draft.data.findIndex((item) => item._id === id);
-                        draft.data[findIndex] = postBody;
+                        const findIndex = draft.findIndex((item) => item._id === id);
+                        draft[findIndex] = postBody;
                     })
                 );
                 try {
                     await queryFulfilled;
-
                 } catch {
-                    response.undo()
+                    response.undo();
                 }
             },
         }),
@@ -60,7 +59,7 @@ export const manufacturerService = apiService.injectEndpoints({
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getManufacturers', undefined, (draft) => {
-                        draft.data = draft.data.filter((item) => item._id !== id);
+                        draft = draft.filter((item) => item._id !== id);
                     })
                 );
                 try {
@@ -73,7 +72,7 @@ export const manufacturerService = apiService.injectEndpoints({
     }),
 });
 export const {
-    useGetManufacturersQuery,
+    useManufacturerListQuery,
     useManufacturerDeleteMutation,
     useManufacturerCreateMutation,
     useManufacturerUpdateMutation,

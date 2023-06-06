@@ -1,9 +1,9 @@
-//internal lib import
+//Internal Lib Import
 import i18n from 'i18next';
 import detector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
-//external lib import
+//External Lib Import
 import store from '../redux/store';
 
 import translationBn from './bn/translation.json';

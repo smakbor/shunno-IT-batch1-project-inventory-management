@@ -1,4 +1,4 @@
-//external lib import
+//External Lib Import
 import React, { useEffect } from 'react';
 import { Card, Button, Modal, Spinner } from 'react-bootstrap';
 import * as yup from 'yup';
@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
-//internal lib import
+//Internal Lib Import
 import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
@@ -14,6 +14,8 @@ import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 import { useSubCategoryCreateMutation, useSubCategoryUpdateMutation } from '../../../redux/services/subCategory';
 import slugify from '../../../helpers/slugify';
+import getStore from '../../../helpers/getStore';
+import { useSelector } from 'react-redux';
 
 const SubCategoryCreateUpdateModal = ({
     subCategoryModal,
@@ -22,6 +24,8 @@ const SubCategoryCreateUpdateModal = ({
     subCategoryEditData,
     subCategoryDefaultValues,
 }) => {
+    const storeID = useSelector(state => state.setting.activeStore._id)
+
     const { t } = useTranslation();
     const [subCategoryCreate, { isLoading, isSuccess }] = useSubCategoryCreateMutation();
     const [subCategoryUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useSubCategoryUpdateMutation();
@@ -49,9 +53,9 @@ const SubCategoryCreateUpdateModal = ({
         data.isEcom = formData.isEcom;
         data.status = formData.status;
         data.categoryID = subCategoryDefaultValues.categoryID;
-
+        data.storeID = storeID;
         if (!subCategoryEditData) {
-            subCategoryCreate(removeEmptyObj(data));
+            subCategoryCreate({ storeID, postBody: removeEmptyObj(data) });
         } else {
             const postBody = removeEmptyObj(data);
             postBody.slug = slugify(postBody.name);

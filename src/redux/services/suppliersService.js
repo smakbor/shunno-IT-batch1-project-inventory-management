@@ -1,30 +1,30 @@
-//internal lib import
+//Internal Lib Import
 
 import { apiService } from '../api/apiService';
 
 export const suppliersService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getSuppliers: builder.query({
-            query: () => ({
-                url: `suppliers`,
+        supplierList: builder.query({
+            query: (storeID) => ({
+                url: `suppliers/${storeID}`,
                 method: 'GET',
             }),
+            transformResponse: ({ data }) => data || [],
         }),
         supplierCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `suppliers`,
+            query: ({ storeID, postBody }) => ({
+                url: `suppliers/${storeID}`,
                 method: 'POST',
                 body: postBody,
             }),
             async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getSuppliers', undefined, (draft) => {
-                        draft.data.push(postBody);
+                        draft.push(postBody);
                     })
                 );
                 try {
                     await queryFulfilled;
-
                 } catch {
                     response.undo();
                 }
@@ -40,14 +40,12 @@ export const suppliersService = apiService.injectEndpoints({
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getSuppliers', undefined, (draft) => {
-                        const findIndex = draft.data.findIndex((item) => item._id === id);
-                        draft.data[findIndex] = postBody;
+                        const findIndex = draft.findIndex((item) => item._id === id);
+                        draft[findIndex] = postBody;
                     })
                 );
                 try {
                     await queryFulfilled;
-
-
                 } catch {
                     response.undo();
                 }
@@ -61,7 +59,7 @@ export const suppliersService = apiService.injectEndpoints({
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getSuppliers', undefined, (draft) => {
-                        draft.data = draft.data.filter((item) => item._id !== id);
+                        draft = draft.filter((item) => item._id !== id);
                     })
                 );
                 try {
@@ -75,9 +73,5 @@ export const suppliersService = apiService.injectEndpoints({
         }),
     }),
 });
-export const {
-    useGetSuppliersQuery,
-    useSupplierDeleteMutation,
-    useSupplierCreateMutation,
-    useSupplierUpdateMutation,
-} = suppliersService;
+export const { useSupplierListQuery, useSupplierDeleteMutation, useSupplierCreateMutation, useSupplierUpdateMutation } =
+    suppliersService;

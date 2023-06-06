@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 
-const SearchDropdown = (): React$Element<any> => {
+const SearchDropdown = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     /*

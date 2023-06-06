@@ -1,7 +1,7 @@
-//external lib import
+//External Lib Import
 import { createSlice } from '@reduxjs/toolkit';
 
-//internal lib import
+//Internal Lib Import
 import SessionHelper from '../../helpers/SessionHelper';
 
 const settingReducer = createSlice({
@@ -10,6 +10,7 @@ const settingReducer = createSlice({
         language: SessionHelper.getLanguage(),
         isLoading: false,
         customLoader: false,
+        activeStore: SessionHelper.getActiveStore() || undefined,
     },
     reducers: {
         changeLanguage(state, action) {

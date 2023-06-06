@@ -1,13 +1,12 @@
-//external lib import
+//External Lib Import
 import React, { useEffect } from 'react';
 import { Card, Button, Modal, Spinner } from 'react-bootstrap';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import Select from 'react-select';
 
-//internal lib import
+//Internal Lib Import
 import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
@@ -17,10 +16,11 @@ import {
     useManufacturerCreateMutation,
     useManufacturerUpdateMutation,
 } from '../../../redux/services/manufacturerService';
+import { useSelector } from 'react-redux';
 
 const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, editData, defaultValues }) => {
     const { t } = useTranslation();
-
+    const storeID = useSelector(state => state.setting.activeStore._id)
     const [manufacturerCreate, { isLoading, isSuccess }] = useManufacturerCreateMutation();
     const [manufacturerUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useManufacturerUpdateMutation();
 
@@ -38,7 +38,7 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
         data.name = formData.name;
         data.status = formData.status;
         if (!editData) {
-            manufacturerCreate(removeEmptyObj(data));
+            manufacturerCreate({ storeID, postBody: removeEmptyObj(data) });
         } else {
             const updatedData = { ...editData, ...data }
             const postBody = removeEmptyObj(updatedData);
@@ -51,7 +51,7 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
             setModal(false);
         }
     }, [isSuccess, updateSuccess]);
-    console.log(editData)
+
     return (
         <Card className={classNames('', { 'd-none': !modal })}>
             <Card.Body>
@@ -72,16 +72,18 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
                                 containerClass={'mb-3'}
                                 col={'col-12'}
                             />
-                            {<FormInput
-                                name="status"
-                                type="select"
-                                label={t('status')}
-                                defaultValue="ACTIVE"
-                                col={'col-12'}
-                                containerClass={'mb-3'}>
-                                <option value="ACTIVE">Active</option>
-                                <option value="INACTIVE">Inactive</option>
-                            </FormInput>}
+                            {
+                                <FormInput
+                                    name="status"
+                                    type="select"
+                                    label={t('status')}
+                                    defaultValue="ACTIVE"
+                                    col={'col-12'}
+                                    containerClass={'mb-3'}>
+                                    <option value="ACTIVE">Active</option>
+                                    <option value="INACTIVE">Inactive</option>
+                                </FormInput>
+                            }
 
                             <div className="mb-3 text-end">
                                 <Button variant="primary" type="submit">

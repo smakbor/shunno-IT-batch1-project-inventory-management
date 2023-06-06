@@ -1,36 +1,36 @@
-//internal lib import
+//Internal Lib Import
 import { apiService } from '../api/apiService';
-import { profileService } from './profileService';
 
 export const roleService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         roleList: builder.query({
-            query: () => ({
-                url: `role/roleList`,
+            query: (storeID) => ({
+                url: `role/${storeID}`,
                 method: 'GET',
             }),
+            transformResponse: ({ data }) => data || [],
         }),
         roleDropDown: builder.query({
-            query: () => ({
-                url: `role/roleDropDown`,
+            query: (storeID) => ({
+                url: `role/dropDown/${storeID}`,
                 method: 'GET',
             }),
+            transformResponse: ({ data }) => data,
         }),
         roleCreate: builder.mutation({
             query: (postBody) => ({
-                url: `role/roleCreate`,
+                url: `role/${postBody.storeID}`,
                 method: 'POST',
                 body: postBody,
             }),
-            async onQueryStarted(_, { dispatch, queryFulfilled }) {
-                try {
-                    const { data } = await queryFulfilled;
+            onQueryStarted({ storeID }, { dispatch, queryFulfilled }) {
+                queryFulfilled.then(({ data }) => {
                     dispatch(
-                        apiService.util.updateQueryData('roleList', undefined, (draft) => {
-                            draft.push(data.data);
+                        apiService.util.updateQueryData('roleList', storeID, (draft) => {
+                            draft.unshift(data);
                         })
                     );
-                } catch {}
+                });
             },
         }),
         roleDetails: builder.query({
@@ -41,34 +41,37 @@ export const roleService = apiService.injectEndpoints({
         }),
         roleUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
-                url: `role/roleUpdate/${id}`,
+                url: `role/${id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
-            async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
-                try {
-                    const { data } = await queryFulfilled;
-
-                    if (data) {
-                        dispatch(profileService.endpoints.profileDetails.initiate());
-                    }
-
+            onQueryStarted({ id, postBody: { storeID } }, { dispatch, queryFulfilled }) {
+                queryFulfilled.then(({ data }) => {
                     dispatch(
-                        apiService.util.updateQueryData('roleList', undefined, (draft) => {
-                            console.log(postBody);
-                            const find = draft.find((role) => role._id === id);
-                            const findIndex = draft.findIndex((role) => role._id === id);
-                            draft[findIndex] = find;
+                        apiService.util.updateQueryData('roleList', storeID, (draft) => {
+                            const findIndex = draft.findIndex((item) => item._id === id);
+                            draft[findIndex] = data;
                         })
                     );
-                } catch {}
+                });
             },
         }),
         roleDelete: builder.mutation({
-            query: (id) => ({
-                url: `role/roleDelete/${id}`,
+            query: ({ id, storeID }) => ({
+                url: `role/${id}/${storeID}`,
                 method: 'DELETE',
             }),
+            onQueryStarted({ id, storeID }, { queryFulfilled, dispatch }) {
+                queryFulfilled.then(() => {
+                    dispatch(
+                        apiService.util.updateQueryData(
+                            'roleList',
+                            storeID,
+                            (draft) => (draft = draft.filter((item) => item._id !== id))
+                        )
+                    );
+                });
+            },
         }),
     }),
 });

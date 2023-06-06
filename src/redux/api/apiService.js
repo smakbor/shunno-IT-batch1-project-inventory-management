@@ -1,53 +1,61 @@
-//external lib import
+//External Lib Import
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
+//Internal Lib Import
+import { userLogin, userLogout } from '../features/authReducer';
+import { setLoading } from '../features/settingReducer';
 
 //constant env variable
 const SERVER_URL = process.env.REACT_APP_API_SERVER_URL;
 const API_PREFIX_PATH = process.env.REACT_APP_API_PREFIX_PATH;
-const baseFetchBaseQuery = fetchBaseQuery({
+
+const baseQuery = fetchBaseQuery({
     baseUrl: SERVER_URL + API_PREFIX_PATH,
     prepareHeaders: (headers, { getState }) => {
         const {
             setting: { language },
-            auth: { accessToken, refreshToken },
+            auth: { accessToken },
         } = getState();
         headers.set('authorization', accessToken ? `Bearer ${accessToken}` : '');
         headers.set('accept-language', language);
         return headers;
     },
+    credentials: 'include',
 });
 
-export const apiService = createApi({
-    reducerPath: API_PREFIX_PATH,
-    baseQuery: async (args, api, extraOptions) => {
-        // api.dispatch(setLoading(true));
+const baseQueryWithReauth = async (args, api, extraOptions) => {
+    api.dispatch(setLoading(true));
+    let result = await baseQuery(args, api, extraOptions);
+    const { error, data } = result;
 
-        const { error, data } = await baseFetchBaseQuery(args, api, extraOptions);
+    if (error) {
+        api.dispatch(setLoading(false));
 
-        if (error) {
-            // api.dispatch(setLoading(false));
+        if (error.status === 401) {
+            // try to get a new token
+            const refreshResult = await baseQuery(`/auth/refreshTokens`, api, extraOptions);
 
-            if (error.status === 401) {
-                // api.dispatch(setLogout());
-                // ToastMessage.errorMessage(error.data?.message);
-            } else if (error.status === 404 || error.status === 400) {
-                //ToastMessage.errorMessage(error.data?.message);
+            if (refreshResult?.data?.status) {
+                // store the new token
+                api.dispatch(userLogin(refreshResult?.data?.data?.accessToken));
+
+                // retry the initial query
+                result = await baseQuery(args, api, extraOptions);
             } else {
-                // ToastMessage.errorMessage('Sorry, Something went wrong');
+                api.dispatch(userLogout());
             }
-            return { error: { status: error.status, data: error.data } };
         }
+    }
 
-        if (data) {
-            // api.dispatch(setLoading(false));
+    if (data) {
+        api.dispatch(setLoading(false));
+    }
 
-            if (data?.message) {
-                //  ToastMessage.successMessage(data.message);
-                delete data.message;
-            }
-            return { data };
-        }
-    },
-    tagTypes: [],
-    endpoints: (builder) => ({}),
+    return result;
+};
+
+export const apiService = createApi({
+    reducerPath: 'api-v2',
+    baseQuery: baseQueryWithReauth,
+    endpoints: () => ({}),
 });

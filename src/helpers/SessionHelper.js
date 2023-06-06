@@ -16,22 +16,21 @@ class SessionHelper {
     static setLanguage(language) {
         return localStorage.setItem('i18nextLng', language);
     }
-
     static getAccessToken() {
-        return localStorage.getItem('accessToken');
+        return localStorage.getItem('hnfeAccessToken');
     }
     static setAccessToken(accessToken) {
-        return localStorage.setItem('accessToken', accessToken);
-    }
-    static setRefreshToken(refreshToken) {
-        return localStorage.setItem('refreshToken', refreshToken);
-    }
-    static getRefreshToken() {
-        return localStorage.getItem('refreshToken');
+        if (!accessToken) return undefined;
+        return localStorage.setItem('hnfeAccessToken', accessToken);
     }
     static removeTokens() {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('hnfeAccessToken');
+    }
+    static getActiveStore() {
+        return JSON.parse(localStorage.getItem('activeStore'));
+    }
+    static removeActiveStore() {
+        localStorage.removeItem('activeStore');
     }
 }
 

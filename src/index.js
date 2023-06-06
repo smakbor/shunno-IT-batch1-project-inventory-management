@@ -1,10 +1,10 @@
-//external lib import
+//External Lib Import
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
-//internal lib import
+//Internal Lib Import
 import App from './App';
 import ApiLoader from './components/common/ApiLoader';
 import CustomLoader from './components/common/CustomLoader';
@@ -17,7 +17,7 @@ root.render(
             {/* <React.StrictMode> */}
             <App />
             <CustomLoader />
-            <ApiLoader />
+            {/* <ApiLoader /> */}
             {/* </React.StrictMode> */}
         </Provider>
         <ToastContainer />

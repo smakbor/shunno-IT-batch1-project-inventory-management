@@ -13,12 +13,13 @@ import exportFromJson from '../../../utils/exportFromJson';
 import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 import AleartMessage from '../../../utils/AleartMessage';
-import ModalCreateUpdate from './ModalCreateUpdate';
+import CostSectionCreateUpdate from './CostSectionCreateUpdate';
 
 //api services
 
-import { useGetAllCostSectionQuery, useCostSectionDeleteMutation } from '../../../redux/services/costSectionService';
-import { useGetStoresQuery } from '../../../redux/services/storeService';
+import { useCostSectionListQuery, useCostSectionDeleteMutation } from '../../../redux/services/costSectionService';
+import { useStoreListQuery } from '../../../redux/services/storeService';
+import { useSelector } from 'react-redux';
 
 // main component
 const CostSection = () => {
@@ -27,10 +28,11 @@ const CostSection = () => {
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
+    const storeID = useSelector((state) => state.setting.activeStore._id);
     const [costSectionDelete] = useCostSectionDeleteMutation();
-    const { data, isLoading, isError } = useGetAllCostSectionQuery();
-    const { data: store, isLoading: isLoaded, isError: isErr } = useGetStoresQuery();
-    console.log(store);
+    const { data, isLoading, isError } = useCostSectionListQuery(storeID, {
+        skip: !storeID,
+    });
 
     /**
      * Show/hide the modal
@@ -62,7 +64,7 @@ const CostSection = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, costSectionDelete)}>
+                    onClick={() => AleartMessage.Delete({ id: row?.original._id, storeID }, costSectionDelete)}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
@@ -114,30 +116,37 @@ const CostSection = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('cost section'), path: '/cost-sections', active: true }]}
+                    title={t('cost sections')}
                 />
-                <LoadingData />
+                <Card>
+                    <Card.Body>
+                        <LoadingData />
+                    </Card.Body>
+                </Card>
             </>
         );
     } else if (isError) {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('cost section'), path: '/cost-sections', active: true }]}
+                    title={t('cost sections')}
                 />
-                <ErrorDataLoad />
+                <Card>
+                    <Card.Body>
+                        <ErrorDataLoad />
+                    </Card.Body>
+                </Card>
             </>
         );
     } else {
         return (
             <>
-                {/* <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('category')}
-                /> */}
-
+                <PageTitle
+                    breadCrumbItems={[{ label: t('cost section'), path: '/cost-sections', active: true }]}
+                    title={t('cost sections')}
+                />
                 <Row>
                     <Col xs={12}>
                         <Card>
@@ -179,7 +188,7 @@ const CostSection = () => {
 
                                 <Table
                                     columns={columns}
-                                    data={data.data}
+                                    data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}
@@ -194,7 +203,7 @@ const CostSection = () => {
                         </Card>
                     </Col>
                 </Row>
-                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <CostSectionCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }

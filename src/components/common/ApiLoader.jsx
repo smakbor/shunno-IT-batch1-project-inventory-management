@@ -6,7 +6,7 @@ const ApiLoader = () => {
 
     return (
         <div className={isLoading ? 'd-block' : 'd-none'}>
-            <div className="loading__overlay">
+            <div className="loading__overlay" style={{ background: 'transparent' }}>
                 <div className="indeterminate"></div>
             </div>
         </div>

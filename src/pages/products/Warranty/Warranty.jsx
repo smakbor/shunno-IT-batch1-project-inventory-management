@@ -1,4 +1,4 @@
-//external lib import
+//External Lib Import
 import React, { useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -6,18 +6,19 @@ import { GrDocumentCsv } from 'react-icons/gr';
 import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 
-//internal lib import
+//Internal Lib Import
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
 import exportFromJson from '../../../utils/exportFromJson';
 import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 import AleartMessage from '../../../utils/AleartMessage';
-import ModalCreateUpdate from './ModalCreateUpdate';
+import WarrantyCreateUpdate from './WarrantyCreateUpdate';
 
 //api services
 
-import { useGetWarrantiesQuery, useWarrantyDeleteMutation } from '../../../redux/services/warrantyService';
+import { useWarrantyListQuery, useWarrantyDeleteMutation } from '../../../redux/services/warrantyService';
+import { useSelector } from 'react-redux';
 
 // main component
 const Warranty = () => {
@@ -26,9 +27,9 @@ const Warranty = () => {
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
+    const storeID = useSelector((state) => state.setting.activeStore._id);
     const [warrantyDelete] = useWarrantyDeleteMutation();
-    const { data, isLoading, isError } = useGetWarrantiesQuery();
-    console.log(data);
+    const { data, isLoading, isError } = useWarrantyListQuery(storeID);
 
     /**
      * Show/hide the modal
@@ -36,7 +37,7 @@ const Warranty = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: true });
+        setDefaultValues({ name: '', status: 'ACTIVE' });
         setModal(!modal);
     };
 
@@ -89,9 +90,9 @@ const Warranty = () => {
             sort: true,
             Cell: ({ row }) =>
                 row.original.status === 'ACTIVE' ? (
-                    <div className="badge bg-success">{t('active')}</div>
+                    <div className="badge badge-success-lighten">{t('active')}</div>
                 ) : (
-                    <div className="badge bg-danger">{t('inactive')}</div>
+                    <div className="badge badge-danger-lighten">{t('inactive')}</div>
                 ),
             classes: 'table-user',
         },
@@ -124,8 +125,8 @@ const Warranty = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('warranties'), path: '/products/warranties', active: true }]}
+                    title={t('warranties')}
                 />
                 <LoadingData />
             </>
@@ -134,8 +135,8 @@ const Warranty = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('user role')}
+                    breadCrumbItems={[{ label: t('warranties'), path: '/products/warranties', active: true }]}
+                    title={t('warranties')}
                 />
                 <ErrorDataLoad />
             </>
@@ -143,10 +144,10 @@ const Warranty = () => {
     } else {
         return (
             <>
-                {/* <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('category')}
-                /> */}
+                <PageTitle
+                    breadCrumbItems={[{ label: t('warranties'), path: '/products/warranties', active: true }]}
+                    title={t('warranties')}
+                />
 
                 <Row>
                     <Col xs={12}>
@@ -189,7 +190,7 @@ const Warranty = () => {
 
                                 <Table
                                     columns={columns}
-                                    data={data.data}
+                                    data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}
@@ -204,7 +205,7 @@ const Warranty = () => {
                         </Card>
                     </Col>
                 </Row>
-                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <WarrantyCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }

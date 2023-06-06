@@ -1,30 +1,30 @@
-//internal lib import
+//Internal Lib Import
 import { object } from 'joi';
 import { apiService } from '../api/apiService';
 
 export const subCategoryService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getSubCategories: builder.query({
-            query: () => ({
-                url: `categories/subcategories`,
+        subCategoryList: builder.query({
+            query: (storeID) => ({
+                url: `categories/subcategories/${storeID}`,
                 method: 'GET',
             }),
+            transformResponse: ({ data }) => data || [],
         }),
         subCategoryCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `categories/subcategories`,
+            query: ({ storeID, postBody }) => ({
+                url: `categories/subcategories/${storeID}`,
                 method: 'POST',
                 body: postBody,
             }),
             async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getSubCategories', undefined, (draft) => {
-                        draft.data.push(postBody);
+                    apiService.util.updateQueryData('subCategoryList', undefined, (draft) => {
+                        draft.push(postBody);
                     })
                 );
                 try {
                     await queryFulfilled;
-
                 } catch {
                     response.undo();
                 }
@@ -39,14 +39,13 @@ export const subCategoryService = apiService.injectEndpoints({
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getSubCategories', undefined, (draft) => {
-                        const findIndex = draft.data.findIndex((item) => item._id === id);
-                        draft.data[findIndex] = postBody;
+                    apiService.util.updateQueryData('subCategoryList', undefined, (draft) => {
+                        const findIndex = draft.findIndex((item) => item._id === id);
+                        draft[findIndex] = postBody;
                     })
                 );
                 try {
                     await queryFulfilled;
-
                 } catch {
                     response.undo();
                 }
@@ -59,8 +58,8 @@ export const subCategoryService = apiService.injectEndpoints({
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getSubCategories', undefined, (draft) => {
-                        draft.data = draft.data.filter((item) => item._id !== id);
+                    apiService.util.updateQueryData('subCategoryList', undefined, (draft) => {
+                        draft = draft.filter((item) => item._id !== id);
                     })
                 );
                 try {
@@ -73,7 +72,7 @@ export const subCategoryService = apiService.injectEndpoints({
     }),
 });
 export const {
-    useGetSubCategoriesQuery,
+    useSubCategoryListQuery,
     useSubCategoryCreateMutation,
     useSubCategoryUpdateMutation,
     useSubCategoryDeleteMutation,

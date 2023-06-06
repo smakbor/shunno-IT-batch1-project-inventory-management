@@ -13,23 +13,33 @@ import exportFromJson from '../../../utils/exportFromJson';
 import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 import AleartMessage from '../../../utils/AleartMessage';
-import ModalCreateUpdate from './ModalCreateUpdate';
-import { useExpenditureDeleteMutation, useGetExpendituresQuery } from '../../../redux/services/expenditureService';
+import ExpenditureCreateUpdate from './ExpenditureCreateUpdate';
+import { useExpenditureDeleteMutation, useExpenditureListQuery } from '../../../redux/services/expenditureService';
 import DateFormatter from '../../../utils/DateFormatter';
-import { useGetAllCostSectionQuery } from '../../../redux/services/costSectionService';
+import { useCostSectionListQuery } from '../../../redux/services/costSectionService';
+import { useSelector } from 'react-redux';
 
 //api services
 
 // main component
 const Expenditure = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '' });
+    const [defaultValues, setDefaultValues] = useState({});
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
+    const storeID = useSelector((state) => state.setting.activeStore._id);
     const [expenditureDelete] = useExpenditureDeleteMutation();
-    const { data, isLoading, isError } = useGetExpendituresQuery();
-    const { data: costSectionData, isLoading: isLoaded, isError: isErr } = useGetAllCostSectionQuery();
+    const { data, isLoading, isError } = useExpenditureListQuery(storeID, {
+        skip: !storeID,
+    });
+    const {
+        data: costSectionData,
+        isLoading: isLoaded,
+        isError: isErr,
+    } = useCostSectionListQuery(storeID, {
+        skip: !storeID,
+    });
 
     /**
      * Show/hide the modal
@@ -37,7 +47,7 @@ const Expenditure = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '' });
+        setDefaultValues({});
         setModal(!modal);
     };
 
@@ -58,12 +68,12 @@ const Expenditure = () => {
                 <span role="button" className="action-icon text-warning" onClick={edit}>
                     <i className="mdi mdi-square-edit-outline"></i>
                 </span>
-                <span
+                {/* <span
                     role="button"
                     className="action-icon text-danger"
                     onClick={() => AleartMessage.Delete(row?.original._id, expenditureDelete)}>
                     <i className="mdi mdi-delete"></i>
-                </span>
+                </span> */}
             </>
         );
     };
@@ -142,30 +152,37 @@ const Expenditure = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('expenditure'), path: '/user-role', active: true }]}
+                    breadCrumbItems={[{ label: t('expenditure'), path: '/expenditure', active: true }]}
                     title={t('expenditure')}
                 />
-                <LoadingData />
+                <Card>
+                    <Card.Body>
+                        <LoadingData />
+                    </Card.Body>
+                </Card>
             </>
         );
     } else if (isError) {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('expenditure'), path: '/user-role', active: true }]}
+                    breadCrumbItems={[{ label: t('expenditure'), path: '/expenditure', active: true }]}
                     title={t('expenditure')}
                 />
-                <ErrorDataLoad />
+                <Card>
+                    <Card.Body>
+                        <ErrorDataLoad />
+                    </Card.Body>
+                </Card>
             </>
         );
     } else {
         return (
             <>
-                {/* <PageTitle
-                    breadCrumbItems={[{ label: t('user role'), path: '/user-role', active: true }]}
-                    title={t('category')}
-                /> */}
-
+                <PageTitle
+                    breadCrumbItems={[{ label: t('expenditure'), path: '/expenditure', active: true }]}
+                    title={t('expenditure')}
+                />
                 <Row>
                     <Col xs={12}>
                         <Card>
@@ -207,7 +224,7 @@ const Expenditure = () => {
 
                                 <Table
                                     columns={columns}
-                                    data={data.data}
+                                    data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}
@@ -222,7 +239,7 @@ const Expenditure = () => {
                         </Card>
                     </Col>
                 </Row>
-                <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues, costSectionData }} />
+                <ExpenditureCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues, costSectionData }} />
             </>
         );
     }

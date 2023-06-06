@@ -4,29 +4,27 @@ import { apiService } from '../api/apiService';
 
 export const costSectionService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getAllCostSection: builder.query({
-            query: () => ({
-                url: `cost-sections`,
+        costSectionList: builder.query({
+            query: (storeID) => ({
+                url: `cost-sections/${storeID}`,
                 method: 'GET',
             }),
+            transformResponse: ({ data }) => data || [],
         }),
         costSectionCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `cost-sections`,
+            query: ({ postBody }) => ({
+                url: `cost-sections/${postBody.storeID}`,
                 method: 'POST',
                 body: postBody,
             }),
-            async onQueryStarted(_, { dispatch, queryFulfilled }) {
-                try {
-                    const { data } = await queryFulfilled;
+            onQueryStarted({ postBody }, { dispatch, queryFulfilled }) {
+                queryFulfilled.then(({ data: { data } }) => {
                     dispatch(
-                        apiService.util.updateQueryData('getAllCostSection', undefined, (draft) => {
-                            draft.data.push(data.data);
+                        apiService.util.updateQueryData('costSectionList', postBody.storeID, (draft) => {
+                            draft.unshift(data);
                         })
                     );
-                } catch (e) {
-                    console.log(e);
-                }
+                });
             },
         }),
 
@@ -37,29 +35,31 @@ export const costSectionService = apiService.injectEndpoints({
                 body: postBody,
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
+                const response = dispatch(
+                    apiService.util.updateQueryData('costSectionList', postBody.storeID, (draft) => {
+                        const findIndex = draft.findIndex((item) => item._id === id);
+                        draft[findIndex] = postBody;
+                    })
+                );
                 try {
-                    const { data } = await queryFulfilled;
-                    dispatch(
-                        apiService.util.updateQueryData('getAllCostSection', undefined, (draft) => {
-                            const findIndex = draft.data.findIndex((item) => item._id === id);
-                            draft.data[findIndex] = postBody;
-                        })
-                    );
+                    await queryFulfilled;
                 } catch (e) {
-                    console.log(e);
+                    response.undo();
                 }
             },
         }),
         costSectionDelete: builder.mutation({
-            query: (id) => ({
+            query: ({ id, storeID }) => ({
                 url: `cost-sections/${id}`,
                 method: 'DELETE',
             }),
-            async onQueryStarted(id, { queryFulfilled, dispatch }) {
+            async onQueryStarted({ id, storeID }, { queryFulfilled, dispatch }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getAllCostSection', undefined, (draft) => {
-                        draft.data = draft.data.filter((item) => item._id !== id);
-                    })
+                    apiService.util.updateQueryData(
+                        'costSectionList',
+                        storeID,
+                        (draft) => (draft = draft.filter((item) => item._id !== id))
+                    )
                 );
                 try {
                     await queryFulfilled;
@@ -71,7 +71,7 @@ export const costSectionService = apiService.injectEndpoints({
     }),
 });
 export const {
-    useGetAllCostSectionQuery,
+    useCostSectionListQuery,
     useCostSectionDeleteMutation,
     useCostSectionCreateMutation,
     useCostSectionUpdateMutation,

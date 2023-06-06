@@ -4,32 +4,29 @@ import { apiService } from '../api/apiService';
 
 export const expenditureService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getExpenditures: builder.query({
-            query: () => ({
-                url: `expenditures`,
+        expenditureList: builder.query({
+            query: (storeID) => ({
+                url: `expenditures/${storeID}`,
                 method: 'GET',
             }),
+            transformResponse: ({ data }) => data || [],
         }),
         expenditureCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `expenditures`,
+            query: ({ postBody }) => ({
+                url: `expenditures/${postBody.storeID}`,
                 method: 'POST',
                 body: postBody,
             }),
-            async onQueryStarted(_, { dispatch, queryFulfilled }) {
-                try {
-                    const { data } = await queryFulfilled;
+            onQueryStarted({ postBody }, { dispatch, queryFulfilled }) {
+                queryFulfilled.then(({ data: { data } }) => {
                     dispatch(
-                        apiService.util.updateQueryData('getExpenditures', undefined, (draft) => {
-                            draft.data.push(data.data);
+                        apiService.util.updateQueryData('expenditureList', postBody.storeID, (draft) => {
+                            draft.unshift(data);
                         })
                     );
-                } catch (e) {
-                    console.log(e);
-                }
+                });
             },
         }),
-
         expenditureUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
                 url: `expenditures/${id}`,
@@ -37,16 +34,16 @@ export const expenditureService = apiService.injectEndpoints({
                 body: postBody,
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
+                const response = dispatch(
+                    apiService.util.updateQueryData('getExpenditures', postBody.storeID, (draft) => {
+                        const findIndex = draft.findIndex((item) => item._id === id);
+                        draft[findIndex] = postBody;
+                    })
+                );
                 try {
-                    const { data } = await queryFulfilled;
-                    dispatch(
-                        apiService.util.updateQueryData('getExpenditures', undefined, (draft) => {
-                            const findIndex = draft.data.findIndex((item) => item._id === id);
-                            draft.data[findIndex] = postBody;
-                        })
-                    );
+                    await queryFulfilled;
                 } catch (e) {
-                    console.log(e);
+                    response.undo();
                 }
             },
         }),
@@ -58,7 +55,7 @@ export const expenditureService = apiService.injectEndpoints({
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getExpenditures', undefined, (draft) => {
-                        draft.data = draft.data.filter((item) => item._id !== id);
+                        draft = draft.filter((item) => item._id !== id);
                     })
                 );
                 try {
@@ -71,7 +68,7 @@ export const expenditureService = apiService.injectEndpoints({
     }),
 });
 export const {
-    useGetExpendituresQuery,
+    useExpenditureListQuery,
     useExpenditureDeleteMutation,
     useExpenditureCreateMutation,
     useExpenditureUpdateMutation,

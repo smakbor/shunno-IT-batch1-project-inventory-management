@@ -1,25 +1,26 @@
-//internal lib import
+//Internal Lib Import
 
 import { apiService } from '../api/apiService';
 
 export const customerService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        getCustomers: builder.query({
-            query: () => ({
-                url: `customers`,
+        customerList: builder.query({
+            query: (storeID) => ({
+                url: `customers/${storeID}`,
                 method: 'GET',
             }),
+            transformResponse: ({ data }) => data || [],
         }),
         customerCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `customers`,
+            query: ({ storeID, postBody }) => ({
+                url: `customers/${storeID}`,
                 method: 'POST',
                 body: postBody,
             }),
             async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getCustomers', undefined, (draft) => {
-                        draft.data.push(postBody);
+                        draft.push(postBody);
                     })
                 );
                 try {
@@ -39,8 +40,8 @@ export const customerService = apiService.injectEndpoints({
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getCustomers', undefined, (draft) => {
-                        const findIndex = draft.data.findIndex((item) => item._id === id);
-                        draft.data[findIndex] = postBody;
+                        const findIndex = draft.findIndex((item) => item._id === id);
+                        draft[findIndex] = postBody;
                     })
                 );
                 try {
@@ -58,7 +59,7 @@ export const customerService = apiService.injectEndpoints({
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('getCustomers', undefined, (draft) => {
-                        draft.data = draft.data.filter((item) => item._id !== id);
+                        draft = draft.filter((item) => item._id !== id);
                     })
                 );
                 try {
@@ -70,5 +71,5 @@ export const customerService = apiService.injectEndpoints({
         }),
     }),
 });
-export const { useGetCustomersQuery, useCustomerDeleteMutation, useCustomerCreateMutation, useCustomerUpdateMutation } =
+export const { useCustomerListQuery, useCustomerDeleteMutation, useCustomerCreateMutation, useCustomerUpdateMutation } =
     customerService;

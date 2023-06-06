@@ -105,7 +105,7 @@ const Invoice = (): React$Element<React$FragmentType> => {
                                         </p>
                                         <p className="font-13">
                                             <strong>Order Status: </strong>{' '}
-                                            <span className="badge bg-success float-end">{order_status}</span>
+                                            <span className="badge badge-success-lighten float-end">{order_status}</span>
                                         </p>
                                         <p className="font-13">
                                             <strong>Order ID: </strong> <span className="float-end">#{order_id}</span>
