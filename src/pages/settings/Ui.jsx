@@ -1,59 +1,68 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PageTitle from '../../components/PageTitle';
-import { Button, Card, Col, Row, Tab, Tabs } from 'react-bootstrap';
+import { Button, Card, Col, Row, Accordion, Spinner } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useUiListQuery } from '../../redux/services/uiService';
+import { useUiListQuery, useUiUpdateMutation } from '../../redux/services/uiService';
 import { useSelector } from 'react-redux';
 import ErrorDataLoad from '../../components/common/ErrorDataLoad';
 import LoadingData from '../../components/common/LoadingData';
 import { FormInput, VerticalForm } from '../../components';
 import { useForm } from 'react-hook-form';
-
-const UiElement = ({ data }) => {
-    const { t } = useTranslation();
-    return <Tabs>{
-        Object.keys(data).map((key) => {
-
-
-            if (key !== '_id') {
-                return <Tab eventKey={key} title={t(key)} >
-                    <div className=' d-flex justify-content-start flex-wrap'>
-                        {
-                            typeof (data[key]) === 'object' ?
-                                Object.keys(data[key]).map(prop =>
-                                    <FormInput
-                                        name={prop}
-                                        type="checkbox"
-                                        label={t(prop)}
-                                        col={'col-12 col-md-6 col-lg-4'}
-                                        containerClass={'m-3'}
-                                    />
-                                ) :
-                                <FormInput
-                                    name={key}
-                                    type="checkbox"
-                                    label={t(key)}
-                                    col={'col-12 col-md-6 col-lg-4'}
-                                    containerClass={'m-3'}
-                                />
-                        }
-                    </div>
-
-                </Tab>
-            }
-
-        }
-        )
-    }
-    </Tabs>
-}
-
+import removeEmptyObj from '../../helpers/removeEmptyObj';
 const Ui = () => {
+    const [defaultValues, setDefaultValues] = useState({
+        "customer": {
+            "fatherName": false,
+            "address": false,
+            "thana": false,
+            "district": false,
+            "email": false,
+            "nid": false,
+            "reference": false,
+            "ledgerNumber": false,
+            "customerType": false
+        },
+        "supplier": {
+            "fatherName": false,
+            "customerType": false,
+            "address": false,
+            "thana": false,
+            "district": false,
+            "email": false,
+            "nid": false,
+            "reference": false,
+            "ledgerNumber": false
+        },
+        "staff": {
+            "fatherName": false,
+            "customerType": false,
+            "address": false,
+            "thana": false,
+            "district": false,
+            "email": false,
+            "nid": false,
+            "reference": false
+        },
+        "product": {
+            "productModel": false,
+            "productDetails": false,
+            "productCode": false,
+            "installment": false,
+            "warranty": false,
+            "barCode": false,
+            "productExpireDate": false,
+            "manufacturer": false
+        },
+        "storeUserName": false,
+        "expenditure": false,
+        "bankTransaction": false
+    })
     const { t } = useTranslation();
-    const storeID = useSelector(state => state.setting.activeStore._id)
-    const { data, isLoading, isError } = useUiListQuery(storeID, {
+    const storeID = useSelector(state => state.setting.activeStore?._id)
+    const { data, isLoading, isError, isSuccess } = useUiListQuery(storeID, {
         skip: !storeID
     })
+    const [uiUpdate, { isLoading: isUpdating, isSuccess: updateSuccess }] = useUiUpdateMutation()
     const {
         handleSubmit,
         register,
@@ -63,8 +72,16 @@ const Ui = () => {
         formState: { errors },
     } = useForm();
     const onSubmit = formData => {
-        console.log(formData)
+        const postBody = removeEmptyObj(formData)
+        uiUpdate({ id: data?._id, postBody })
     }
+
+    useEffect(() => {
+        if (isSuccess) {
+            reset(data)
+        }
+    }, [isSuccess])
+
     if (isLoading)
         return (
             <>
@@ -88,6 +105,7 @@ const Ui = () => {
             </>
         )
     else
+
         return (
             <>
                 <PageTitle breadCrumbItems={[{ label: t('ui settings'), path: '/settings/ui', active: true }]} title={t('ui settings')} />
@@ -96,61 +114,60 @@ const Ui = () => {
                         <Card>
                             <Card.Body>
                                 <Row className="mb-2">
-
-                                    <form
+                                    <VerticalForm
                                         onSubmit={handleSubmit(onSubmit)}
-                                    // resolver={schemaResolver} defaultValues={defaultValues}
+                                        // resolver={schemaResolver} 
+                                        defaultValues={defaultValues}
                                     >
-                                        <Tabs>{
-                                            Object.keys(data).map((key) => {
-
-
-                                                if (key !== '_id') {
-                                                    return <Tab eventKey={key} title={t(key)} >
-                                                        <div className=' d-flex justify-content-start flex-wrap'>
-                                                            {
-                                                                typeof (data[key]) === 'object' ?
-                                                                    Object.keys(data[key]).map(prop =>
-                                                                        <FormInput
-                                                                            name={prop}
-                                                                            register={register}
-                                                                            errors={errors}
-                                                                            type="checkbox"
-                                                                            label={t(prop)}
-                                                                            col={'col-12 col-md-6 col-lg-4'}
-                                                                            containerClass={'m-3'}
-                                                                        />
-                                                                    ) :
-                                                                    <FormInput
-                                                                        name={key}
-                                                                        register={register}
-                                                                        errors={errors}
-                                                                        type="checkbox"
-                                                                        label={t(key)}
-                                                                        col={'col-12 col-md-6 col-lg-4'}
-                                                                        containerClass={'m-3'}
-                                                                    />
-                                                            }
-                                                        </div>
-
-                                                    </Tab>
+                                        <Accordion defaultActiveKey={0}>
+                                            {
+                                                Object.keys(data).map((key, index) => {
+                                                    if (key !== '_id' && key !== 'storeUserName') {
+                                                        return (
+                                                            <Accordion.Item key={index} eventKey={index}>
+                                                                <Accordion.Header >
+                                                                    {t(key)}
+                                                                </Accordion.Header>
+                                                                <Accordion.Body>
+                                                                    {
+                                                                        typeof (data[key]) === 'object' ?
+                                                                            Object.keys(data[key]).map((prop, i) =>
+                                                                                <FormInput
+                                                                                    key={i}
+                                                                                    name={`${key}.${prop}`}
+                                                                                    register={register}
+                                                                                    errors={errors}
+                                                                                    type="checkbox"
+                                                                                    label={t(prop)}
+                                                                                    col={'col-12 col-md-6 col-lg-4'}
+                                                                                    containerClass={'m-3'}
+                                                                                />
+                                                                            ) :
+                                                                            <FormInput
+                                                                                name={key}
+                                                                                register={register}
+                                                                                errors={errors}
+                                                                                type="checkbox"
+                                                                                label={t(key)}
+                                                                                col={'col-12 col-md-6 col-lg-4'}
+                                                                                containerClass={'m-3'}
+                                                                            />
+                                                                    }
+                                                                </Accordion.Body>
+                                                            </Accordion.Item>
+                                                        )
+                                                    }
                                                 }
-
+                                                )
                                             }
-                                            )
-                                        }
-                                        </Tabs>
+                                        </Accordion>
 
-                                        <div className="mb-1 text-center" col={'col-12'}>
+                                        <div className="my-3 text-center" col={'col-12'}>
                                             <Button variant='primary' type='submit'>
-                                                {t('submit')}
+                                                {!isUpdating ? t('update') : <>{t('updating')}&nbsp;<Spinner color='primary' size='sm' /></>}
                                             </Button>
-                                            {/* <Button variant="primary" type="submit">
-                                                {editData ? t('update user') : t('create user')}
-                                                &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
-                                            </Button> */}
                                         </div>
-                                    </form>
+                                    </VerticalForm>
                                 </Row>
                             </Card.Body>
                         </Card>

@@ -20,7 +20,7 @@ const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValu
     const { t } = useTranslation();
     const { activeStore } = useSelector((state) => state.setting);
     const { data: allRoles } = useRoleListQuery(activeStore?._id, {
-        skip: !activeStore._id,
+        skip: !activeStore?._id,
     });
 
     const [staffCreate, { isLoading, isSuccess }] = useStaffCreateMutation();
@@ -109,7 +109,7 @@ const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValu
      * handle form submission
      */
     const onSubmit = (formData) => {
-        formData.storeID = activeStore._id;
+        formData.storeID = activeStore?._id;
         delete formData.confirmPassword;
         if (!editData) {
             staffCreate(removeEmptyObj(formData));

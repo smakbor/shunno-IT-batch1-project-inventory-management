@@ -35,7 +35,7 @@ const Users = () => {
         isLoading,
         isError,
     } = useStaffListQuery(activeStore?._id, {
-        skip: !activeStore._id,
+        skip: !activeStore?._id,
     });
 
     const valuesDefault = {
@@ -111,7 +111,7 @@ const Users = () => {
                     role="button"
                     className="action-icon text-danger"
                     onClick={() =>
-                        AleartMessage.Delete({ id: row?.original._id, storeID: activeStore._id }, staffDelete)
+                        AleartMessage.Delete({ id: row?.original._id, storeID: activeStore?._id }, staffDelete)
                     }>
                     <i className="mdi mdi-delete"></i>
                 </span>

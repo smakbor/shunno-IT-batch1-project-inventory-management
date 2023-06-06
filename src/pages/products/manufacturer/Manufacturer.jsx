@@ -29,7 +29,7 @@ const Manufacturer = () => {
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-    const storeID = useSelector((state) => state.setting.activeStore._id);
+    const storeID = useSelector((state) => state.setting.activeStore?._id);
     const [manufacturerDelete] = useManufacturerDeleteMutation();
 
     const { data, isLoading, isError } = useManufacturerListQuery(storeID, {

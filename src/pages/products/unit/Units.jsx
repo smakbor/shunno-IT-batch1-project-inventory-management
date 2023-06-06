@@ -26,7 +26,7 @@ const Units = () => {
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-    const storeID = useSelector((state) => state.setting.activeStore._id);
+    const storeID = useSelector((state) => state.setting.activeStore?._id);
     const [unitDelete] = useUnitDeleteMutation();
     const { data, isLoading, isError } = useUnitListQuery(storeID, {
         skip: !storeID,

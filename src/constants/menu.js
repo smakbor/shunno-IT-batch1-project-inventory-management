@@ -94,19 +94,19 @@ const MENU_ITEMS = () => {
         { key: 'permissions', label: 'permissions', isTitle: true },
         {
             key: 'permissions',
-            label: 'permissions',
+            label: t('permissions'),
             isTitle: false,
             icon: 'uil-shield-exclamation',
             children: [
                 {
                     key: 'user-role',
-                    label: 'User Role',
+                    label: t('user role'),
                     url: '/user-role',
                     parentKey: 'permissions',
                 },
                 {
                     key: 'permission',
-                    label: 'permissions',
+                    label: t('permissions'),
                     url: '/permissions',
                     parentKey: 'permissions',
                 },
@@ -115,19 +115,19 @@ const MENU_ITEMS = () => {
         { key: 'settings', label: 'settings', isTitle: true },
         {
             key: 'settings',
-            label: 'settings',
+            label: t('settings'),
             isTitle: false,
             icon: 'dripicons-gear',
             children: [
                 {
                     key: 'user',
-                    label: 'users',
+                    label: t('users'),
                     url: '/users',
                     parentKey: 'settings',
                 },
                 {
                     key: 'ui',
-                    label: 'ui',
+                    label: t('ui'),
                     url: '/settings/ui',
                     parentKey: 'settings',
                 },

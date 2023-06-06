@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { Row, Col, Breadcrumb } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 type BreadcrumbItems = {
     label: string,
@@ -17,13 +18,14 @@ type PageTitleProps = {
  * PageTitle
  */
 const PageTitle = (props: PageTitleProps): React$Element<any> => {
+    const { t } = useTranslation()
     return (
         <Row>
             <Col>
                 <div className="page-title-box">
                     <div className="page-title-right">
                         <Breadcrumb listProps={{ className: 'm-0' }}>
-                            <Breadcrumb.Item href="/dashboard">Hisab Nikash</Breadcrumb.Item>
+                            <Breadcrumb.Item href="/dashboard">{t('hisab nikash')}</Breadcrumb.Item>
 
                             {props.breadCrumbItems.map((item, index) => {
                                 return item.active ? (

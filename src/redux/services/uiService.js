@@ -17,19 +17,19 @@ export const uiService = apiService.injectEndpoints({
                 method: 'PUT',
                 body: postBody,
             }),
-            async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
-                try {
-                    const { data } = await queryFulfilled;
-                    dispatch(
-                        apiService.util.updateQueryData('getUnits', undefined, (draft) => {
-                            const findIndex = draft.findIndex((item) => item._id === id);
-                            draft[findIndex] = postBody;
-                        })
-                    );
-                } catch (e) {
-                    console.log(e);
-                }
-            },
+            // async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
+            //     try {
+            //         const { data } = await queryFulfilled;
+            //         dispatch(
+            //             apiService.util.updateQueryData('getUnits', undefined, (draft) => {
+            //                 const findIndex = draft.findIndex((item) => item._id === id);
+            //                 draft[findIndex] = postBody;
+            //             })
+            //         );
+            //     } catch (e) {
+            //         console.log(e);
+            //     }
+            // },
         }),
     }),
 });

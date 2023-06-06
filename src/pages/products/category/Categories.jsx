@@ -36,7 +36,7 @@ const Categories = () => {
     const [subCategoryModal, setSubCategoryModal] = useState(false);
     const [editData, setEditData] = useState(false);
     const [subCategoryEditData, setSubCategoryEditData] = useState(false);
-    const storeID = useSelector((state) => state.setting.activeStore._id);
+    const storeID = useSelector((state) => state.setting.activeStore?._id);
     const [categoryDelete] = useCategoryDeleteMutation();
     const { data, isLoading, isError } = useCategoryListQuery(storeID, {
         skip: !storeID,

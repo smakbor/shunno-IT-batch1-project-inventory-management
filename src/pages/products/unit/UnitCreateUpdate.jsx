@@ -19,7 +19,7 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
     const { t } = useTranslation();
     const [unitCreate, { isLoading, isSuccess }] = useUnitCreateMutation();
     const [unitUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useUnitUpdateMutation();
-    const storeID = useSelector(state => state.setting.activeStore._id)
+    const storeID = useSelector(state => state.setting.activeStore?._id)
     /*
      * form validation schema
      */

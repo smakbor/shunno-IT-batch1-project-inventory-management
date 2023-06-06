@@ -30,7 +30,7 @@ const Customers = () => {
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
 
-    const storeID = useSelector(state => state.setting.activeStore._id)
+    const storeID = useSelector(state => state.setting.activeStore?._id)
     const [customerDelete] = useCustomerDeleteMutation();
 
     const { data, isLoading, isError } = useCustomerListQuery(storeID, {

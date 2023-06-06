@@ -17,7 +17,7 @@ import slugify from '../../../helpers/slugify';
 
 const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
-    const storeID = useSelector(state => state.setting.activeStore._id)
+    const storeID = useSelector(state => state.setting.activeStore?._id)
     const [categoryCreate, { isLoading, isSuccess }] = useCategoryCreateMutation();
     const [categoryUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCategoryUpdateMutation();
 
@@ -60,7 +60,7 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
             setModal(false);
         }
     }, [isSuccess, updateSuccess]);
-    console.log(defaultValues)
+
     return (
         <Card className={classNames('', { 'd-none': !modal })}>
             <Card.Body>
