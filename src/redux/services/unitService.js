@@ -12,8 +12,8 @@ export const unitService = apiService.injectEndpoints({
             transformResponse: ({ data }) => data || [],
         }),
         unitCreate: builder.mutation({
-            query: ({ storeID, postBody }) => ({
-                url: `units/${storeID}`,
+            query: (postBody) => ({
+                url: `units`,
                 method: 'POST',
                 body: postBody,
             }),
@@ -21,7 +21,7 @@ export const unitService = apiService.injectEndpoints({
                 try {
                     const { data } = await queryFulfilled;
                     dispatch(
-                        apiService.util.updateQueryData('getUnits', undefined, (draft) => {
+                        apiService.util.updateQueryData('unitList', undefined, (draft) => {
                             draft.push(data);
                         })
                     );
@@ -41,7 +41,7 @@ export const unitService = apiService.injectEndpoints({
                 try {
                     const { data } = await queryFulfilled;
                     dispatch(
-                        apiService.util.updateQueryData('getUnits', undefined, (draft) => {
+                        apiService.util.updateQueryData('unitList', undefined, (draft) => {
                             const findIndex = draft.findIndex((item) => item._id === id);
                             draft[findIndex] = postBody;
                         })
@@ -58,7 +58,7 @@ export const unitService = apiService.injectEndpoints({
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getUnits', undefined, (draft) => {
+                    apiService.util.updateQueryData('unitList', undefined, (draft) => {
                         draft = draft.filter((item) => item._id !== id);
                     })
                 );

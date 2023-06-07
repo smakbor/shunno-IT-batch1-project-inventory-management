@@ -37,7 +37,7 @@ export const authService = apiService.injectEndpoints({
                 } catch (error) {}
             },
         }),
-        fotgetPassword: builder.mutation({
+        forgetPassword: builder.mutation({
             query: (email) => ({
                 url: `auth/fotgetPassword`,
                 method: 'POST',
@@ -63,7 +63,7 @@ export const {
     useRegisterMutation,
     useLoginMutation,
     useLogoutMutation,
-    useFotgetPasswordMutation,
+    useForgetPasswordMutation,
     useVerifyForgetTokenQuery,
-    useResetPasswordTokenQuery,
+    useResetPasswordTokenMutation,
 } = authService;

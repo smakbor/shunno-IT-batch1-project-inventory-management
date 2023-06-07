@@ -12,14 +12,14 @@ export const customerService = apiService.injectEndpoints({
             transformResponse: ({ data }) => data || [],
         }),
         customerCreate: builder.mutation({
-            query: ({ storeID, postBody }) => ({
-                url: `customers/${storeID}`,
+            query: (postBody) => ({
+                url: `customers`,
                 method: 'POST',
                 body: postBody,
             }),
             async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getCustomers', undefined, (draft) => {
+                    apiService.util.updateQueryData('customerList', undefined, (draft) => {
                         draft.push(postBody);
                     })
                 );
@@ -39,7 +39,7 @@ export const customerService = apiService.injectEndpoints({
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getCustomers', undefined, (draft) => {
+                    apiService.util.updateQueryData('customerList', undefined, (draft) => {
                         const findIndex = draft.findIndex((item) => item._id === id);
                         draft[findIndex] = postBody;
                     })
@@ -58,7 +58,7 @@ export const customerService = apiService.injectEndpoints({
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('getCustomers', undefined, (draft) => {
+                    apiService.util.updateQueryData('customerList', undefined, (draft) => {
                         draft = draft.filter((item) => item._id !== id);
                     })
                 );

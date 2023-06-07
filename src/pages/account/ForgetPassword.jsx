@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { VerticalForm, FormInput } from '../../components';
 
 import AccountLayout from './AccountLayout';
-import { useFotgetPasswordMutation } from '../../redux/services/authService';
+import { useForgetPasswordMutation } from '../../redux/services/authService';
 
 /* bottom link */
 const BottomLink = () => {
@@ -35,7 +35,7 @@ const ForgetPassword = (): React$Element<any> => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
-    const [fotgetPassword, { isLoading, data, isSuccess, isError }] = useFotgetPasswordMutation();
+    const [forgetPassword, { isLoading, data, isSuccess, isError }] = useForgetPasswordMutation();
     /*
      * form validation schema
      */
@@ -48,7 +48,7 @@ const ForgetPassword = (): React$Element<any> => {
     /*
      * handle form submission
      */
-    const onSubmit = (formData) => {};
+    const onSubmit = (formData) => { };
 
     return (
         <AccountLayout bottomLinks={<BottomLink />} className="col-md-8 col-lg-6 col-xl-5 col-xxl-4 col-md-8">
