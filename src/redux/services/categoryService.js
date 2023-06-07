@@ -10,12 +10,12 @@ export const categoryService = apiService.injectEndpoints({
             transformResponse: ({ data }) => data || [],
         }),
         categoryCreate: builder.mutation({
-            query: ({ storeID, postBody }) => ({
-                url: `categories/${storeID}`,
+            query: (postBody) => ({
+                url: `categories`,
                 method: 'POST',
                 body: postBody,
             }),
-            async onQueryStarted({ storeID, postBody }, { dispatch, queryFulfilled, queryCache }) {
+            async onQueryStarted(postBody, { dispatch, queryFulfilled, queryCache }) {
                 const cachedData = queryCache.getState()
                 console.log(cachedData)
                 // const cachedUnits = apiService.endpoints.unitList.select(storeID)
