@@ -19,7 +19,8 @@ export const authService = apiService.injectEndpoints({
             }),
             async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
                 try {
-                    const { data } = await queryFulfilled;
+                    const { data: { data } } = await queryFulfilled;
+                    console.log(data)
                     const {
                         data: { accessToken, user },
                     } = data || {};

@@ -20,7 +20,7 @@ const baseQuery = fetchBaseQuery({
         headers.set('accept-language', language);
         return headers;
     },
-    credentials: 'include',
+    mode: "cors",
 });
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
@@ -59,3 +59,4 @@ export const apiService = createApi({
     baseQuery: baseQueryWithReauth,
     endpoints: () => ({}),
 });
+

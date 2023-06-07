@@ -37,10 +37,12 @@ const Categories = () => {
     const [editData, setEditData] = useState(false);
     const [subCategoryEditData, setSubCategoryEditData] = useState(false);
     const storeID = useSelector((state) => state.setting.activeStore?._id);
+    console.log(storeID)
     const [categoryDelete] = useCategoryDeleteMutation();
     const { data, isLoading, isError } = useCategoryListQuery(storeID, {
         skip: !storeID,
     });
+    console.log(data)
     const {
         data: subCategory,
         isLoading: loading,
@@ -269,7 +271,7 @@ const Categories = () => {
                                     </Col>
                                 </Row>
 
-                                <Table
+                                {/* <Table
                                     columns={columns}
                                     data={data}
                                     pageSize={5}
@@ -281,7 +283,7 @@ const Categories = () => {
                                     tableClass="table-striped"
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
-                                />
+                                /> */}
                             </Card.Body>
                         </Card>
                     </Col>
