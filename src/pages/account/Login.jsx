@@ -30,7 +30,7 @@ const BottomLink = () => {
 
 const Login = () => {
     const { accessToken } = useSelector((state) => state.auth);
-    console.log(accessToken)
+    console.log(accessToken);
     const { t } = useTranslation();
 
     const [login, { isLoading, isError, error }] = useLoginMutation();

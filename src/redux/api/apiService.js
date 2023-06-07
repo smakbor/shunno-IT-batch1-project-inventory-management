@@ -20,7 +20,8 @@ const baseQuery = fetchBaseQuery({
         headers.set('accept-language', language);
         return headers;
     },
-    mode: "cors",
+    mode: 'cors',
+    // credentials: 'include',
 });
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
