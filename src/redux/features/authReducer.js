@@ -11,7 +11,7 @@ const authReducer = createSlice({
     },
     reducers: {
         userLogin: (state, action) => {
-            SessionHelper.setAccessToken(action.payload.accessToken);
+            SessionHelper.setAccessToken(action.payload);
             state.accessToken = SessionHelper.getAccessToken();
         },
         userLogout: (state, _action) => {

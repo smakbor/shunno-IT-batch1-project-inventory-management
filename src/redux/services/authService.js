@@ -17,17 +17,12 @@ export const authService = apiService.injectEndpoints({
                 method: 'POST',
                 body: postBody,
             }),
-            async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
-                try {
-                    const { data } = await queryFulfilled;
-                    const {
-                        data: { accessToken, user },
-                    } = data || {};
-
-                    dispatch(userLogin({ accessToken, user }));
-                } catch (error) {
-                    dispatch(userLogout());
-                }
+            onQueryStarted(_arg, { queryFulfilled, dispatch }) {
+                queryFulfilled
+                    .then(({ data }) => dispatch(userLogin(data?.data?.accessToken)))
+                    .catch(() => {
+                        dispatch(userLogout());
+                    });
             },
         }),
         logout: builder.mutation({
@@ -39,7 +34,7 @@ export const authService = apiService.injectEndpoints({
                 try {
                     await queryFulfilled;
                     dispatch(userLogout());
-                } catch (error) { }
+                } catch (error) {}
             },
         }),
         fotgetPassword: builder.mutation({
