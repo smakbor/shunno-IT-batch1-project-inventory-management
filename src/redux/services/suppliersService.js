@@ -32,8 +32,8 @@ export const suppliersService = apiService.injectEndpoints({
         }),
 
         supplierUpdate: builder.mutation({
-            query: ({ id, postBody }) => ({
-                url: `suppliers/${id}`,
+            query: (postBody) => ({
+                url: `suppliers/${postBody?._id}`,
                 method: 'PUT',
                 body: postBody,
             }),
@@ -64,9 +64,7 @@ export const suppliersService = apiService.injectEndpoints({
                 );
                 try {
                     await queryFulfilled;
-
                 } catch {
-
                     response.undo();
                 }
             },

@@ -30,11 +30,11 @@ const Customers = () => {
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
 
-    const storeID = useSelector(state => state.setting.activeStore?._id)
+    const storeID = useSelector((state) => state.setting.activeStore?._id);
     const [customerDelete] = useCustomerDeleteMutation();
 
     const { data, isLoading, isError } = useCustomerListQuery(storeID, {
-        skip: !storeID
+        skip: !storeID,
     });
     /**
      * Show/hide the modal
@@ -54,13 +54,14 @@ const Customers = () => {
     const ActionColumn = ({ row }) => {
         const edit = () => {
             toggle();
-            let { reference, ...updateData } = { ...row.original };
-            updateData.refName = row.original.reference?.name || '';
-            updateData.refAddress = row.original.reference?.address || '';
-            updateData.refMobile = row.original.reference?.mobile || '';
-            console.log(updateData);
-            setEditData(updateData);
-            setDefaultValues(updateData);
+            let dValues = { ...row?.original };
+            dValues.referenceName = row?.original.reference.name;
+            dValues.referenceMobile = row?.original.reference.mobile;
+            dValues.referenceNid = row?.original.reference.nid;
+            dValues.referenceRelation = row?.original.reference.relation;
+            dValues.referenceAddress = row?.original.reference.address;
+            setEditData(dValues);
+            setDefaultValues(dValues);
         };
 
         return (
@@ -80,14 +81,6 @@ const Customers = () => {
 
     // get all columns
     const columns = [
-        // {
-        //     Header: '#',
-        //     accessor: 'sl',
-        //     sort: true,
-        //     Cell: ({ row }) => row.index + 1,
-        //     classes: 'table-user',
-        // },
-
         {
             Header: t('name'),
             accessor: 'name',

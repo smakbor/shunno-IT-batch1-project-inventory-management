@@ -27,12 +27,14 @@ const Suppliers = () => {
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
-    const storeID = useSelector(state => state.setting.activeStore?._id)
+    // store id
+    const store = useSelector((state) => state.setting.activeStore?._id);
     const [supplierDelete] = useSupplierDeleteMutation();
 
-    const { data, isLoading, isError } = useSupplierListQuery(storeID, {
-        skip: !storeID
+    const { data, isLoading, isError } = useSupplierListQuery(store, {
+        skip: !store,
     });
+
     /**
      * Show/hide the modal
      */
@@ -229,7 +231,7 @@ const Suppliers = () => {
                                 </Row>
 
                                 <Table
-                                    columns={columns}
+                                    columns={columns || []}
                                     data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}

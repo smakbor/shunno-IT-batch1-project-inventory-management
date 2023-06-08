@@ -1,6 +1,6 @@
 //External Lib Import
 import React, { useEffect } from 'react';
-import { Card, Button, Modal, Spinner } from 'react-bootstrap';
+import { Card, Button, Modal, Spinner, Row, Col } from 'react-bootstrap';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
@@ -14,10 +14,12 @@ import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 import { useSupplierCreateMutation, useSupplierUpdateMutation } from '../../../redux/services/suppliersService';
 import { useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
 
 const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
-    const storeID = useSelector(state => state.setting.activeStore?._id)
+    const storeID = useSelector((state) => state.setting.activeStore?._id);
+    const store = useSelector((state) => state.setting.activeStore);
     const [supplierCreate, { isLoading, isSuccess }] = useSupplierCreateMutation();
     const [supplierUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useSupplierUpdateMutation();
 
@@ -29,47 +31,226 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             name: yup.string().required(t('please enter customer name')).min(3, t('minimum containing 3 letter')),
             fatherName: yup.string(),
             address: yup.string(),
-            mobile: yup.string().required(t('enter mobile number')).matches(/^(?:\+?88|0088)?01[3-9]\d{8}$/
-            ),
+            mobile: yup.string().required(t('enter mobile number')),
+            // .matches(/^(?:\+?88|0088)?01[3-9]\d{8}$/),
             email: yup.string().email(),
-            nid: yup.string()
+            nid: yup.string(),
         })
     );
 
+    const inputData = [
+        {
+            label: t('company name'),
+            type: 'text',
+            name: 'company',
+            placeholder: t('please enter company name'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: true,
+        },
+        {
+            label: t(' name'),
+            type: 'text',
+            name: 'name',
+            placeholder: t('please enter suppliler name'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: true,
+        },
+        {
+            label: t('mobile'),
+            type: 'text',
+            name: 'mobile',
+            placeholder: t('please enter mobile number'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: true,
+        },
+        {
+            label: t('email'),
+            type: 'email',
+            name: 'email',
+            placeholder: t('please enter supplier email'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: true,
+        },
+        {
+            label: t('NID'),
+            type: 'text',
+            name: 'nid',
+            placeholder: t('please enter supplier nid'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: true,
+        },
+        {
+            label: t('address'),
+            type: 'text',
+            name: 'address',
+            placeholder: t('please enter supplier address'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('father name'),
+            type: 'text',
+            name: 'fatherName',
+            placeholder: t('please enter father name'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('remarks'),
+            type: 'text',
+            name: 'remarks',
+            placeholder: t('please enter remarks'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('thana'),
+            type: 'text',
+            name: 'thana',
+            placeholder: t('please enter thana'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('district'),
+            type: 'text',
+            name: 'district',
+            placeholder: t('please enter district'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('previous due'),
+            type: 'number',
+            name: 'due',
+            placeholder: t('please enter supplier previous due'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('reference name'),
+            type: 'text',
+            name: 'reference.name',
+            placeholder: t('please enter reference name'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('reference mobile'),
+            type: 'text',
+            name: 'reference.mobile',
+            placeholder: t('please enter supplier mobile'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('reference address'),
+            type: 'text',
+            name: 'reference.address',
+            placeholder: t('please enter reference address'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('reference nid'),
+            type: 'text',
+            name: 'reference.nid',
+            placeholder: t('please enter reference nid'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('reference relation'),
+            type: 'text',
+            name: 'reference.relation',
+            placeholder: t('please enter reference address'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('status'),
+            type: 'select',
+            name: 'status',
+            placeholder: t('please enter status'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+            options: [
+                { label: 'please select status', value: '' },
+                { label: 'new', value: 'NEW' },
+                { label: 'active', value: 'ACTIVE' },
+                { label: 'inactive', value: 'INACTIVE' },
+                { label: 'banned', value: 'BANNED' },
+                { label: 'deleted', value: 'DELETED' },
+            ],
+        },
+    ];
+
     const onSubmit = (formData) => {
-        let data = {};
-        data.name = formData?.name;
-        data.mobile = formData?.mobile;
-        data.email = formData?.email;
-        data.fatherName = formData?.fatherName;
-        data.company = formData?.company;
-        data.address = formData?.address;
-        data.remarks = formData?.remarks;
-        data.thana = formData?.thana;
-        data.district = formData?.district;
-        data.nid = formData?.nid;
-        data.reference = {};
-        data.reference.name = formData?.referenceName;
-        data.reference.mobile = formData?.referenceMobile;
-        data.reference.address = formData?.referenceAddress;
-        data.reference.nid = formData?.referenceNid;
-        data.reference.relation = formData?.referenceRelation;
-        data.due = formData?.due;
-        data.storeID = '602e42e46ebade5b1c7cf45f';
+        formData.store = storeID;
+        formData.due = Number(formData.due);
+
         if (!editData) {
-            supplierCreate({ storeID, postBody: removeEmptyObj(data) });
+            supplierCreate(removeEmptyObj(formData));
         } else {
-            const updatedData = { ...editData, ...data };
-            const postBody = removeEmptyObj(updatedData);
-            supplierUpdate({ id: editData._id, postBody });
+            const updatedData = { ...editData, ...formData };
+            supplierUpdate(removeEmptyObj(updatedData));
         }
     };
+    const methods = useForm({ mode: 'onChange', defaultValues, resolver: schemaResolver });
+    const {
+        handleSubmit,
+        register,
+        control,
+        setValue,
+        reset,
+        formState: { errors },
+    } = methods;
+    useEffect(() => {
+        reset(defaultValues);
+    }, [defaultValues]);
 
     useEffect(() => {
         if (isSuccess || updateSuccess) {
             setModal(false);
         }
     }, [isSuccess, updateSuccess]);
+
+    const MappedComponent = () =>
+        inputData.map((item) => {
+            return (
+                <Col className={item.col}>
+                    <FormInput
+                        label={item.label}
+                        type={item.type}
+                        name={item.name}
+                        placeholder={item.placeholder}
+                        required={item.required}
+                        register={register}
+                        errors={errors}>
+                        {item.type == 'select'
+                            ? item.options?.map((opt) => <option value={opt.value}>{opt.label}</option>)
+                            : ''}
+                    </FormInput>
+                </Col>
+            );
+        });
 
     return (
         <Card className={classNames('', { 'd-none': !modal })}>
@@ -80,144 +261,17 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                     </Modal.Header>
 
                     <Modal.Body>
-                        <VerticalForm onSubmit={onSubmit} resolver={schemaResolver} defaultValues={defaultValues}>
-                            <FormInput
-                                label={t('company name')}
-                                type="text"
-                                name="company"
-                                placeholder={t('please enter company name')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('name')}
-                                type="text"
-                                name="name"
-                                placeholder={t('please enter supplier name')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                                required={true}
-                            />
-                            <FormInput
-                                label={t('mobile')}
-                                type="number"
-                                name="mobile"
-                                placeholder={t('please enter mobile number')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                                required={true}
-                            />
-                            <FormInput
-                                label={t('email')}
-                                type="email"
-                                name="email"
-                                placeholder={t('please enter supplier email')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('NID')}
-                                type="text"
-                                name="nid"
-                                placeholder={t('please enter supplier nid')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('address')}
-                                type="text"
-                                name="address"
-                                placeholder={t('please enter supplier address')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('father name')}
-                                type="text"
-                                name="fatherName"
-                                placeholder={t('please enter father name')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('remarks')}
-                                type="text"
-                                name="remarks"
-                                placeholder={t('please enter remarks')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('thana')}
-                                type="text"
-                                name="thana"
-                                placeholder={t('please enter thana')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('district')}
-                                type="text"
-                                name="district"
-                                placeholder={t('please enter district')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('previous due')}
-                                type="number"
-                                name="due"
-                                placeholder={t('please enter supplier previous due')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('reference name')}
-                                type="text"
-                                name="referenceName"
-                                placeholder={t('please enter reference name')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('reference mobile')}
-                                type="tel"
-                                name="referenceMobile"
-                                placeholder={t('please enter supplier mobile')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('reference address')}
-                                type="text"
-                                name="referenceAddress"
-                                placeholder={t('please enter reference address')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('reference nid')}
-                                type="text"
-                                name="referenceNid"
-                                placeholder={t('please enter reference nid')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('reference relation')}
-                                type="text"
-                                name="referenceRelation"
-                                placeholder={t('please enter reference address')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <div className="mb-3 text-end">
-                                <Button variant="primary" type="submit">
-                                    {editData ? t('update supplier') : t('create supplier')}
-                                    &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
-                                </Button>
-                            </div>
-                        </VerticalForm>
+                        <form onSubmit={handleSubmit(onSubmit)} className={'formClass'} noValidate>
+                            <Row>
+                                <MappedComponent />
+                                <div className="mt-3 text-end">
+                                    <Button variant="primary" type="submit">
+                                        {editData ? t('update supplier') : t('create supplier')}
+                                        &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
+                                    </Button>
+                                </div>
+                            </Row>
+                        </form>
                     </Modal.Body>
                 </Modal>
             </Card.Body>
