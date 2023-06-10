@@ -33,7 +33,7 @@ export const warrantyService = apiService.injectEndpoints({
         warrantyUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
                 url: `warranties/${id}`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: postBody,
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {

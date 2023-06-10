@@ -29,7 +29,7 @@ export const staffService = apiService.injectEndpoints({
         staffUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
                 url: `staffs/${id}`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: postBody,
             }),
             onQueryStarted({ id, postBody: { storeID } }, { dispatch, queryFulfilled }) {
@@ -46,7 +46,7 @@ export const staffService = apiService.injectEndpoints({
         staffResetPassword: builder.mutation({
             query: (password) => ({
                 url: `auth/reset-password`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: { password },
             }),
         }),

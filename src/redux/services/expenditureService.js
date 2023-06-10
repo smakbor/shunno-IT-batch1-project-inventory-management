@@ -30,7 +30,7 @@ export const expenditureService = apiService.injectEndpoints({
         expenditureUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
                 url: `expenditures/${id}`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: postBody,
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {

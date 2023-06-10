@@ -34,7 +34,7 @@ export const manufacturerService = apiService.injectEndpoints({
         manufacturerUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
                 url: `manufacturers/${id}`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: postBody,
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {

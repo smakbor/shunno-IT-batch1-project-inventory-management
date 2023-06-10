@@ -34,7 +34,7 @@ export const unitService = apiService.injectEndpoints({
         unitUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
                 url: `units/${id}`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: postBody,
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {

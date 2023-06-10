@@ -14,7 +14,6 @@ const StoreDropdown = () => {
     const { data: stores, isSuccess } = useStoreListQuery(undefined, {
         skip: !profile?.store,
     });
-    console.log(stores)
     useEffect(() => {
         if (stores && stores.length > 0) {
             if (!localStorage.getItem('activeStore')) {

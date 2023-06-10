@@ -5,21 +5,21 @@ export const roleService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         roleList: builder.query({
             query: (storeID) => ({
-                url: `role/${storeID}`,
+                url: `roles/${storeID}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         roleDropDown: builder.query({
             query: (storeID) => ({
-                url: `role/dropDown/${storeID}`,
+                url: `roles/dropDown/${storeID}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data,
         }),
         roleCreate: builder.mutation({
             query: (postBody) => ({
-                url: `role/${postBody.storeID}`,
+                url: `roles/${postBody.storeID}`,
                 method: 'POST',
                 body: postBody,
             }),
@@ -35,13 +35,13 @@ export const roleService = apiService.injectEndpoints({
         }),
         roleDetails: builder.query({
             query: (id) => ({
-                url: `role/roleDetails/${id}`,
+                url: `roles/roleDetails/${id}`,
                 method: 'GET',
             }),
         }),
         roleUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
-                url: `role/${id}`,
+                url: `roles/${id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
