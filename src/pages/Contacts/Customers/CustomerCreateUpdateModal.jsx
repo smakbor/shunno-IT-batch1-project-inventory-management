@@ -39,12 +39,32 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
         })
     );
 
+    // react hook form
+    const methods = useForm({ mode: 'onChange', defaultValues, resolver: schemaResolver });
+    const {
+        handleSubmit,
+        register,
+        control,
+        setValue,
+        reset,
+        formState: { errors },
+    } = methods;
+    useEffect(() => {
+        reset(defaultValues);
+    }, [defaultValues]);
+
+    useEffect(() => {
+        if (isSuccess || updateSuccess) {
+            setModal(false);
+        }
+    }, [isSuccess, updateSuccess]);
+
     // handle input field
 
     const inputData = [
         {
             label: t('customer type'),
-            type: 'select',
+            type: 'react-select',
             name: 'customerType',
             placeholder: t('please enter customer type'),
             containerClass: 'mb-3',
@@ -55,6 +75,8 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                 { label: 'retail', value: 'RETAIL' },
                 { label: 'wholesale', value: 'WHOLESALE' },
             ],
+            control: control,
+            defaultValues: defaultValues,
         },
         {
             label: t(' name'),
@@ -195,7 +217,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
         },
         {
             label: t('status'),
-            type: 'select',
+            type: 'react-select',
             name: 'status',
             placeholder: t('please enter status'),
             containerClass: 'mb-3',
@@ -209,6 +231,8 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                 { label: 'banned', value: 'BANNED' },
                 { label: 'delete', value: 'DELETED' },
             ],
+            control: control,
+            defaultValues: defaultValues,
         },
     ];
 
@@ -221,13 +245,14 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                         type={item.type}
                         name={item.name}
                         placeholder={item.placeholder}
+                        containerClass={item.containerClass}
                         required={item.required}
                         register={register}
-                        errors={errors}>
-                        {item.type == 'select'
-                            ? item.options?.map((opt) => <option value={opt.value}>{opt.label}</option>)
-                            : ''}
-                    </FormInput>
+                        errors={errors}
+                        option={item.options}
+                        control={item.control}
+                        setValue={item.setValue}
+                        defaultValues={item.defaultValues}></FormInput>
                 </Col>
             );
         });
@@ -247,29 +272,10 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
         }
     };
 
-    const methods = useForm({ mode: 'onChange', defaultValues, resolver: schemaResolver });
-    const {
-        handleSubmit,
-        register,
-        control,
-        setValue,
-        reset,
-        formState: { errors },
-    } = methods;
-    useEffect(() => {
-        reset(defaultValues);
-    }, [defaultValues]);
-
-    useEffect(() => {
-        if (isSuccess || updateSuccess) {
-            setModal(false);
-        }
-    }, [isSuccess, updateSuccess]);
-
     return (
         <Card className={classNames('', { 'd-none': !modal })}>
             <Card.Body>
-                <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false} size="lg">
+                <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false} size="xl">
                     <Modal.Header onHide={toggle} closeButton>
                         <h4 className="modal-title">{editData ? t('update customer') : t('create customer')}</h4>
                     </Modal.Header>

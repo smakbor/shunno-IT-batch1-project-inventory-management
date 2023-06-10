@@ -20,6 +20,7 @@ export const suppliersService = apiService.injectEndpoints({
             async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('supplierList', undefined, (draft) => {
+                        console.log(draft);
                         draft.push(postBody);
                     })
                 );

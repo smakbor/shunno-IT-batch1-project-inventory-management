@@ -1,5 +1,5 @@
 //External Lib Import
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Button, Modal, Spinner, Row, Col } from 'react-bootstrap';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -37,6 +37,25 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             nid: yup.string(),
         })
     );
+
+    const methods = useForm({ mode: 'onChange', defaultValues, resolver: schemaResolver });
+    const {
+        handleSubmit,
+        register,
+        control,
+        setValue,
+        reset,
+        formState: { errors },
+    } = methods;
+    useEffect(() => {
+        reset(defaultValues);
+    }, [defaultValues]);
+
+    useEffect(() => {
+        if (isSuccess || updateSuccess) {
+            setModal(false);
+        }
+    }, [isSuccess, updateSuccess]);
 
     const inputData = [
         {
@@ -185,7 +204,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
         },
         {
             label: t('status'),
-            type: 'select',
+            type: 'react-select',
             name: 'status',
             placeholder: t('please enter status'),
             containerClass: 'mb-3',
@@ -199,10 +218,13 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                 { label: 'banned', value: 'BANNED' },
                 { label: 'deleted', value: 'DELETED' },
             ],
+            control: control,
+            defaultValues: defaultValues,
         },
     ];
 
     const onSubmit = (formData) => {
+        console.log(formData);
         formData.store = storeID;
         formData.due = Number(formData.due);
 
@@ -213,24 +235,6 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             supplierUpdate(removeEmptyObj(updatedData));
         }
     };
-    const methods = useForm({ mode: 'onChange', defaultValues, resolver: schemaResolver });
-    const {
-        handleSubmit,
-        register,
-        control,
-        setValue,
-        reset,
-        formState: { errors },
-    } = methods;
-    useEffect(() => {
-        reset(defaultValues);
-    }, [defaultValues]);
-
-    useEffect(() => {
-        if (isSuccess || updateSuccess) {
-            setModal(false);
-        }
-    }, [isSuccess, updateSuccess]);
 
     const MappedComponent = () =>
         inputData.map((item) => {
@@ -241,13 +245,14 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                         type={item.type}
                         name={item.name}
                         placeholder={item.placeholder}
+                        containerClass={item.containerClass}
                         required={item.required}
                         register={register}
-                        errors={errors}>
-                        {item.type == 'select'
-                            ? item.options?.map((opt) => <option value={opt.value}>{opt.label}</option>)
-                            : ''}
-                    </FormInput>
+                        errors={errors}
+                        option={item.options}
+                        control={item.control}
+                        setValue={item.setValue}
+                        defaultValues={item.defaultValues}></FormInput>
                 </Col>
             );
         });
