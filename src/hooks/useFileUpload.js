@@ -1,5 +1,5 @@
 import { useState, useEffect, React } from "react";
-import { axioShunnoStorage } from "../utils/axios/axios";
+import { axioShunnoStorage, axiosPrivate } from "../utils/axios/axios";
 
 const useFileUpload = () => {
     const [data, setData] = useState(null);
@@ -9,7 +9,7 @@ const useFileUpload = () => {
         setIsLoading(true);
         let formData = new FormData();
         formData.append('file', file)
-        const fileUploadInfo = await axioShunnoStorage.post('/vault/vaultUpload/', formData)
+        const fileUploadInfo = await axiosPrivate.post('/media/upload', formData)
         if (fileUploadInfo.data.data.file) {
             setIsLoading(false);
             setData(fileUploadInfo.data.data.file)

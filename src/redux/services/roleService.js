@@ -19,15 +19,16 @@ export const roleService = apiService.injectEndpoints({
         }),
         roleCreate: builder.mutation({
             query: (postBody) => ({
-                url: `roles/${postBody.storeID}`,
+                url: 'roles',
                 method: 'POST',
                 body: postBody,
             }),
-            onQueryStarted({ storeID }, { dispatch, queryFulfilled }) {
-                queryFulfilled.then(({ data }) => {
+            onQueryStarted(postBody, { dispatch, queryFulfilled }) {
+
+                queryFulfilled.then(({ data: { data } }) => {
                     dispatch(
-                        apiService.util.updateQueryData('roleList', storeID, (draft) => {
-                            draft.unshift(data);
+                        apiService.util.updateQueryData('roleList', postBody.store, (draft) => {
+                            draft.unshift(data)
                         })
                     );
                 });
@@ -45,11 +46,14 @@ export const roleService = apiService.injectEndpoints({
                 method: 'PATCH',
                 body: postBody,
             }),
-            onQueryStarted({ id, postBody: { storeID } }, { dispatch, queryFulfilled }) {
-                queryFulfilled.then(({ data }) => {
+            onQueryStarted({ id, postBody: { store } }, { dispatch, queryFulfilled }) {
+                queryFulfilled.then(({ data: { data } }) => {
+                    console.log(data)
                     dispatch(
-                        apiService.util.updateQueryData('roleList', storeID, (draft) => {
+                        apiService.util.updateQueryData('roleList', store, (draft) => {
+
                             const findIndex = draft.findIndex((item) => item._id === id);
+
                             draft[findIndex] = data;
                         })
                     );
@@ -58,7 +62,7 @@ export const roleService = apiService.injectEndpoints({
         }),
         roleDelete: builder.mutation({
             query: ({ id, storeID }) => ({
-                url: `role/${id}/${storeID}`,
+                url: `role/${id}`,
                 method: 'DELETE',
             }),
             onQueryStarted({ id, storeID }, { queryFulfilled, dispatch }) {

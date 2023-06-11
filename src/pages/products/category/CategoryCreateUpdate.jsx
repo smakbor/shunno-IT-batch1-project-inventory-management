@@ -77,17 +77,17 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
         if (formData?.image?.length > 0) {
             await handleFileUpload(formData.image[0])
 
-            const { publicID, path } = fileData;
-            formData.image = { publicId: publicID, url: path }
+            if (Object.entries(fileData).length > 0) {
+                const { publicID, path } = fileData;
+                formData.image = { publicId: publicID, url: path }
+            }
 
 
         }
         else {
             delete formData.image;
         }
-        if (!fileError && !fileLoading) {
-            editData ? categoryUpdate({ id: editData._id, postBody: formData }) : categoryCreate(formData)
-        };
+        editData ? categoryUpdate({ id: editData._id, postBody: formData }) : categoryCreate(formData)
 
     };
 

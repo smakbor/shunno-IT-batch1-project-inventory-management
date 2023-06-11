@@ -3,13 +3,11 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Card } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
+import { useTranslation } from 'react-i18next';
 
-type FileUploaderProps = {
-    onFileUpload?: (files: any) => void,
-    showPreview?: boolean,
-};
 
-const FileUploader = (props: FileUploaderProps): React$Element<any> => {
+const FileUploader = props => {
+    const { t } = useTranslation();
     const [selectedFiles, setSelectedFiles] = useState([]);
 
     /**
@@ -31,7 +29,7 @@ const FileUploader = (props: FileUploaderProps): React$Element<any> => {
             setSelectedFiles(allFiles);
         }
 
-        if (props.onFileUpload) props.onFileUpload(allFiles);
+        // if (props.onFileUpload) props.onFileUpload(allFiles);
     };
 
     /**
@@ -52,7 +50,8 @@ const FileUploader = (props: FileUploaderProps): React$Element<any> => {
      */
     const removeFile = (file) => {
         const newFiles = [...selectedFiles];
-        newFiles.splice(newFiles.indexOf(file), 1);
+
+        newFiles.splice(file, 1);
         setSelectedFiles(newFiles);
     };
 
@@ -64,11 +63,7 @@ const FileUploader = (props: FileUploaderProps): React$Element<any> => {
                         <div className="dz-message needsclick" {...getRootProps()}>
                             <input {...getInputProps()} />
                             <i className="h3 text-muted dripicons-cloud-upload"></i>
-                            <h5>Drop files here or click to upload.</h5>
-                            <span className="text-muted font-13">
-                                (This is just a demo dropzone. Selected files are <strong>not</strong> actually
-                                uploaded.)
-                            </span>
+                            <h5>{t("drop files here or click to upload")}</h5>
                         </div>
                     </div>
                 )}
@@ -109,15 +104,25 @@ const FileUploader = (props: FileUploaderProps): React$Element<any> => {
                                             </p>
                                         </Col>
                                         <Col className="text-end">
-                                            <Link to="#" className="btn btn-link btn-lg text-muted shadow-none">
+                                            <button className="btn btn-link btn-lg text-muted shadow-none">
                                                 <i className="dripicons-cross" onClick={() => removeFile(i)}></i>
-                                            </Link>
+                                            </button>
                                         </Col>
                                     </Row>
+
                                 </div>
                             </Card>
                         );
-                    })}
+                    })
+                    }
+                    {
+                        selectedFiles &&
+                        <Row>
+                            <Col className='text-center'>
+                                <button className='btn btn-primary mt-3'>{t("upload")}</button>
+                            </Col>
+                        </Row>
+                    }
                 </div>
             )}
         </>

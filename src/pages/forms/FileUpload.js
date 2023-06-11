@@ -5,34 +5,25 @@ import { Row, Col, Card } from 'react-bootstrap';
 // components
 import PageTitle from '../../components/PageTitle';
 import FileUploader from '../../components/FileUploader';
+import { useTranslation } from 'react-i18next';
 
-const FileUpload = (): React$Element<React$FragmentType> => {
+const FileUpload = () => {
+    const { t } = useTranslation();
     return (
         <>
             <PageTitle
                 breadCrumbItems={[
-                    { label: 'Forms', path: '/forms/upload' },
-                    { label: 'Form Upload', path: '/forms/upload', active: true },
+                    { label: t("media"), path: '/media' },
+                    { label: t("media upload"), path: '/media/upload', active: true },
                 ]}
-                title={'Form Upload'}
+                title={t('media upload')}
             />
 
             <Row>
                 <Col>
                     <Card>
                         <Card.Body>
-                            <h4 className="header-title mb-3">Dropzone File Upload</h4>
-
-                            <p className="text-muted font-13 m-b-30">
-                                DropzoneJS is an open source library that provides drag’n’drop file uploads with image
-                                previews.
-                            </p>
-
-                            <FileUploader
-                                onFileUpload={(files) => {
-                                    console.log(files);
-                                }}
-                            />
+                            <FileUploader />
                         </Card.Body>
                     </Card>
                 </Col>
