@@ -1,6 +1,6 @@
 //External Lib Import
 import React, { useEffect } from 'react';
-import { Card, Button, Modal, Spinner } from 'react-bootstrap';
+import { Card, Button, Modal, Spinner, Col, Row } from 'react-bootstrap';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
@@ -14,10 +14,12 @@ import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 import { useCustomerCreateMutation, useCustomerUpdateMutation } from '../../../redux/services/customerService';
 import { useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
 
 const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
-    const storeID = useSelector(state => state.setting.activeStore?._id)
+    //store id
+    const store = useSelector((state) => state.setting.activeStore?._id);
     const [customerCreate, { isLoading, isSuccess }] = useCustomerCreateMutation();
     const [customerUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCustomerUpdateMutation();
 
@@ -29,42 +31,27 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             name: yup.string().required(t('please enter customer name')).min(3, t('minimum containing 3 letter')),
             fatherName: yup.string(),
             address: yup.string(),
-            mobile: yup.string().required(t('enter mobile number')).matches(/^(?:\+?88|0088)?01[3-9]\d{8}$/
-                , t('enter valid number')),
+            mobile: yup.string().required(t('enter mobile number')),
+            // .matches(/^(?:\+?88|0088)?01[3-9]\d{8}$/, t('enter valid number')),
             email: yup.string().email(t('enter valid email')),
             ledgerNumber: yup.string(),
-            nid: yup.string()
+            nid: yup.string(),
         })
     );
 
-    //slugify
-
-    /*
-     * handle form submission
-     */
-
-    const onSubmit = (formData) => {
-        const data = { reference: {} };
-        data.name = formData.name;
-        data.fatherName = formData.fatherName;
-        data.customerType = formData.customerType;
-        data.address = formData.address;
-        data.mobile = formData.mobile;
-        data.email = formData.email;
-        data.due = formData.due;
-        data.ledgerNumber = formData.ledgerNumber;
-        data.nid = formData.nid;
-        data.reference.name = formData.refName;
-        data.reference.mobile = formData.refMobile;
-        data.reference.address = formData.refAddress;
-
-        if (!editData) {
-            customerCreate({ storeID, postBody: removeEmptyObj(data) });
-        } else {
-            const postBody = removeEmptyObj(data);
-            customerUpdate({ id: editData._id, postBody });
-        }
-    };
+    // react hook form
+    const methods = useForm({ mode: 'onChange', defaultValues, resolver: schemaResolver });
+    const {
+        handleSubmit,
+        register,
+        control,
+        setValue,
+        reset,
+        formState: { errors },
+    } = methods;
+    useEffect(() => {
+        reset(defaultValues);
+    }, [defaultValues]);
 
     useEffect(() => {
         if (isSuccess || updateSuccess) {
@@ -72,125 +59,239 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
         }
     }, [isSuccess, updateSuccess]);
 
+    // handle input field
+
+    const inputData = [
+        {
+            label: t('customer type'),
+            type: 'react-select',
+            name: 'customerType',
+            placeholder: t('please enter customer type'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: true,
+            options: [
+                { label: 'please select customer type', value: '' },
+                { label: 'retail', value: 'RETAIL' },
+                { label: 'wholesale', value: 'WHOLESALE' },
+            ],
+            control: control,
+            defaultValues: defaultValues,
+        },
+        {
+            label: t(' name'),
+            type: 'text',
+            name: 'name',
+            placeholder: t('please enter customer name'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: true,
+        },
+        {
+            label: t('father name '),
+            type: 'text',
+            name: 'fatherName',
+            placeholder: t('please enter customer father name'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: true,
+        },
+        {
+            label: t('mobile'),
+            type: 'text',
+            name: 'mobile',
+            placeholder: t('please enter mobile number'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: true,
+        },
+        {
+            label: t('email'),
+            type: 'email',
+            name: 'email',
+            placeholder: t('please enter customer email'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('NID'),
+            type: 'text',
+            name: 'nid',
+            placeholder: t('please enter customer nid'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('address'),
+            type: 'text',
+            name: 'address',
+            placeholder: t('please enter customer address'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+
+        {
+            label: t('previous due'),
+            type: 'number',
+            name: 'due',
+            placeholder: t('please enter customer previous due'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('remarks'),
+            type: 'text',
+            name: 'remarks',
+            placeholder: t('please enter remarks'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('thana'),
+            type: 'text',
+            name: 'thana',
+            placeholder: t('please enter thana'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('district'),
+            type: 'text',
+            name: 'district',
+            placeholder: t('please enter district'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('reference name'),
+            type: 'text',
+            name: 'reference.name',
+            placeholder: t('please enter reference name'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('reference mobile'),
+            type: 'text',
+            name: 'reference.mobile',
+            placeholder: t('please enter supplier mobile'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('reference address'),
+            type: 'text',
+            name: 'reference.address',
+            placeholder: t('please enter reference address'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('reference nid'),
+            type: 'text',
+            name: 'reference.nid',
+            placeholder: t('please enter reference nid'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+
+        {
+            label: t('reference relation'),
+            type: 'text',
+            name: 'reference.relation',
+            placeholder: t('please enter reference relation'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('status'),
+            type: 'react-select',
+            name: 'status',
+            placeholder: t('please enter status'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+            options: [
+                { label: 'please select status', value: '' },
+                { label: 'new', value: 'NEW' },
+                { label: 'active', value: 'ACTIVE' },
+                { label: 'inactive', value: 'INACTIVE' },
+                { label: 'banned', value: 'BANNED' },
+                { label: 'delete', value: 'DELETED' },
+            ],
+            control: control,
+            defaultValues: defaultValues,
+        },
+    ];
+
+    const MappedComponent = () =>
+        inputData.map((item) => {
+            return (
+                <Col className={item.col}>
+                    <FormInput
+                        label={item.label}
+                        type={item.type}
+                        name={item.name}
+                        placeholder={item.placeholder}
+                        containerClass={item.containerClass}
+                        required={item.required}
+                        register={register}
+                        errors={errors}
+                        option={item.options}
+                        control={item.control}
+                        setValue={item.setValue}
+                        defaultValues={item.defaultValues}></FormInput>
+                </Col>
+            );
+        });
+
+    /*
+     * handle form submission
+     */
+
+    const onSubmit = (formData) => {
+        formData.store = store;
+        formData.due = Number(formData.due);
+        if (!editData) {
+            customerCreate(removeEmptyObj(formData));
+        } else {
+            const updatedData = { ...editData, ...formData };
+            customerUpdate(removeEmptyObj(updatedData));
+        }
+    };
+
     return (
         <Card className={classNames('', { 'd-none': !modal })}>
             <Card.Body>
-                <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false} size="lg">
+                <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false} size="xl">
                     <Modal.Header onHide={toggle} closeButton>
                         <h4 className="modal-title">{editData ? t('update customer') : t('create customer')}</h4>
                     </Modal.Header>
 
                     <Modal.Body>
-                        <VerticalForm onSubmit={onSubmit} resolver={schemaResolver} defaultValues={defaultValues}>
-                            <FormInput
-                                name="customerType"
-                                type="select"
-                                label="select customer type"
-                                col={'col-12 col-md-6 col-lg-4'}
-                                required={true}
-                                containerClass={'mb-3'}>
-                                <option value="">Select Customer Type</option>
-                                <option value="RETAIL">Retail</option>
-                                <option value="WHOLESALE">Wholesale</option>
-                            </FormInput>
-                            <FormInput
-                                label={t('customer name')}
-                                type="text"
-                                name="name"
-                                placeholder={t('please enter customer name')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                                required={true}
-                            />
-                            <FormInput
-                                label={t('father name')}
-                                type="text"
-                                name="fatherName"
-                                placeholder={t('please enter father name')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('mobile')}
-                                type="number"
-                                name="mobile"
-                                placeholder={t('please enter mobile')}
-                                containerClass={'mb-3'}
-                                required={true}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('email')}
-                                type="email"
-                                name="email"
-                                placeholder={t('please enter email')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('nid')}
-                                type="text"
-                                name="nid"
-                                placeholder={t('please enter nid')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('address')}
-                                type="text"
-                                name="address"
-                                placeholder={t('please enter address')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('due')}
-                                type="number"
-                                name="due"
-                                placeholder={t('please enter due')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('ledger number')}
-                                type="text"
-                                name="ledgerNumber"
-                                placeholder={t('please enter ledger number')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('reference name')}
-                                type="text"
-                                name="refName"
-                                placeholder={t('please enter reference name')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('reference mobile')}
-                                type="text"
-                                name="refMobile"
-                                placeholder={t('please enter reference mobile')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-                            <FormInput
-                                label={t('reference address')}
-                                type="text"
-                                name="refAddress"
-                                placeholder={t('please enter reference address')}
-                                containerClass={'mb-3'}
-                                col={'col-12 col-md-6 col-lg-4'}
-                            />
-
-                            <div className="mb-3 text-end">
-                                <Button variant="primary" type="submit">
-                                    {editData ? t('update manufacturer') : t('create manufacturer')}
-                                    &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
-                                </Button>
-                            </div>
-                        </VerticalForm>
+                        <form onSubmit={handleSubmit(onSubmit)} className={'formClass'} noValidate>
+                            <Row>
+                                <MappedComponent />
+                                <div className="mt-2 text-end">
+                                    <Button variant="primary" type="submit">
+                                        {editData ? t('update customer') : t('create customer')}
+                                        &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
+                                    </Button>
+                                </div>
+                            </Row>
+                        </form>
                     </Modal.Body>
                 </Modal>
             </Card.Body>

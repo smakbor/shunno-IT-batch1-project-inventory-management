@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
 import classNames from 'classnames';
 import { get } from 'lodash';
-
+import Select from 'react-select';
 //Internal Lib Import
 import HyperDatepicker from '../components/Datepicker';
+import { Controller } from 'react-hook-form';
 
 /* Password Input */
 const PasswordInput = ({ name, placeholder, refCallback, errors, register, className }) => {
@@ -51,6 +52,7 @@ const FormInput = ({
     placeholder,
     register,
     errors,
+    control,
     className,
     labelClassName,
     containerClass,
@@ -60,6 +62,10 @@ const FormInput = ({
     required,
     setValue,
     watchValue,
+    option,
+    selectedOption,
+    setSelectedValue,
+    defaultValues,
     ...otherProps
 }) => {
     // handle input type
@@ -171,6 +177,43 @@ const FormInput = ({
                         hideAddon={true}
                         value={watchValue ? new Date(watchValue) : null}
                         onChange={(date) => setValue(name, new Date(date).toDateString())}
+                    />
+                    {errors && errors[name] && !watchValue ? (
+                        <Form.Control.Feedback type="invalid" className="d-block">
+                            {errors[name]['message']}
+                        </Form.Control.Feedback>
+                    ) : null}
+                </Form.Group>
+            );
+            break;
+        case 'react-select':
+            return (
+                <Form.Group className={containerClass}>
+                    {label ? (
+                        <>
+                            {' '}
+                            <Form.Label className={labelClassName} htmlFor={name}>
+                                {label}
+                            </Form.Label>{' '}
+                            {children}{' '}
+                        </>
+                    ) : null}{' '}
+                    {required && <span className="text-danger">*</span>}
+                    <Controller
+                        control={control}
+                        defaultValue={option.find((dValue) => dValue.value === defaultValues.value)}
+                        name={name}
+                        render={({ field: { onChange, value, name, ref } }) => {
+                            return (
+                                <Select
+                                    inputRef={ref}
+                                    classNamePrefix="addl-class"
+                                    options={option}
+                                    value={option.find((c) => c.value === value)}
+                                    onChange={(val) => onChange(val.value)}
+                                />
+                            );
+                        }}
                     />
                     {errors && errors[name] && !watchValue ? (
                         <Form.Control.Feedback type="invalid" className="d-block">

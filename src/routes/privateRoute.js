@@ -29,12 +29,6 @@ const privateRoutes = [
         routePermission: 'ALL',
     },
     {
-        path: '/customers',
-        element: <LazyLoad component={Customers} />,
-        roles: ['ALLf', 'PROPRIETOR'],
-        routePermission: 'ALL',
-    },
-    {
         path: '/products/categories',
         element: <LazyLoad component={Categories} />,
         roles: ['ALL', 'PROPRIETOR'],

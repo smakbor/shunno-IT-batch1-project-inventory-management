@@ -71,9 +71,5 @@ export const storeService = apiService.injectEndpoints({
         }),
     }),
 });
-export const {
-    useStoreListQuery,
-    useStoreDeleteMutation,
-    useStoreCreateMutation,
-    useStoreUpdateMutation,
-} = storeService;
+export const { useStoreListQuery, useStoreDeleteMutation, useStoreCreateMutation, useStoreUpdateMutation } =
+    storeService;
