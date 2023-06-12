@@ -21,7 +21,7 @@ import CategoryCreateUpdate from './CategoryCreateUpdate';
 import { useSubCategoryListQuery, useSubCategoryDeleteMutation } from '../../../redux/services/subCategory';
 import SubCategoryCreateUpdateModal from '../subCategory/SubCreateUpdateModal';
 import { useSelector } from 'react-redux';
-import { shunnoStorageBaseUrl } from '../../../config/config';
+import { shunnoStorageBaseURL } from '../../../config/config';
 import noImage from '../../../assets/images/no-image.png'
 // main component
 const Categories = () => {
@@ -50,7 +50,7 @@ const Categories = () => {
         skip: !storeID,
     });
     const [subCategoryDelete] = useSubCategoryDeleteMutation();
-    const imageBaseUrl = shunnoStorageBaseUrl;
+    const imageBaseUrl = shunnoStorageBaseURL;
     /**
      * Show/hide the modal
      */
