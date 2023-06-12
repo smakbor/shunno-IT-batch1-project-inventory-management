@@ -8,11 +8,11 @@ const Ui = lazy(() => import('../pages/settings/Ui.jsx'));
 const Trash = lazy(() => import('../pages/message/Trash.jsx'));
 const Inbox = lazy(() => import('../pages/message/Inbox.jsx'));
 const Warranty = lazy(() => import('../pages/products/warranty/Warranty.jsx'));
-const Suppliers = lazy(() => import('../pages/Contacts/suppliers/Suppliers.jsx'));
-const Customers = lazy(() => import('../pages/Contacts/customers/Customers.jsx'));
+const Suppliers = lazy(() => import('../pages/contacts/suppliers/Suppliers.jsx'));
+const Customers = lazy(() => import('..//pages/contacts/customers/Customers.jsx'));
 const Units = lazy(() => import('../pages/products/unit/Units.jsx'));
-const UserRolePage = lazy(() => import('../pages/Permissions/UserRolePage.jsx'));
-const Permissions = lazy(() => import('../pages/Permissions/Permissions.jsx'));
+const UserRolePage = lazy(() => import('../pages/permissions/UserRolePage.jsx'));
+const Permissions = lazy(() => import('../pages/permissions/Permissions.jsx'));
 const Categories = lazy(() => import('../pages/products/category/Categories'));
 const Manufacturer = lazy(() => import('../pages/products/manufacturer/Manufacturer'));
 const CostSection = lazy(() => import('../pages/expenditure/costSection/CostSection.jsx'));
@@ -20,6 +20,7 @@ const Sent = lazy(() => import('../pages/message/Sent.jsx'));
 const Details = lazy(() => import('../pages/message/Details.jsx'));
 const Expenditure = lazy(() => import('../pages/expenditure/expenditure/Expenditure.jsx'));
 const Users = lazy(() => import('../pages/settings/Users.jsx'));
+const MediaUpload = lazy(() => import('../pages/media/MediaUpload.jsx'));
 
 const privateRoutes = [
     {
@@ -133,6 +134,12 @@ const privateRoutes = [
     {
         path: '/salary/:employeeID',
         element: <LazyLoad component={Salary} />,
+        roles: ['ALL', 'PROPRIETOR'],
+        routePermission: 'ALL',
+    },
+    {
+        path: '/media/upload',
+        element: <LazyLoad component={MediaUpload} />,
         roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },

@@ -14,7 +14,7 @@ export const uiService = apiService.injectEndpoints({
         uiUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
                 url: `ui-settings/${id}`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: postBody,
             }),
             // async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {

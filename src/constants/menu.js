@@ -112,6 +112,27 @@ const MENU_ITEMS = () => {
                 },
             ],
         },
+        { key: 'media', label: 'media', isTitle: true },
+        {
+            key: 'media',
+            label: t('media'),
+            isTitle: false,
+            icon: 'dripicons-photo',
+            children: [
+                {
+                    key: 'media',
+                    label: t('media'),
+                    url: '/media',
+                    parentKey: 'media',
+                },
+                {
+                    key: 'upload',
+                    label: t('upload'),
+                    url: '/media/upload',
+                    parentKey: 'media',
+                },
+            ],
+        },
         { key: 'settings', label: 'settings', isTitle: true },
         {
             key: 'settings',

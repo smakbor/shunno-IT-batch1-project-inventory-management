@@ -36,11 +36,11 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
     const onSubmit = (formData) => {
         if (!editData) {
             const postBody = removeEmptyObj(formData);
-            postBody['storeID'] = activeStore?._id;
+            postBody['store'] = activeStore?._id;
             roleCreate(postBody);
         } else {
             const postBody = removeEmptyObj(formData);
-            postBody['storeID'] = activeStore?._id;
+            postBody['store'] = activeStore?._id;
             roleUpdate({ id: editData._id, postBody });
         }
     };

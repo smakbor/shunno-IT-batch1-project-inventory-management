@@ -34,7 +34,7 @@ export const subCategoryService = apiService.injectEndpoints({
         subCategoryUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
                 url: `sub-categories/${id}`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: postBody,
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {

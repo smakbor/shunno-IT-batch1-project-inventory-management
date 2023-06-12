@@ -27,31 +27,31 @@ const VerticalForm = ({
         register,
         control,
         formState: { errors },
+        watch
     } = methods;
-
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={formClass} noValidate>
             <Row>
                 {Array.isArray(children)
                     ? children.map((child, i) => {
-                          return (
-                              child.props && (
-                                  <Col className={child.props.col} key={i}>
-                                      {child.props && child.props.name
-                                          ? React.createElement(child.type, {
-                                                ...{
-                                                    ...child.props,
-                                                    register,
-                                                    key: child.props.name,
-                                                    errors,
-                                                    control,
-                                                },
-                                            })
-                                          : child}
-                                  </Col>
-                              )
-                          );
-                      })
+                        return (
+                            child.props && (
+                                <Col className={child.props.col} key={i}>
+                                    {child.props && child.props.name
+                                        ? React.createElement(child.type, {
+                                            ...{
+                                                ...child.props,
+                                                register,
+                                                key: child.props.name,
+                                                errors,
+                                                control,
+                                            },
+                                        })
+                                        : child}
+                                </Col>
+                            )
+                        );
+                    })
                     : children}
             </Row>
         </form>

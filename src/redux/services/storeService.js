@@ -34,7 +34,7 @@ export const storeService = apiService.injectEndpoints({
         storeUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
                 url: `stores/${id}`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: postBody,
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {

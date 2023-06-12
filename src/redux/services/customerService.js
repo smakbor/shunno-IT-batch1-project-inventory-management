@@ -32,9 +32,9 @@ export const customerService = apiService.injectEndpoints({
         }),
 
         customerUpdate: builder.mutation({
-            query: (postBody) => ({
-                url: `customers/${postBody?._id}`,
-                method: 'PUT',
+            query: ({ id, postBody }) => ({
+                url: `customers/${id}`,
+                method: 'PATCH',
                 body: postBody,
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {

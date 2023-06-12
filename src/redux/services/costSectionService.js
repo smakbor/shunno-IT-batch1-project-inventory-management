@@ -31,7 +31,7 @@ export const costSectionService = apiService.injectEndpoints({
         costSectionUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
                 url: `cost-sections/${id}`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: postBody,
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {

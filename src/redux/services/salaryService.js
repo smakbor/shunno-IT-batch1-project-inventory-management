@@ -34,7 +34,7 @@ export const salaryService = apiService.injectEndpoints({
         salaryUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
                 url: `salary/${id}`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: postBody,
             }),
             async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {

@@ -5,29 +5,30 @@ export const roleService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         roleList: builder.query({
             query: (storeID) => ({
-                url: `role/${storeID}`,
+                url: `roles/${storeID}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         roleDropDown: builder.query({
             query: (storeID) => ({
-                url: `role/dropDown/${storeID}`,
+                url: `roles/dropDown/${storeID}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data,
         }),
         roleCreate: builder.mutation({
             query: (postBody) => ({
-                url: `role/${postBody.storeID}`,
+                url: 'roles',
                 method: 'POST',
                 body: postBody,
             }),
-            onQueryStarted({ storeID }, { dispatch, queryFulfilled }) {
-                queryFulfilled.then(({ data }) => {
+            onQueryStarted(postBody, { dispatch, queryFulfilled }) {
+
+                queryFulfilled.then(({ data: { data } }) => {
                     dispatch(
-                        apiService.util.updateQueryData('roleList', storeID, (draft) => {
-                            draft.unshift(data);
+                        apiService.util.updateQueryData('roleList', postBody.store, (draft) => {
+                            draft.unshift(data)
                         })
                     );
                 });
@@ -35,21 +36,24 @@ export const roleService = apiService.injectEndpoints({
         }),
         roleDetails: builder.query({
             query: (id) => ({
-                url: `role/roleDetails/${id}`,
+                url: `roles/roleDetails/${id}`,
                 method: 'GET',
             }),
         }),
         roleUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
-                url: `role/${id}`,
+                url: `roles/${id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
-            onQueryStarted({ id, postBody: { storeID } }, { dispatch, queryFulfilled }) {
-                queryFulfilled.then(({ data }) => {
+            onQueryStarted({ id, postBody: { store } }, { dispatch, queryFulfilled }) {
+                queryFulfilled.then(({ data: { data } }) => {
+                    console.log(data)
                     dispatch(
-                        apiService.util.updateQueryData('roleList', storeID, (draft) => {
+                        apiService.util.updateQueryData('roleList', store, (draft) => {
+
                             const findIndex = draft.findIndex((item) => item._id === id);
+
                             draft[findIndex] = data;
                         })
                     );
@@ -58,7 +62,7 @@ export const roleService = apiService.injectEndpoints({
         }),
         roleDelete: builder.mutation({
             query: ({ id, storeID }) => ({
-                url: `role/${id}/${storeID}`,
+                url: `role/${id}`,
                 method: 'DELETE',
             }),
             onQueryStarted({ id, storeID }, { queryFulfilled, dispatch }) {

@@ -15,43 +15,32 @@ export const categoryService = apiService.injectEndpoints({
                 method: 'POST',
                 body: postBody,
             }),
-            async onQueryStarted(postBody, { dispatch, queryFulfilled, queryCache }) {
-                const cachedData = queryCache.getState()
-                console.log(cachedData)
-                // const cachedUnits = apiService.endpoints.unitList.select(storeID)
-                // const { data: cacheData } = useUnitListQuery(cachedUnits)
-                // console.log(cacheData)
-                const response = dispatch(
-                    apiService.util.updateQueryData('categoryList', undefined, (draft) => {
-                        draft.push(postBody);
-                    })
-                );
-                try {
-                    await queryFulfilled;
-                } catch {
-                    response.undo();
-                }
+            async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
+                queryFulfilled.then(({ data: { data } }) => {
+                    dispatch(
+                        apiService.util.updateQueryData("categoryList", postBody.store, (draft) => {
+                            draft.unshift(data)
+                        })
+                    )
+                })
             },
         }),
 
         categoryUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
                 url: `categories/${id}`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: postBody,
             }),
-            async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
-                const response = dispatch(
-                    apiService.util.updateQueryData('categoryList', undefined, (draft) => {
-                        const findIndex = draft.findIndex((item) => item._id === id);
-                        draft[findIndex] = postBody;
-                    })
-                );
-                try {
-                    await queryFulfilled;
-                } catch {
-                    response.undo();
-                }
+            async onQueryStarted({ id, postBody: { store } }, { dispatch, queryFulfilled }) {
+                queryFulfilled.then(({ data: { data } }) => {
+                    dispatch(
+                        apiService.util.updateQueryData("categoryList", store, (draft) => {
+                            const findIndex = draft.findIndex(item => item._id === id);
+                            draft[findIndex] = data;
+                        })
+                    )
+                })
             },
         }),
         categoryDelete: builder.mutation({
