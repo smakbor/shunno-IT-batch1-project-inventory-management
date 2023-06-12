@@ -28,7 +28,8 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter customer name')).min(3, t('minimum containing 3 letter')),
+            name: yup.string().required(t('please enter customer name')),
+            // .min(3, t('minimum containing 3 letter')),
             fatherName: yup.string(),
             address: yup.string(),
             mobile: yup.string().required(t('enter mobile number')),

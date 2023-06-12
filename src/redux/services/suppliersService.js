@@ -17,18 +17,25 @@ export const suppliersService = apiService.injectEndpoints({
                 method: 'POST',
                 body: postBody,
             }),
-            async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
-                const response = dispatch(
-                    apiService.util.updateQueryData('supplierList', undefined, (draft) => {
-                        console.log(draft);
-                        draft.push(postBody);
-                    })
-                );
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
-                    await queryFulfilled;
-                } catch {
-                    response.undo();
+                    const { data: createdSupplier } = await queryFulfilled;
+                    console.log(apiService.util.updateQueryData());
+
+                    dispatch(
+                        apiService.util.updateQueryData('supplierList', undefined, (draft) => {
+                            draft.push(createdSupplier.data?.supplier);
+                        })
+                    );
+                } catch (error) {
+                    console.log(error);
                 }
+
+                // try {
+                //     await queryFulfilled;
+                // } catch {
+                //     response.undo();
+                // }
             },
         }),
 

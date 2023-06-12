@@ -9,7 +9,7 @@ const Trash = lazy(() => import('../pages/message/Trash.jsx'));
 const Inbox = lazy(() => import('../pages/message/Inbox.jsx'));
 const Warranty = lazy(() => import('../pages/products/warranty/Warranty.jsx'));
 const Suppliers = lazy(() => import('../pages/Contacts/suppliers/Suppliers.jsx'));
-const Customers = lazy(() => import('../pages/Contacts/Customers/Customers.jsx'));
+const Customers = lazy(() => import('../pages/Contacts/customers/Customers.jsx'));
 const Units = lazy(() => import('../pages/products/unit/Units.jsx'));
 const UserRolePage = lazy(() => import('../pages/Permissions/UserRolePage.jsx'));
 const Permissions = lazy(() => import('../pages/Permissions/Permissions.jsx'));
