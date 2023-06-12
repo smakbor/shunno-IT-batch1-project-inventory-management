@@ -35,14 +35,15 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
      * handle form submission
      */
     const onSubmit = (formData) => {
-        const data = {};
-        data.name = formData.name;
-        data.status = formData.status;
+        formData.store = storeID;
+        // const data = {};
+        // data.name = formData.name;
+        // data.status = formData.status;
 
         if (!editData) {
-            warrantyCreate({ storeID, postBody: removeEmptyObj(data) });
+            warrantyCreate(removeEmptyObj(formData));
         } else {
-            const updatedData = { ...editData, ...data }
+            const updatedData = { ...editData, ...formData }
             const postBody = removeEmptyObj(updatedData);
             warrantyUpdate({ id: editData._id, postBody });
         }
