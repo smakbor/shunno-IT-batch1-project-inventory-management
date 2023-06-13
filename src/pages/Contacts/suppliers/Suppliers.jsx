@@ -1,5 +1,5 @@
 //External Lib Import
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { GrDocumentCsv } from 'react-icons/gr';
@@ -40,14 +40,20 @@ const Suppliers = () => {
      */
 
     const addShowModal = () => {
-        setEditData(false);
         setDefaultValues({});
+        setEditData(false);
         setModal(!modal);
+
+        console.log('supplier, ', defaultValues);
     };
 
     const toggle = (e) => {
         setModal(!modal);
     };
+
+    useEffect(() => {
+        if (!modal) setDefaultValues({});
+    }, [modal]);
 
     /* action column render */
     const ActionColumn = ({ row }) => {
@@ -60,7 +66,7 @@ const Suppliers = () => {
             dValues.referenceNid = row?.original.reference.nid;
             dValues.referenceRelation = row?.original.reference.relation;
             dValues.referenceAddress = row?.original.reference.address;
-            setEditData(dValues);
+            setEditData(true);
             setDefaultValues(dValues);
         };
 

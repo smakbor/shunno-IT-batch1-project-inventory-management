@@ -4,8 +4,8 @@ import { apiService } from '../api/apiService';
 export const warrantyService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         warrantyList: builder.query({
-            query: (storeID) => ({
-                url: `warranties/${storeID}`,
+            query: (store) => ({
+                url: `warranties/${store}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
@@ -16,11 +16,13 @@ export const warrantyService = apiService.injectEndpoints({
                 method: 'POST',
                 body: postBody,
             }),
-            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
-                    const { data } = await queryFulfilled;
+                    const {
+                        data: { data },
+                    } = await queryFulfilled;
                     dispatch(
-                        apiService.util.updateQueryData('warrantyList', undefined, (draft) => {
+                        apiService.util.updateQueryData('warrantyList', data.store, (draft) => {
                             draft.push(data);
                         })
                     );
@@ -31,22 +33,25 @@ export const warrantyService = apiService.injectEndpoints({
         }),
 
         warrantyUpdate: builder.mutation({
-            query: ({ id, postBody }) => ({
-                url: `warranties/${id}`,
+            query: (postBody) => ({
+                url: `warranties/${postBody?._id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
-            async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                const {
+                    data: { data },
+                } = await queryFulfilled;
+                const response = dispatch(
+                    apiService.util.updateQueryData('warrantyList', data.store, (draft) => {
+                        const findIndex = draft.findIndex((item) => item._id === data._id);
+                        draft[findIndex] = data;
+                    })
+                );
                 try {
-                    const { data } = await queryFulfilled;
-                    dispatch(
-                        apiService.util.updateQueryData('warrantyList', undefined, (draft) => {
-                            const findIndex = draft.findIndex((item) => item._id === id);
-                            draft[findIndex] = postBody;
-                        })
-                    );
-                } catch (e) {
-                    console.log(e);
+                    await queryFulfilled;
+                } catch {
+                    response.undo();
                 }
             },
         }),
@@ -70,9 +75,5 @@ export const warrantyService = apiService.injectEndpoints({
         }),
     }),
 });
-export const {
-    useWarrantyListQuery,
-    useWarrantyDeleteMutation,
-    useWarrantyCreateMutation,
-    useWarrantyUpdateMutation,
-} = warrantyService;
+export const { useWarrantyListQuery, useWarrantyDeleteMutation, useWarrantyCreateMutation, useWarrantyUpdateMutation } =
+    warrantyService;

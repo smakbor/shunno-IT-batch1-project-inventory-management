@@ -5,16 +5,15 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 
 //Internal Lib Import
-import { FormInput, VerticalForm } from '../../../components';
-import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
+import removeEmptyObj from '../../../helpers/removeEmptyObj';
+import MappedComponent from '../mappedComponent/MappedComponent';
 //api services
 
 import { useCustomerCreateMutation, useCustomerUpdateMutation } from '../../../redux/services/customerService';
-import { useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
 
 const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
@@ -39,20 +38,6 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
         })
     );
 
-    // react hook form
-    const methods = useForm({ mode: 'onChange', defaultValues, resolver: schemaResolver });
-    const {
-        handleSubmit,
-        register,
-        control,
-        setValue,
-        reset,
-        formState: { errors },
-    } = methods;
-    useEffect(() => {
-        reset(defaultValues);
-    }, [defaultValues]);
-
     useEffect(() => {
         if (isSuccess || updateSuccess) {
             setModal(false);
@@ -75,8 +60,6 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                 { label: 'retail', value: 'RETAIL' },
                 { label: 'wholesale', value: 'WHOLESALE' },
             ],
-            control: control,
-            defaultValues: defaultValues,
         },
         {
             label: t(' name'),
@@ -231,31 +214,8 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                 { label: 'banned', value: 'BANNED' },
                 { label: 'delete', value: 'DELETED' },
             ],
-            control: control,
-            defaultValues: defaultValues,
         },
     ];
-
-    const MappedComponent = () =>
-        inputData.map((item) => {
-            return (
-                <Col className={item.col}>
-                    <FormInput
-                        label={item.label}
-                        type={item.type}
-                        name={item.name}
-                        placeholder={item.placeholder}
-                        containerClass={item.containerClass}
-                        required={item.required}
-                        register={register}
-                        errors={errors}
-                        option={item.options}
-                        control={item.control}
-                        setValue={item.setValue}
-                        defaultValues={item.defaultValues}></FormInput>
-                </Col>
-            );
-        });
 
     /*
      * handle form submission
@@ -281,17 +241,17 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                     </Modal.Header>
 
                     <Modal.Body>
-                        <form onSubmit={handleSubmit(onSubmit)} className={'formClass'} noValidate>
-                            <Row>
-                                <MappedComponent />
-                                <div className="mt-2 text-end">
-                                    <Button variant="primary" type="submit">
-                                        {editData ? t('update customer') : t('create customer')}
-                                        &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
-                                    </Button>
-                                </div>
-                            </Row>
-                        </form>
+                        <MappedComponent
+                            inputField={inputData}
+                            onSubmit={onSubmit}
+                            defaultValues={defaultValues}
+                            schemaResolver={schemaResolver}
+                            isLoading={isLoading}
+                            updateLoad={updateLoad}
+                            editData={editData}
+                            updateTitle={t('update customer')}
+                            createTitle={t('create customer')}
+                        />
                     </Modal.Body>
                 </Modal>
             </Card.Body>

@@ -10,6 +10,7 @@ import Select from 'react-select';
 //Internal Lib Import
 import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
+import MappedComponent from '../../contacts/mappedComponent/MappedComponent';
 
 //api services
 import { useWarrantyCreateMutation, useWarrantyUpdateMutation } from '../../../redux/services/warrantyService';
@@ -17,7 +18,7 @@ import { useSelector } from 'react-redux';
 
 const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
-    const storeID = useSelector(state => state.setting.activeStore?._id)
+    const store = useSelector((state) => state.setting.activeStore?._id);
     const [warrantyCreate, { isLoading, isSuccess }] = useWarrantyCreateMutation();
     const [warrantyUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useWarrantyUpdateMutation();
 
@@ -31,20 +32,43 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
         })
     );
 
+    const inputData = [
+        {
+            label: t('warranty name'),
+            type: 'text',
+            name: 'name',
+            placeholder: t('please enter warranty name'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-12 col-lg-12',
+            required: true,
+        },
+        {
+            label: t('status'),
+            type: 'react-select',
+            name: 'status',
+            placeholder: t('please enter status'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-12 col-lg-12',
+            required: false,
+            options: [
+                { label: 'please select status', value: '' },
+                { label: 'active', value: 'ACTIVE' },
+                { label: 'inactive', value: 'INACTIVE' },
+            ],
+        },
+    ];
+
     /*
      * handle form submission
      */
     const onSubmit = (formData) => {
-        const data = {};
-        data.name = formData.name;
-        data.status = formData.status;
-
+        formData.store = store;
         if (!editData) {
-            warrantyCreate({ storeID, postBody: removeEmptyObj(data) });
+            warrantyCreate(removeEmptyObj(formData));
         } else {
-            const updatedData = { ...editData, ...data }
+            const updatedData = { ...editData, ...formData };
             const postBody = removeEmptyObj(updatedData);
-            warrantyUpdate({ id: editData._id, postBody });
+            warrantyUpdate(postBody);
         }
     };
 
@@ -59,37 +83,21 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
             <Card.Body>
                 <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false}>
                     <Modal.Header onHide={toggle} closeButton>
-                        <h4 className="modal-title">{editData ? t('edit warranty') : t('add warranty')}</h4>
+                        <h4 className="modal-title">{editData ? t('update warranty') : t('create warranty')}</h4>
                     </Modal.Header>
 
                     <Modal.Body>
-                        <VerticalForm onSubmit={onSubmit} resolver={schemaResolver} defaultValues={defaultValues}>
-                            <FormInput
-                                label={t('warranty name')}
-                                type="text"
-                                name="name"
-                                placeholder={t('please enter warranty name')}
-                                containerClass={'mb-3'}
-                                col={'col-12'}
-                            />
-                            <FormInput
-                                name="status"
-                                type="select"
-                                label={t('status')}
-                                defaultValue="ACTIVE"
-                                col={'col-12'}
-                                containerClass={'mb-3'}>
-                                <option value="ACTIVE">Active</option>
-                                <option value="INACTIVE">Inactive</option>
-                            </FormInput>
-
-                            <div className="mb-3 text-end">
-                                <Button variant="primary" type="submit">
-                                    {editData ? t('update warranty') : t('add warranty')}
-                                    &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
-                                </Button>
-                            </div>
-                        </VerticalForm>
+                        <MappedComponent
+                            inputField={inputData}
+                            onSubmit={onSubmit}
+                            defaultValues={defaultValues}
+                            schemaResolver={schemaResolver}
+                            isLoading={isLoading}
+                            updateLoad={updateLoad}
+                            editData={editData}
+                            updateTitle={t('update warrnaty')}
+                            createTitle={t('create warranty')}
+                        />
                     </Modal.Body>
                 </Modal>
             </Card.Body>

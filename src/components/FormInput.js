@@ -63,9 +63,6 @@ const FormInput = ({
     setValue,
     watchValue,
     option,
-    selectedOption,
-    setSelectedValue,
-    defaultValues,
     ...otherProps
 }) => {
     // handle input type
@@ -201,13 +198,14 @@ const FormInput = ({
                     {required && <span className="text-danger">*</span>}
                     <Controller
                         control={control}
-                        defaultValue={option.find((dValue) => dValue.value === defaultValues.value)}
+                        // defaultValue={option.find((dValue) => dValue.value === defaultValues.value)}
                         name={name}
                         render={({ field: { onChange, value, name, ref } }) => {
                             return (
                                 <Select
+                                    menuPlacement="auto"
                                     inputRef={ref}
-                                    classNamePrefix="addl-class"
+                                    classNamePrefix="react-select"
                                     options={option}
                                     value={option.find((c) => c.value === value)}
                                     onChange={(val) => onChange(val.value)}
@@ -260,6 +258,7 @@ const FormInput = ({
                     ) : null}{' '}
                     {required && <span className="text-danger">*</span>}
                     <Form.Control
+                        index={Date.now()}
                         type={type}
                         placeholder={placeholder}
                         name={name}

@@ -7,9 +7,8 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
 //Internal Lib Import
-import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
-
+import MappedComponent from '../../contacts/mappedComponent/MappedComponent';
 //api services
 
 import {
@@ -20,7 +19,7 @@ import { useSelector } from 'react-redux';
 
 const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, editData, defaultValues }) => {
     const { t } = useTranslation();
-    const storeID = useSelector(state => state.setting.activeStore?._id)
+    const store = useSelector((state) => state.setting.activeStore?._id);
     const [manufacturerCreate, { isLoading, isSuccess }] = useManufacturerCreateMutation();
     const [manufacturerUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useManufacturerUpdateMutation();
 
@@ -33,16 +32,40 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
         })
     );
 
+    const inputData = [
+        {
+            label: t('manufacturer name'),
+            type: 'text',
+            name: 'name',
+            placeholder: t('please enter manufacturer name'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-12 col-lg-12',
+            required: true,
+        },
+        {
+            label: t('status'),
+            type: 'react-select',
+            name: 'status',
+            placeholder: t('please enter status'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-12 col-lg-12',
+            required: false,
+            options: [
+                { label: 'please select status', value: '' },
+                { label: 'active', value: 'ACTIVE' },
+                { label: 'inactive', value: 'INACTIVE' },
+            ],
+        },
+    ];
+
     const onSubmit = (formData) => {
-        const data = {};
-        data.name = formData.name;
-        data.status = formData.status;
+        formData.store = store;
         if (!editData) {
-            manufacturerCreate({ storeID, postBody: removeEmptyObj(data) });
+            manufacturerCreate(removeEmptyObj(formData));
         } else {
-            const updatedData = { ...editData, ...data }
+            const updatedData = { ...editData, ...formData };
             const postBody = removeEmptyObj(updatedData);
-            manufacturerUpdate({ id: editData._id, postBody });
+            manufacturerUpdate(postBody);
         }
     };
 
@@ -63,35 +86,17 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
                     </Modal.Header>
 
                     <Modal.Body>
-                        <VerticalForm onSubmit={onSubmit} resolver={schemaResolver} defaultValues={defaultValues}>
-                            <FormInput
-                                label={t('manufacturer name')}
-                                type="text"
-                                name="name"
-                                placeholder={t('please enter manufacturer name')}
-                                containerClass={'mb-3'}
-                                col={'col-12'}
-                            />
-                            {
-                                <FormInput
-                                    name="status"
-                                    type="select"
-                                    label={t('status')}
-                                    defaultValue="ACTIVE"
-                                    col={'col-12'}
-                                    containerClass={'mb-3'}>
-                                    <option value="ACTIVE">Active</option>
-                                    <option value="INACTIVE">Inactive</option>
-                                </FormInput>
-                            }
-
-                            <div className="mb-3 text-end">
-                                <Button variant="primary" type="submit">
-                                    {editData ? t('update manufacturer') : t('create manufacturer')}
-                                    &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
-                                </Button>
-                            </div>
-                        </VerticalForm>
+                        <MappedComponent
+                            inputField={inputData}
+                            onSubmit={onSubmit}
+                            defaultValues={defaultValues}
+                            schemaResolver={schemaResolver}
+                            isLoading={isLoading}
+                            updateLoad={updateLoad}
+                            editData={editData}
+                            updateTitle={t('update manufacturer')}
+                            createTitle={t('create manufacturer')}
+                        />
                     </Modal.Body>
                 </Modal>
             </Card.Body>
