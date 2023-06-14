@@ -1,20 +1,19 @@
 //External Lib Import
-import React, { useEffect, useState } from 'react';
-import { Card, Button, Modal, Spinner, Row, Col } from 'react-bootstrap';
+import React, { useEffect } from 'react';
+import { Card, Modal } from 'react-bootstrap';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 
 //Internal Lib Import
-import { FormInput, VerticalForm } from '../../../components';
-import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
+import removeEmptyObj from '../../../helpers/removeEmptyObj';
+import MappedComponent from '../mappedComponent/MappedComponent';
 //api services
 
 import { useSupplierCreateMutation, useSupplierUpdateMutation } from '../../../redux/services/suppliersService';
-import { useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
 
 const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
@@ -28,7 +27,8 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter customer name')).min(3, t('minimum containing 3 letter')),
+            name: yup.string().required(t('please enter customer name')),
+            // .min(3, t('minimum containing 3 letter')),
             fatherName: yup.string(),
             address: yup.string(),
             mobile: yup.string().required(t('enter mobile number')),
@@ -37,19 +37,6 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             nid: yup.string(),
         })
     );
-
-    const methods = useForm({ mode: 'onChange', defaultValues, resolver: schemaResolver });
-    const {
-        handleSubmit,
-        register,
-        control,
-        setValue,
-        reset,
-        formState: { errors },
-    } = methods;
-    useEffect(() => {
-        reset(defaultValues);
-    }, [defaultValues]);
 
     useEffect(() => {
         if (isSuccess || updateSuccess) {
@@ -218,13 +205,11 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                 { label: 'banned', value: 'BANNED' },
                 { label: 'deleted', value: 'DELETED' },
             ],
-            control: control,
-            defaultValues: defaultValues,
+            // control: control,
         },
     ];
 
     const onSubmit = (formData) => {
-        console.log(formData);
         formData.store = storeID;
         formData.due = Number(formData.due);
 
@@ -236,27 +221,6 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
         }
     };
 
-    const MappedComponent = () =>
-        inputData.map((item) => {
-            return (
-                <Col className={item.col}>
-                    <FormInput
-                        label={item.label}
-                        type={item.type}
-                        name={item.name}
-                        placeholder={item.placeholder}
-                        containerClass={item.containerClass}
-                        required={item.required}
-                        register={register}
-                        errors={errors}
-                        option={item.options}
-                        control={item.control}
-                        setValue={item.setValue}
-                        defaultValues={item.defaultValues}></FormInput>
-                </Col>
-            );
-        });
-
     return (
         <Card className={classNames('', { 'd-none': !modal })}>
             <Card.Body>
@@ -266,17 +230,17 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                     </Modal.Header>
 
                     <Modal.Body>
-                        <form onSubmit={handleSubmit(onSubmit)} className={'formClass'} noValidate>
-                            <Row>
-                                <MappedComponent />
-                                <div className="mt-3 text-end">
-                                    <Button variant="primary" type="submit">
-                                        {editData ? t('update supplier') : t('create supplier')}
-                                        &nbsp;{(isLoading || updateLoad) && <Spinner color={'primary'} size={'sm'} />}
-                                    </Button>
-                                </div>
-                            </Row>
-                        </form>
+                        <MappedComponent
+                            inputField={inputData}
+                            onSubmit={onSubmit}
+                            defaultValues={defaultValues}
+                            schemaResolver={schemaResolver}
+                            isLoading={isLoading}
+                            updateLoad={updateLoad}
+                            editData={editData}
+                            updateTitle={t('update supplier')}
+                            createTitle={t('create supplier')}
+                        />
                     </Modal.Body>
                 </Modal>
             </Card.Body>

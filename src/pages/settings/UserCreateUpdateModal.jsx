@@ -429,3 +429,283 @@ const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValu
 };
 
 export default StaffCreateUpdateModal;
+
+/*
+
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    name="roleID"
+    type="select"
+    label={t('select user role')}
+    containerClass={'mb-3'}
+    required={true}
+    register={register}
+    errors={errors}>
+    <option value="">{t('select user role')}</option>
+    {allRoles &&
+        allRoles.map((role) => (
+            <option key={role._id} value={role._id}>
+                {role.name}
+            </option>
+        ))}
+</FormInput>
+</Col>
+{editData && (
+<Col className={'col-12 col-md-6 col-lg-4'}>
+    <FormInput
+        name="status"
+        type="select"
+        label={t('select user status')}
+        containerClass={'mb-3'}
+        required={true}
+        register={register}
+        errors={errors}>
+        <option value="">{t('select user role')}</option>
+        <option value="ACTIVE">{t('ACTIVE')}</option>
+        <option value="BLOCKED">{t('BLOCKED')}</option>
+        <option value="BANNED">{t('BANNED')}</option>
+    </FormInput>
+</Col>
+)}
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('name')}
+    type="text"
+    name="name"
+    placeholder={t('please enter name')}
+    containerClass={'mb-3'}
+    required={true}
+    register={register}
+    errors={errors}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('mobile')}
+    type="text"
+    name="mobile"
+    placeholder={t('please enter mobile')}
+    containerClass={'mb-3'}
+    required={true}
+    register={register}
+    errors={errors}
+/>
+</Col>
+{!editData && (
+<Col className={'col-12 col-md-6 col-lg-4'}>
+    <FormInput
+        label={t('password')}
+        type="password"
+        name="password"
+        placeholder={t('please enter password')}
+        containerClass={'mb-3'}
+        required={true}
+        register={register}
+        errors={errors}
+    />
+</Col>
+)}
+{!editData && (
+<Col className={'col-12 col-md-6 col-lg-4'}>
+    <FormInput
+        label={t('confirm password')}
+        type="password"
+        name="confirmPassword"
+        placeholder={t('please enter confirm password')}
+        containerClass={'mb-3'}
+        required={true}
+        register={register}
+        errors={errors}
+    />
+</Col>
+)}
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('address')}
+    type="text"
+    name="address"
+    placeholder={t('please enter address')}
+    containerClass={'mb-3'}
+    register={register}
+    errors={errors}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('date of joining')}
+    type="datePicker"
+    name="dateOfJoining"
+    placeholder={t('please enter date of joining')}
+    containerClass={'mb-3'}
+    register={register}
+    errors={errors}
+    watchValue={watchValueJoining}
+    setValue={setValue}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('date of birth')}
+    type="datePicker"
+    name="dateOfBirth"
+    placeholder={t('please enter date of birth')}
+    containerClass={'mb-3'}
+    register={register}
+    errors={errors}
+    watchValue={watchValueBirth}
+    setValue={setValue}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('email')}
+    type="email"
+    name="email"
+    placeholder={t('please enter email')}
+    containerClass={'mb-3'}
+    register={register}
+    errors={errors}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('father name')}
+    type="text"
+    name="fatherName"
+    placeholder={t('please enter father name')}
+    containerClass={'mb-3'}
+    register={register}
+    errors={errors}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('nid')}
+    type="text"
+    name="nid"
+    placeholder={t('please enter nid')}
+    containerClass={'mb-3'}
+    register={register}
+    errors={errors}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('thana')}
+    type="text"
+    name="thana"
+    placeholder={t('please enter thana')}
+    containerClass={'mb-3'}
+    register={register}
+    errors={errors}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('district')}
+    type="text"
+    name="district"
+    placeholder={t('please enter district')}
+    containerClass={'mb-3'}
+    register={register}
+    errors={errors}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('salary')}
+    type="text"
+    name="salary"
+    placeholder={t('please enter salary')}
+    containerClass={'mb-3'}
+    register={register}
+    errors={errors}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('due')}
+    type="text"
+    name="due"
+    placeholder={t('please enter due')}
+    containerClass={'mb-3'}
+    register={register}
+    errors={errors}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('remarks')}
+    type="text"
+    name="remarks"
+    placeholder={t('please enter remarks')}
+    containerClass={'mb-3'}
+    register={register}
+    errors={errors}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('reference name')}
+    type="text"
+    name="reference.name"
+    placeholder={t('please enter reference name')}
+    containerClass={'mb-3'}
+    nested={true}
+    register={register}
+    errors={errors}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('reference mobile')}
+    type="text"
+    name="reference.mobile"
+    placeholder={t('please enter reference mobile')}
+    containerClass={'mb-3'}
+    nested={true}
+    register={register}
+    errors={errors}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('reference address')}
+    type="text"
+    name="reference.address"
+    placeholder={t('please enter reference address')}
+    containerClass={'mb-3'}
+    nested={true}
+    register={register}
+    errors={errors}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('reference nid')}
+    type="text"
+    name="reference.nid"
+    placeholder={t('please enter reference nid')}
+    containerClass={'mb-3'}
+    nested={true}
+    register={register}
+    errors={errors}
+/>
+</Col>
+<Col className={'col-12 col-md-6 col-lg-4'}>
+<FormInput
+    label={t('reference relation')}
+    type="text"
+    name="reference.relation"
+    placeholder={t('please enter reference relation')}
+    containerClass={'mb-3'}
+    nested={true}
+    register={register}
+    errors={errors}
+/>
+</Col>
+
+
+
+
+*/

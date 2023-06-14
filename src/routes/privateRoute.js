@@ -21,7 +21,7 @@ const Sent = lazy(() => import('../pages/message/Sent.jsx'));
 const Details = lazy(() => import('../pages/message/Details.jsx'));
 const Expenditure = lazy(() => import('../pages/expenditure/expenditure/Expenditure.jsx'));
 const Users = lazy(() => import('../pages/settings/Users.jsx'));
-const MediaUpload = lazy(() => import("../pages/media/MediaUpload.jsx"))
+const MediaUpload = lazy(() => import('../pages/media/MediaUpload.jsx'));
 
 const privateRoutes = [
     {

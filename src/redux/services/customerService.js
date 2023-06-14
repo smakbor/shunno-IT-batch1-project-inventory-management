@@ -5,8 +5,8 @@ import { apiService } from '../api/apiService';
 export const customerService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         customerList: builder.query({
-            query: (storeID) => ({
-                url: `customers/${storeID}`,
+            query: (store) => ({
+                url: `customers/${store}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
@@ -18,30 +18,35 @@ export const customerService = apiService.injectEndpoints({
                 body: postBody,
             }),
             async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
-                const response = dispatch(
-                    apiService.util.updateQueryData('customerList', undefined, (draft) => {
-                        draft.push(postBody);
-                    })
-                );
                 try {
-                    await queryFulfilled;
-                } catch {
-                    response.undo();
+                    const {
+                        data: { data },
+                    } = await queryFulfilled;
+                    dispatch(
+                        apiService.util.updateQueryData('customerList', data.customer.store, (draft) => {
+                            draft.push(data.customer);
+                        })
+                    );
+                } catch (error) {
+                    console.log(error);
                 }
             },
         }),
 
         customerUpdate: builder.mutation({
-            query: ({ id, postBody }) => ({
-                url: `customers/${id}`,
+            query: (postBody) => ({
+                url: `customers/${postBody?._id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
-            async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                const {
+                    data: { data },
+                } = await queryFulfilled;
                 const response = dispatch(
-                    apiService.util.updateQueryData('customerList', undefined, (draft) => {
-                        const findIndex = draft.findIndex((item) => item._id === id);
-                        draft[findIndex] = postBody;
+                    apiService.util.updateQueryData('customerList', data.store, (draft) => {
+                        const findIndex = draft.findIndex((item) => item._id === data._id);
+                        draft[findIndex] = data;
                     })
                 );
                 try {

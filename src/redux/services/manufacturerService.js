@@ -5,8 +5,8 @@ import { apiService } from '../api/apiService';
 export const manufacturerService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         manufacturerList: builder.query({
-            query: (storeID) => ({
-                url: `manufacturers/${storeID}`,
+            query: (store) => ({
+                url: `manufacturers/${store}`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
@@ -17,31 +17,36 @@ export const manufacturerService = apiService.injectEndpoints({
                 method: 'POST',
                 body: postBody,
             }),
-            async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
-                const response = dispatch(
-                    apiService.util.updateQueryData('manufacturerList', undefined, (draft) => {
-                        draft.push(postBody);
-                    })
-                );
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
-                    await queryFulfilled;
-                } catch {
-                    response.undo();
+                    const {
+                        data: { data },
+                    } = await queryFulfilled;
+                    dispatch(
+                        apiService.util.updateQueryData('manufacturerList', data.store, (draft) => {
+                            draft.push(data);
+                        })
+                    );
+                } catch (error) {
+                    console.log(error);
                 }
             },
         }),
 
         manufacturerUpdate: builder.mutation({
-            query: ({ id, postBody }) => ({
-                url: `manufacturers/${id}`,
+            query: (postBody) => ({
+                url: `manufacturers/${postBody?._id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
-            async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                const {
+                    data: { data },
+                } = await queryFulfilled;
                 const response = dispatch(
-                    apiService.util.updateQueryData('manufacturerList', undefined, (draft) => {
-                        const findIndex = draft.findIndex((item) => item._id === id);
-                        draft[findIndex] = postBody;
+                    apiService.util.updateQueryData('manufacturerList', data.store, (draft) => {
+                        const findIndex = draft.findIndex((item) => item._id === data._id);
+                        draft[findIndex] = data;
                     })
                 );
                 try {
