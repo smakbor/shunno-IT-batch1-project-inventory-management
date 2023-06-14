@@ -3,6 +3,7 @@ import { lazy } from 'react';
 
 //Internal Lib Import
 import LazyLoad from '../components/common/LazyLoad.jsx';
+const Media = lazy(() => import('../pages/media/Media.jsx'));
 const Salary = lazy(() => import('../pages/employee/Salary.jsx'));
 const Ui = lazy(() => import('../pages/settings/Ui.jsx'));
 const Trash = lazy(() => import('../pages/message/Trash.jsx'));
@@ -134,6 +135,12 @@ const privateRoutes = [
     {
         path: '/salary/:employeeID',
         element: <LazyLoad component={Salary} />,
+        roles: ['ALL', 'PROPRIETOR'],
+        routePermission: 'ALL',
+    },
+    {
+        path: '/media',
+        element: <LazyLoad component={Media} />,
         roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },

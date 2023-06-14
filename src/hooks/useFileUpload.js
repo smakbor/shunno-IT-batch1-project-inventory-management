@@ -44,10 +44,11 @@ const useFileUpload = () => {
     }
     const handleFileDelete = async (publicID) => {
         try {
-
-            const fileDeleteInfo = axioShunnoStorage.delete('/vault/vaultDelete', {
+            const formData = new FormData();
+            formData()
+            const fileDeleteInfo = axioShunnoStorage.delete('/vault', {
                 publicID,
-                permanent: true,
+                permanent: false,
                 clientApp: "HISABNIKASH"
             })
             return fileDeleteInfo;

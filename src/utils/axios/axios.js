@@ -1,6 +1,6 @@
 //External Lib Import
 import axios from 'axios';
-import { shunnoStorageBaseURL, shunnoStorageKey } from '../../config/config';
+import { shunnoStorageApiPrefix, shunnoStorageBaseURL, shunnoStorageKey } from '../../config/config';
 
 //constant env variable
 const SERVER_URL = process.env.REACT_APP_API_SERVER_URL;
@@ -22,7 +22,7 @@ export const axiosPrivate = axios.create({
 });
 
 export const axioShunnoStorage = axios.create({
-    baseURL: shunnoStorageBaseURL,
+    baseURL: shunnoStorageBaseURL + shunnoStorageApiPrefix,
     headers: {
         'Content-Type': 'multipart/form-data',
         authorization: `Bearer ${shunnoStorageKey}`

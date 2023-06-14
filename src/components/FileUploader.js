@@ -61,8 +61,10 @@ const FileUploader = props => {
     const handleUpload = async (files) => {
         let response = [];
         try {
-            const response = await handleFileUpload(files);
+            response = await handleFileUpload(files);
             mediaCreate(response);
+            setSelectedFiles([]);
+
         } catch (error) {
             // if (isUploaded) {
             //     handleFileDelete()
