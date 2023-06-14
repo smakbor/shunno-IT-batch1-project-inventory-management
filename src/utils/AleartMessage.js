@@ -1,7 +1,25 @@
 //External Lib Import
+import { t } from 'i18next';
 import Swal from 'sweetalert2';
 
 class AleartMessage {
+    static DeleteFile(arg, request) {
+        return Swal.fire({
+            title: 'Delete Confirmation',
+            input: 'checkbox',
+            inputPlaceholder: 'delete permanently',
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel',
+        }).then(function (result) {
+            if (result.value === 1) {
+                return request({ ...arg, permanent: true })
+            } else if (result.value === 0) {
+                return request({ ...arg, permanent: false })
+            }
+        });
+
+    }
     static Delete(id, request) {
         return Swal.fire({
             title: 'Are you sure?',

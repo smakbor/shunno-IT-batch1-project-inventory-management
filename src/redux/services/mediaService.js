@@ -28,9 +28,9 @@ export const mediaService = apiService.injectEndpoints({
             },
         }),
         mediaDelete: builder.mutation({
-            query: ({ id, store }) => (
+            query: ({ id, store, permanent }) => (
                 {
-                    url: `media/${id}?permanent=false`,
+                    url: `media/${id}?permanent=${permanent}`,
                     method: 'DELETE'
                 }
             ),
