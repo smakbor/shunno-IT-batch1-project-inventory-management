@@ -21,19 +21,11 @@ export const mediaService = apiService.injectEndpoints({
             }),
             onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 queryFulfilled.then(
-                    ({ data: { data } }) => {
-                        console.log(data)
-                        dispatch(
-                            apiService.util.updateQueryData("mediaList", postBody.store, (draft) => {
-                                data.forEach(item => draft.unshift(item))
-                                console.log(JSON.stringify(draft))
-                            })
+                    ({ data: { data } }) => dispatch(
+                        apiService.util.updateQueryData("mediaList", postBody[0].store, (draft) => draft = data.concat(draft)
                         )
-
-                    }
-                )
+                    ))
             },
-
         }),
         mediaDelete: builder.mutation({
             query: ({ id, store }) => (
@@ -42,17 +34,13 @@ export const mediaService = apiService.injectEndpoints({
                     method: 'DELETE'
                 }
             ),
-            async onQueryStarted({ id, store }, { queryFulfilled, dispatch }) {
-                const response = dispatch(
-                    apiService.util.updateQueryData('mediaList', store, (draft) => {
-                        draft = draft.filter(item => item._id !== id);
-                    })
-                );
-                try {
-                    await queryFulfilled;
-                } catch {
-                    response.undo();
-                }
+            onQueryStarted({ id, store }, { queryFulfilled, dispatch }) {
+                queryFulfilled.then(
+                    ({ data: { data } }) => dispatch(
+                        apiService.util.updateQueryData("mediaList", store, (draft) => draft.filter(item => item._id !== id)
+                        )
+                    )
+                )
             },
         })
 

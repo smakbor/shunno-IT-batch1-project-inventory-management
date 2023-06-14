@@ -12,12 +12,11 @@ import useFileUpload from '../../hooks/useFileUpload';
 const Media = () => {
     const { handleFileDelete } = useFileUpload()
     const store = useSelector(state => state.setting.activeStore)
-    const { data, isLoading, isError } = useMediaListQuery(store._id)
+    const { data, isLoading, isError } = useMediaListQuery(store?._id)
     const [mediaDelete] = useMediaDeleteMutation()
     const { t } = useTranslation();
     const baseImageURL = shunnoStorageBaseURL;
-    console.log(data)
-
+    console.log(data?.length)
     const FileCardComponent = ({ item }) => (
         <Col xs={6} md={2}>
             <Card style={{ width: 'auto', height: "auto" }}>
