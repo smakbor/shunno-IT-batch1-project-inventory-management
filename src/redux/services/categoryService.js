@@ -15,7 +15,7 @@ export const categoryService = apiService.injectEndpoints({
                 method: 'POST',
                 body: postBody,
             }),
-            async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
+            onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 queryFulfilled.then(({ data: { data } }) => {
                     dispatch(
                         apiService.util.updateQueryData("categoryList", postBody.store, (draft) => {
@@ -32,7 +32,7 @@ export const categoryService = apiService.injectEndpoints({
                 method: 'PATCH',
                 body: postBody,
             }),
-            async onQueryStarted({ id, postBody: { store } }, { dispatch, queryFulfilled }) {
+            onQueryStarted({ id, postBody: { store } }, { dispatch, queryFulfilled }) {
                 queryFulfilled.then(({ data: { data } }) => {
                     dispatch(
                         apiService.util.updateQueryData("categoryList", store, (draft) => {

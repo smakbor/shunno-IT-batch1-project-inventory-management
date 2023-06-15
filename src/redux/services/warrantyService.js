@@ -16,13 +16,11 @@ export const warrantyService = apiService.injectEndpoints({
                 method: 'POST',
                 body: postBody,
             }),
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 try {
-                    const {
-                        data: { data },
-                    } = await queryFulfilled;
+                    const { data } = await queryFulfilled;
                     dispatch(
-                        apiService.util.updateQueryData('warrantyList', data.store, (draft) => {
+                        apiService.util.updateQueryData('warrantyList', undefined, (draft) => {
                             draft.push(data);
                         })
                     );
@@ -38,20 +36,17 @@ export const warrantyService = apiService.injectEndpoints({
                 method: 'PATCH',
                 body: postBody,
             }),
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-                const {
-                    data: { data },
-                } = await queryFulfilled;
-                const response = dispatch(
-                    apiService.util.updateQueryData('warrantyList', data.store, (draft) => {
-                        const findIndex = draft.findIndex((item) => item._id === data._id);
-                        draft[findIndex] = data;
-                    })
-                );
+            async onQueryStarted({ id, postBody }, { dispatch, queryFulfilled }) {
                 try {
-                    await queryFulfilled;
-                } catch {
-                    response.undo();
+                    const { data } = await queryFulfilled;
+                    dispatch(
+                        apiService.util.updateQueryData('warrantyList', undefined, (draft) => {
+                            const findIndex = draft.findIndex((item) => item._id === id);
+                            draft[findIndex] = postBody;
+                        })
+                    );
+                } catch (e) {
+                    console.log(e);
                 }
             },
         }),

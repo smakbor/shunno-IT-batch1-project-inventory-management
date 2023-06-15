@@ -4,11 +4,15 @@ import { Link } from 'react-router-dom';
 import { Row, Col, Card } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
+import useFileUpload from '../hooks/useFileUpload';
+import { useMediaCreateMutation } from '../redux/services/mediaService';
 
 
 const FileUploader = props => {
     const { t } = useTranslation();
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const { data, isLoading, isError, isUploaded, handleFileUpload, handleFileDelete } = useFileUpload()
+    const [mediaCreate, { isLoading: mediaCreateLoading, isSuccess: mediaCreateSuccess }] = useMediaCreateMutation();
 
     /**
      * Handled the accepted files and shows the preview
@@ -54,6 +58,19 @@ const FileUploader = props => {
         newFiles.splice(file, 1);
         setSelectedFiles(newFiles);
     };
+    const handleUpload = async (files) => {
+        let response = [];
+        try {
+            response = await handleFileUpload(files);
+            mediaCreate(response);
+            setSelectedFiles([]);
+
+        } catch (error) {
+            // if (isUploaded) {
+            //     handleFileDelete()
+            // }
+        }
+    }
 
     return (
         <>
@@ -119,7 +136,7 @@ const FileUploader = props => {
                         selectedFiles &&
                         <Row>
                             <Col className='text-center'>
-                                <button className='btn btn-primary mt-3'>{t("upload")}</button>
+                                <button className='btn btn-primary mt-3' onClick={() => handleUpload(selectedFiles)}>{t("upload")}</button>
                             </Col>
                         </Row>
                     }
