@@ -42,20 +42,21 @@ const useFileUpload = () => {
         }
 
     }
-    const handleFileDelete = async (publicID) => {
-        try {
-            const formData = new FormData();
-            formData()
-            const fileDeleteInfo = axioShunnoStorage.delete('/vault', {
-                publicID,
-                permanent: false,
-                clientApp: "HISABNIKASH"
-            })
-            return fileDeleteInfo;
-        } catch (error) {
-            console.log(error)
+    const handleFileDelete = async (files) => {
+        console.log(files)
+        // try {
+        //     const formData = new FormData();
+        //     formData()
+        //     const fileDeleteInfo = axioShunnoStorage.delete('/vault', {
+        //         publicID,
+        //         permanent: false,
+        //         clientApp: "HISABNIKASH"
+        //     })
+        //     return fileDeleteInfo;
+        // } catch (error) {
+        //     console.log(error)
 
-        }
+        // }
 
     }
 

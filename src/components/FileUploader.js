@@ -1,7 +1,7 @@
 // @flow
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card, Spinner } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import useFileUpload from '../hooks/useFileUpload';
@@ -13,7 +13,6 @@ const FileUploader = props => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const { data, isLoading, isError, isUploaded, handleFileUpload, handleFileDelete } = useFileUpload()
     const [mediaCreate, { isLoading: mediaCreateLoading, isSuccess: mediaCreateSuccess }] = useMediaCreateMutation();
-
     /**
      * Handled the accepted files and shows the preview
      */
@@ -60,16 +59,18 @@ const FileUploader = props => {
     };
     const handleUpload = async (files) => {
         let response = [];
-        try {
-            response = await handleFileUpload(files);
+
+        handleFileUpload(files).then(response => {
             mediaCreate(response);
             setSelectedFiles([]);
+        }).catch(err => {
+            console.log(err)
+            if (isUploaded) {
+                handleFileDelete(files)
+            }
+        })
 
-        } catch (error) {
-            // if (isUploaded) {
-            //     handleFileDelete()
-            // }
-        }
+
     }
 
     return (
@@ -121,7 +122,7 @@ const FileUploader = props => {
                                             </p>
                                         </Col>
                                         <Col className="text-end">
-                                            <button className="btn btn-link btn-lg text-muted shadow-none">
+                                            <button className="btn btn-link btn-lg text-muted shadow-none" >
                                                 <i className="dripicons-cross" onClick={() => removeFile(i)}></i>
                                             </button>
                                         </Col>
@@ -136,7 +137,13 @@ const FileUploader = props => {
                         selectedFiles &&
                         <Row>
                             <Col className='text-center'>
-                                <button className='btn btn-primary mt-3' onClick={() => handleUpload(selectedFiles)}>{t("upload")}</button>
+                                <button className='btn btn-primary mt-3' onClick={() => handleUpload(selectedFiles)}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading &&
+                                        <Spinner color={'primary'} size={'sm'} />
+                                    }&nbsp;
+                                    {!isLoading ? t("upload") : t("uploading")}</button>
                             </Col>
                         </Row>
                     }

@@ -5,17 +5,33 @@ import Swal from 'sweetalert2';
 class AleartMessage {
     static DeleteFile(arg, request) {
         return Swal.fire({
-            title: 'Delete Confirmation',
+            title: t("are you sure"),
+            text: t("you wont be able to revert this"),
+            icon: 'warning',
             input: 'checkbox',
-            inputPlaceholder: 'delete permanently',
+            inputPlaceholder: t('delete permanently'),
             showCancelButton: true,
-            confirmButtonText: 'Delete',
-            cancelButtonText: 'Cancel',
+            confirmButtonText: t('delete'),
+            cancelButtonText: t('cancel'),
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: t('yes delete'),
         }).then(function (result) {
             if (result.value === 1) {
-                return request({ ...arg, permanent: true })
+                if (Array.isArray(arg?.mediaIds)) {
+                    return request({ mediaIds: arg.mediaIds, store: arg.store, permanent: true })
+                }
+                else {
+                    return request({ ...arg, permanent: true })
+
+                }
             } else if (result.value === 0) {
-                return request({ ...arg, permanent: false })
+                if (Array.isArray(arg?.mediaIds)) {
+                    return request({ mediaIds: arg.mediaIds, store: arg.store, permanent: false })
+                }
+                else {
+                    return request({ ...arg, permanent: false })
+                }
             }
         });
 

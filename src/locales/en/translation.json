@@ -28,5 +28,12 @@
     "hisab nikash": "Hisab Nikash",
     "media": "Media",
     "upload": "Upload",
-    "media upload": "Media Upload"
+    "media upload": "Media Upload",
+    "uploading": "Uploading",
+    "are you sure": "Are you sure?",
+    "you wont be able to revert this": "You won't be able to revert this!",
+    "delete permanently": "Delete permanently",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "yes delete": "Yes, Delete!"
 }
