@@ -15,15 +15,14 @@ import exportFromJson from '../../utils/exportFromJson';
 import LoadingData from '../../components/common/LoadingData';
 import ErrorDataLoad from '../../components/common/ErrorDataLoad';
 import AleartMessage from '../../utils/AleartMessage';
-
+import StaffCreateUpdateModal from './StaffCreateUpdateModal';
 //api services
 import { useStaffListQuery, useStaffDeleteMutation } from '../../redux/services/staffService';
-import UserCreateUpdateModal from './UserCreateUpdateModal';
 import DateFormatter from '../../utils/DateFormatter';
 import ResetPassModal from './ResetPassModal';
 
 // main component
-const Users = () => {
+const Staffs = () => {
     const { t } = useTranslation();
     const [modal, setModal] = useState(false);
     const [modalResetPass, setModalResetPass] = useState(false);
@@ -239,7 +238,7 @@ const Users = () => {
                                 <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add user')}
+                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add staff')}
                                         </Button>
                                     </Col>
                                     <Col sm={7}>
@@ -285,11 +284,11 @@ const Users = () => {
                         </Card>
                     </Col>
                 </Row>
-                <UserCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <StaffCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
                 <ResetPassModal {...{ modalResetPass, setModalResetPass, toggleResetPass, resetPassData }} />
             </>
         );
     }
 };
 
-export default Users;
+export default Staffs;

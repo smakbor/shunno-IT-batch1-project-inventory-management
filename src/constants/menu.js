@@ -48,20 +48,32 @@ const MENU_ITEMS = () => {
             ],
         },
         { key: 'contacts', label: t('contacts'), isTitle: true },
+
         {
-            key: 'suppliers',
-            label: t('suppliers'),
+            key: 'people',
+            label: t('people'),
             isTitle: false,
-            icon: 'uil-briefcase',
-            url: '/suppliers',
+            icon: 'dripicons-user',
+            children: [
+                {
+                    key: 'suppliers',
+                    label: t('suppliers'),
+                    isTitle: false,
+                    icon: 'uil-briefcase',
+                    url: '/suppliers',
+                    parentKey: 'people',
+                },
+                {
+                    key: 'customers',
+                    label: t('customers'),
+                    isTitle: false,
+                    icon: 'uil-users-alt',
+                    url: '/customers',
+                    parentKey: 'people',
+                },
+            ],
         },
-        {
-            key: 'customers',
-            label: t('customers'),
-            isTitle: false,
-            icon: 'uil-users-alt',
-            url: '/customers',
-        },
+
         { key: 'contacts', label: t('contacts'), isTitle: true },
         {
             key: 'Expenditure',
@@ -133,6 +145,64 @@ const MENU_ITEMS = () => {
                 },
             ],
         },
+        { key: 'HRM', label: 'HRM', isTitle: true },
+        {
+            key: 'HRM',
+            label: t('HRM'),
+            isTitle: false,
+            icon: 'dripicons-user',
+            children: [
+                {
+                    key: 'department',
+                    label: t('Department'),
+                    isTitle: false,
+                    icon: 'uil-briefcase',
+                    url: '/department',
+                    parentKey: 'HRM',
+                },
+                {
+                    key: 'employee',
+                    label: t('Employee'),
+                    isTitle: false,
+                    icon: 'uil-users-alt',
+                    url: '/employees',
+                    parentKey: 'HRM',
+                },
+                {
+                    key: 'attendance',
+                    label: t('attendance'),
+                    isTitle: false,
+                    icon: 'uil-users-alt',
+                    url: '/attendance',
+                    parentKey: 'HRM',
+                },
+                {
+                    key: 'payroll',
+                    label: t('payroll'),
+                    isTitle: false,
+                    icon: 'uil-users-alt',
+                    url: '/payroll',
+                    parentKey: 'HRM',
+                },
+                {
+                    key: 'holiday',
+                    label: t('holiday'),
+                    isTitle: false,
+                    icon: 'uil-users-alt',
+                    url: '/holiday',
+                    parentKey: 'HRM',
+                },
+                {
+                    key: 'hrmsetting',
+                    label: t('HRM Setting'),
+                    isTitle: false,
+                    icon: 'dripicons-gear',
+                    url: '/hrmSetting',
+                    parentKey: 'HRM',
+                },
+            ],
+        },
+
         { key: 'settings', label: 'settings', isTitle: true },
         {
             key: 'settings',
@@ -143,7 +213,7 @@ const MENU_ITEMS = () => {
                 {
                     key: 'user',
                     label: t('users'),
-                    url: '/users',
+                    url: '/staffs',
                     parentKey: 'settings',
                 },
                 {
