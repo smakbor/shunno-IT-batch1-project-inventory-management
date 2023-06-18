@@ -28,9 +28,9 @@ export const mediaService = apiService.injectEndpoints({
             },
         }),
         mediaDelete: builder.mutation({
-            query: ({ id, store }) => (
+            query: ({ id, store, permanent }) => (
                 {
-                    url: `media/${id}?permanent=false`,
+                    url: `media/${id}?permanent=${permanent}`,
                     method: 'DELETE'
                 }
             ),
@@ -42,6 +42,27 @@ export const mediaService = apiService.injectEndpoints({
                     )
                 )
             },
+        }),
+        mediaMultiDelete: builder.mutation({
+            query: ({ mediaIds, store, permanent }) => {
+                return (
+                    {
+                        url: `media/bulk/delete?permanent=${permanent}`,
+                        method: 'DELETE',
+                        body: { mediaIds, store }
+                    }
+                )
+            },
+            onQueryStarted({ mediasIds, store, permanent }, { queryFulfilled, dispatch }) {
+                queryFulfilled.then(
+                    ({ data: { data } }) => dispatch(
+                        apiService.util.updateQueryData("mediaList", store, (draft) => draft.filter(item => data.find(i => item._id === i._id) ? false : true)
+
+                        )
+                    )
+                )
+
+            },
         })
 
     }),
@@ -49,5 +70,6 @@ export const mediaService = apiService.injectEndpoints({
 export const {
     useMediaCreateMutation,
     useMediaListQuery,
-    useMediaDeleteMutation
+    useMediaDeleteMutation,
+    useMediaMultiDeleteMutation
 } = mediaService;

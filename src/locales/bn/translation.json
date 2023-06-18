@@ -28,5 +28,12 @@
     "hisab nikash": "হিসাব নিকাশ",
     "media": "মিডিয়া",
     "upload": "আপলোড",
-    "media upload": "মিডিয়া আপলোড"
+    "media upload": "মিডিয়া আপলোড",
+    "uploading": "আপলোড হচ্ছে",
+    "are you sure": "আপনি কি নিশ্চিত?",
+    "you wont be able to revert this": "আপনি এই একশন ফিরিয়ে নিতে পারবেন না!",
+    "delete permanently": "স্থায়ীভাবে ডিলিট করুন",
+    "delete": "ডিলিট করুন",
+    "cancel": "বাতিল করুন",
+    "yes delete": "হ্যাঁ, ডিলিট করুন"
 }
