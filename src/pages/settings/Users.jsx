@@ -39,8 +39,9 @@ const Users = () => {
     });
 
     const valuesDefault = {
-        roleID: '',
-        status: 'ACTIVE',
+        role: '',
+        status: '',
+        salaryPeriod: '',
         name: '',
         mobile: '',
         address: '',
@@ -59,8 +60,8 @@ const Users = () => {
             relation: '',
         },
         password: '',
-        dateOfBirth: '',
-        dateOfJoining: '',
+        birthDate: '',
+        joiningDate: '',
     };
     const [defaultValues, setDefaultValues] = useState(valuesDefault);
     const [staffDelete] = useStaffDeleteMutation();

@@ -4,9 +4,11 @@ import { Form, InputGroup } from 'react-bootstrap';
 import classNames from 'classnames';
 import { get } from 'lodash';
 import Select from 'react-select';
+import DatePicker from 'react-datepicker';
 //Internal Lib Import
 import HyperDatepicker from '../components/Datepicker';
 import { Controller } from 'react-hook-form';
+import moment from 'moment';
 
 /* Password Input */
 const PasswordInput = ({ name, placeholder, refCallback, errors, register, className }) => {
@@ -169,11 +171,32 @@ const FormInput = ({
                         </>
                     ) : null}{' '}
                     {required && <span className="text-danger">*</span>}
-                    <HyperDatepicker
+                    {/* <HyperDatepicker
                         showTimeSelect={false}
                         hideAddon={true}
                         value={watchValue ? new Date(watchValue) : null}
                         onChange={(date) => setValue(name, new Date(date).toDateString())}
+                    /> */}
+                    <Controller
+                        control={control}
+                        name={name}
+                        render={({ field: { onChange, value, name, ref } }) => {
+                            let date;
+                            if (value) {
+                                date = new Date(value);
+                            }
+                            return (
+                                <DatePicker
+                                    placeholderText="Select date"
+                                    className="datepicker form-control"
+                                    dateFormat="d MMM yyyy"
+                                    inputRef={ref}
+                                    value={date}
+                                    onChange={(date) => onChange(date)}
+                                    selected={date}
+                                />
+                            );
+                        }}
                     />
                     {errors && errors[name] && !watchValue ? (
                         <Form.Control.Feedback type="invalid" className="d-block">

@@ -12,35 +12,48 @@ export const staffService = apiService.injectEndpoints({
         }),
         staffCreate: builder.mutation({
             query: (postBody) => ({
-                url: `staffs/${postBody.storeID}`,
+                url: `staffs`,
                 method: 'POST',
                 body: postBody,
             }),
-            onQueryStarted({ storeID }, { dispatch, queryFulfilled }) {
-                queryFulfilled.then(({ data }) => {
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                try {
+                    const {
+                        data: { data },
+                    } = await queryFulfilled;
+                    console.log(data);
                     dispatch(
-                        apiService.util.updateQueryData('staffList', storeID, (draft) => {
-                            draft.unshift(data.data);
+                        apiService.util.updateQueryData('staffList', data.store, (draft) => {
+                            draft.push(data);
                         })
                     );
-                });
+                } catch (error) {
+                    console.log(error);
+                }
             },
         }),
         staffUpdate: builder.mutation({
-            query: ({ id, postBody }) => ({
-                url: `staffs/${id}`,
+            query: (postBody) => ({
+                url: `staffs/${postBody?._id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
-            onQueryStarted({ id, postBody: { storeID } }, { dispatch, queryFulfilled }) {
-                queryFulfilled.then(({ data }) => {
-                    dispatch(
-                        apiService.util.updateQueryData('staffList', storeID, (draft) => {
-                            const findIndex = draft.findIndex((item) => item._id === id);
-                            draft[findIndex] = data.data;
-                        })
-                    );
-                });
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                const {
+                    data: { data },
+                } = await queryFulfilled;
+                console.log(data);
+                const response = dispatch(
+                    apiService.util.updateQueryData('staffList', data.store, (draft) => {
+                        const findIndex = draft.findIndex((item) => item._id === data._id);
+                        draft[findIndex] = data;
+                    })
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    response.undo();
+                }
             },
         }),
         staffResetPassword: builder.mutation({

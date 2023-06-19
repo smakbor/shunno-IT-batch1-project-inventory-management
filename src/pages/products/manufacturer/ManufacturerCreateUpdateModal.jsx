@@ -60,6 +60,7 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
 
     const onSubmit = (formData) => {
         formData.store = store;
+
         if (!editData) {
             manufacturerCreate(removeEmptyObj(formData));
         } else {
