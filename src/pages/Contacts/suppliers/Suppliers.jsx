@@ -19,12 +19,13 @@ import AleartMessage from '../../../utils/AleartMessage';
 import { useSupplierListQuery, useSupplierDeleteMutation } from '../../../redux/services/suppliersService';
 import SupplierCreateUpdateModal from './SupplierCreateUpdateModal';
 import { useSelector } from 'react-redux';
+import ExcelImportModal from './ImportExport/ExcelImportModal';
 
 // main component
 const Suppliers = () => {
     const { t } = useTranslation();
     const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
-
+    const [importedFile, setImportedFile] = useState(null);
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
     // store id
@@ -34,6 +35,22 @@ const Suppliers = () => {
     const { data, isLoading, isError } = useSupplierListQuery(store, {
         skip: !store,
     });
+    const [showModal, setShowModal] = useState(false);
+
+    const openModal = () => {
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
+
+    const importExcel = () => {
+        const file = importedFile
+        // Process the file here
+        console.log(file);
+        closeModal();
+    };
 
     /**
      * Show/hide the modal
@@ -209,26 +226,51 @@ const Suppliers = () => {
 
                                     <Col sm={7}>
                                         <div className="text-sm-end">
-                                            <Button variant="success" className="mb-2 me-1">
-                                                <i className="mdi mdi-cog"></i>
+                                            <Button variant="info" className="mb-2 me-1">
+                                                <i className="dripicons-information"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title={t("download demo")}
+                                                />
                                             </Button>
+                                            {/* <Button variant="success" className="mb-2 me-1">
+                                                <i className="mdi mdi-cog"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title={t("settings")}
+                                                />
+                                            </Button> */}
 
-                                            <Button variant="light" className="mb-2 me-1">
+                                            <Button variant="light" className="mb-2 me-1" onClick={openModal}
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                title={t("import excel")}
+                                            >
                                                 <BiImport />
-                                                {t('import')}
+                                                {t("import")}
                                             </Button>
 
                                             <Button
                                                 variant="light"
                                                 className="mb-2 me-1"
-                                                onClick={() => exportFromJson([{ name: 'f' }], 'roles', 'xls')}>
+                                                onClick={() => console.log(data)
+                                                    // exportFromJson([data], 'roles', 'xls')
+                                                }
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                title={t("export excel")}
+                                            >
                                                 <SiMicrosoftexcel />
                                                 {t('export')}
                                             </Button>
                                             <Button
                                                 variant="light"
                                                 className="mb-2 me-1"
-                                                onClick={() => exportFromJson([{ name: 'f' }], 'roles', 'csv')}>
+                                                onClick={() => exportFromJson([data], 'roles', 'csv')}
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                title={t("export csv")}
+                                            >
                                                 <GrDocumentCsv /> {t('export')}
                                             </Button>
                                         </div>
@@ -253,6 +295,7 @@ const Suppliers = () => {
                     </Col>
                 </Row>
                 <SupplierCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <ExcelImportModal {...{ showModal, setImportedFile, openModal, closeModal, importExcel }} />
             </>
         );
     }
