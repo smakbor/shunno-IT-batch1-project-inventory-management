@@ -29,59 +29,59 @@ const StaffCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValu
     /*
      * form validation schema
      */
-    const schemaResolver = yupResolver(
-        yup.object().shape({
-            name: yup.string().required(t('please enter name')).max(40, t('maximum containing 40 letter')),
-        })
-    );
     // const schemaResolver = yupResolver(
     //     yup.object().shape({
     //         name: yup.string().required(t('please enter name')).max(40, t('maximum containing 40 letter')),
-    //         // roleID: yup.string().required(t('please select role')),
-    //         mobile: yup
-    //             .string()
-    //             .required(t('please enter mobile'))
-    //             .matches(/(^(\+88|0088|88)?(01){1}[3456789]{1}(\d){8})$/, t('write 11 digit mobile number')),
-    //         status: yup.string().required(t('please select status')),
-    //         ...(!editData && {
-    //             password: yup
-    //                 .string()
-    //                 .required(t('please enter password'))
-    //                 .min(8, t('password must be at least 8 characters'))
-    //                 .matches(
-    //                     /^(?=.*[0-9])(?=.*[a-zA-Z])(?=\S+$).{6,20}$/,
-    //                     'password must contain at least 1 letter and 1 number'
-    //                 ),
-    //         }),
-    //         ...(!editData && {
-    //             confirmPassword: yup.string().oneOf([yup.ref('password'), null], t('passwords must match')),
-    //         }),
-    //         fatherName: yup.string(),
-    //         email: yup.string().email(),
-    //         nid: yup.string(),
-    //         address: yup.string(),
-    //         thana: yup.string(),
-    //         district: yup.string(),
-    //         salary: yup.string(),
-    //         due: yup.string(),
-    //         remarks: yup.string(),
-    //         joiningDate: yup.string(),
-    //         birthDate: yup.string(),
-    //         reference: yup
-    //             .object({
-    //                 name: yup.string(),
-    //                 mobile: yup
-    //                     .string()
-    //                     .matches(/(^$|^(\+88|0088|88)?(01){1}[3456789]{1}(\d){8})$/, t('write 11 digit mobile number'))
-    //                     .nullable()
-    //                     .notRequired(),
-    //                 address: yup.string(),
-    //                 nid: yup.string(),
-    //                 relation: yup.string(),
-    //             })
-    //             .required(),
     //     })
     // );
+    const schemaResolver = yupResolver(
+        yup.object().shape({
+            name: yup.string().required(t('please enter name')).max(40, t('maximum containing 40 letter')),
+            // roleID: yup.string().required(t('please select role')),
+            mobile: yup
+                .string()
+                .required(t('please enter mobile'))
+                .matches(/(^(\+88|0088|88)?(01){1}[3456789]{1}(\d){8})$/, t('write 11 digit mobile number')),
+            status: yup.string().required(t('please select status')),
+            ...(!editData && {
+                password: yup
+                    .string()
+                    .required(t('please enter password'))
+                    .min(8, t('password must be at least 8 characters'))
+                    .matches(
+                        /^(?=.*[0-9])(?=.*[a-zA-Z])(?=\S+$).{6,20}$/,
+                        'password must contain at least 1 letter and 1 number'
+                    ),
+            }),
+            ...(!editData && {
+                confirmPassword: yup.string().oneOf([yup.ref('password'), null], t('passwords must match')),
+            }),
+            fatherName: yup.string(),
+            email: yup.string().email(),
+            nid: yup.string(),
+            address: yup.string(),
+            thana: yup.string(),
+            district: yup.string(),
+            salary: yup.string(),
+            due: yup.string(),
+            remarks: yup.string(),
+            joiningDate: yup.string(),
+            birthDate: yup.string(),
+            reference: yup
+                .object({
+                    name: yup.string(),
+                    mobile: yup
+                        .string()
+                        .matches(/(^$|^(\+88|0088|88)?(01){1}[3456789]{1}(\d){8})$/, t('write 11 digit mobile number'))
+                        .nullable()
+                        .notRequired(),
+                    address: yup.string(),
+                    nid: yup.string(),
+                    relation: yup.string(),
+                })
+                .required(),
+        })
+    );
 
     /*
      * form methods

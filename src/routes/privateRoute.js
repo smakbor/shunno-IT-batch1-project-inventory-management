@@ -20,8 +20,9 @@ const CostSection = lazy(() => import('../pages/expenditure/costSection/CostSect
 const Sent = lazy(() => import('../pages/message/Sent.jsx'));
 const Details = lazy(() => import('../pages/message/Details.jsx'));
 const Expenditure = lazy(() => import('../pages/expenditure/expenditure/Expenditure.jsx'));
-const Users = lazy(() => import('../pages/settings/Users.jsx'));
+const Staffs = lazy(() => import('../pages/settings/Staffs.jsx'));
 const MediaUpload = lazy(() => import('../pages/media/MediaUpload.jsx'));
+const Department = lazy(() => import('../pages/hrm/department/Department.jsx'));
 
 const privateRoutes = [
     {
@@ -121,8 +122,15 @@ const privateRoutes = [
         routePermission: 'ALL',
     },
     {
-        path: '/users',
-        element: <LazyLoad component={Users} />,
+        path: '/staffs',
+        element: <LazyLoad component={Staffs} />,
+        roles: ['ALL', 'PROPRIETOR'],
+        routePermission: 'ALL',
+    },
+    //HRM path
+    {
+        path: '/department',
+        element: <LazyLoad component={Department} />,
         roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },

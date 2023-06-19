@@ -4,9 +4,10 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 //Internal Lib Import
 import { userLogin, userLogout } from '../features/authReducer';
 import { setLoading } from '../features/settingReducer';
+import { baseURL } from '../../config/config';
 
 //constant env variable
-const SERVER_URL = process.env.REACT_APP_API_SERVER_URL;
+const SERVER_URL = baseURL;
 const API_PREFIX_PATH = process.env.REACT_APP_API_PREFIX_PATH;
 
 const baseQuery = fetchBaseQuery({

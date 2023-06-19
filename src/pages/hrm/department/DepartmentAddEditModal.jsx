@@ -1,6 +1,6 @@
 //External Lib Import
 import React, { useEffect } from 'react';
-import { Card, Button, Modal, Spinner } from 'react-bootstrap';
+import { Card, Modal } from 'react-bootstrap';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
@@ -8,36 +8,43 @@ import classNames from 'classnames';
 
 //Internal Lib Import
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
-import MappedComponent from '../../contacts/mappedComponent/MappedComponent';
+
 //api services
-
-import {
-    useManufacturerCreateMutation,
-    useManufacturerUpdateMutation,
-} from '../../../redux/services/manufacturerService';
+import { useDepartmentCreateMutation, useDepartmentUpdateMutation } from '../../../redux/services/departmentService';
 import { useSelector } from 'react-redux';
+import MappedComponent from '../../contacts/mappedComponent/MappedComponent';
 
-const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, editData, defaultValues }) => {
+const DepartmentAddEditModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
     const store = useSelector((state) => state.setting.activeStore?._id);
-    const [manufacturerCreate, { isLoading, isSuccess }] = useManufacturerCreateMutation();
-    const [manufacturerUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useManufacturerUpdateMutation();
+    const [departmentCreate, { isLoading, isSuccess }] = useDepartmentCreateMutation();
+    const [departmentUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useDepartmentUpdateMutation();
 
     /*
      * form validation schema
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter manufacturer name')).min(2, t('minimum containing 2 letter')),
+            name: yup.string().required(t('please enter department name')).min(2, t('minimum containing 2 letters')),
+            status: yup.string().required(t('please select status')),
         })
     );
 
     const inputData = [
         {
-            label: t('manufacturer name'),
+            label: t('department name'),
             type: 'text',
             name: 'name',
-            placeholder: t('please enter manufacturer name'),
+            placeholder: t('please enter department name'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-12 col-lg-12',
+            required: true,
+        },
+        {
+            label: t('description'),
+            type: 'text',
+            name: 'description',
+            placeholder: t('please enter description'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-12 col-lg-12',
             required: true,
@@ -58,14 +65,18 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
         },
     ];
 
+    /*
+     * handle form submission
+     */
     const onSubmit = (formData) => {
         formData.store = store;
+        console.log(formData);
         if (!editData) {
-            manufacturerCreate(removeEmptyObj(formData));
+            departmentCreate(removeEmptyObj(formData));
         } else {
             const updatedData = { ...editData, ...formData };
             const postBody = removeEmptyObj(updatedData);
-            manufacturerUpdate(postBody);
+            departmentUpdate(postBody);
         }
     };
 
@@ -80,9 +91,7 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
             <Card.Body>
                 <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false}>
                     <Modal.Header onHide={toggle} closeButton>
-                        <h4 className="modal-title">
-                            {editData ? t('update manufacturer') : t('create manufacturer')}
-                        </h4>
+                        <h4 className="modal-title">{editData ? t('update department') : t('create department')}</h4>
                     </Modal.Header>
 
                     <Modal.Body>
@@ -94,8 +103,8 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
                             isLoading={isLoading}
                             updateLoad={updateLoad}
                             editData={editData}
-                            updateTitle={t('update manufacturer')}
-                            createTitle={t('create manufacturer')}
+                            updateTitle={t('update department')}
+                            createTitle={t('create department')}
                         />
                     </Modal.Body>
                 </Modal>
@@ -104,4 +113,4 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
     );
 };
 
-export default ManufacturerCreateUpdateModal;
+export default DepartmentAddEditModal;

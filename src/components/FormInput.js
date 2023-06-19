@@ -230,7 +230,7 @@ const FormInput = ({
                                     inputRef={ref}
                                     classNamePrefix="react-select"
                                     options={option}
-                                    value={option.find((c) => c.value === value)}
+                                    value={option?.find((c) => c.value === value)}
                                     onChange={(val) => onChange(val.value)}
                                 />
                             );
