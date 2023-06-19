@@ -14,6 +14,7 @@ import MappedComponent from '../mappedComponent/MappedComponent';
 //api services
 
 import { useSupplierCreateMutation, useSupplierUpdateMutation } from '../../../redux/services/suppliersService';
+import AleartMessage from '../../../utils/AleartMessage';
 
 const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
@@ -212,12 +213,11 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
     const onSubmit = (formData) => {
         formData.store = storeID;
         formData.due = Number(formData.due);
-
         if (!editData) {
-            supplierCreate(removeEmptyObj(formData));
+            supplierCreate(removeEmptyObj(formData)).then(({ data: { message } }) => AleartMessage.SuccessFul(message));
         } else {
             const updatedData = { ...editData, ...formData };
-            supplierUpdate(removeEmptyObj(updatedData));
+            supplierUpdate(removeEmptyObj(updatedData)).then(({ data: { message } }) => AleartMessage.SuccessFul(message));
         }
     };
 
