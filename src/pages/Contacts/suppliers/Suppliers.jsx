@@ -44,7 +44,6 @@ const Suppliers = () => {
         setEditData(false);
         setModal(!modal);
 
-        console.log('supplier, ', defaultValues);
     };
 
     const toggle = (e) => {
