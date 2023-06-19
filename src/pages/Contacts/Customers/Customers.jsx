@@ -42,7 +42,7 @@ const Customers = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: 'ACTIVE' });
+        setDefaultValues({});
         setModal(!modal);
     };
 

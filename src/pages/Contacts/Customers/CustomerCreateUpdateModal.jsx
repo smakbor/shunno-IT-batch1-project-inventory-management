@@ -28,13 +28,15 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
     const schemaResolver = yupResolver(
         yup.object().shape({
             name: yup.string().required(t('please enter customer name')).min(3, t('minimum containing 3 letter')),
-            fatherName: yup.string(),
-            address: yup.string(),
-            mobile: yup.string().required(t('enter mobile number')),
-            // .matches(/^(?:\+?88|0088)?01[3-9]\d{8}$/, t('enter valid number')),
-            email: yup.string().email(t('enter valid email')),
+            customerType: yup.string().required(t('please select customer type')),
+            mobile: yup
+                .string()
+                .required(t('enter mobile number'))
+                .matches(/^(?:\+?88|0088)?01[3-9]\d{8}$/, t('enter valid number')),
+
             ledgerNumber: yup.string(),
-            nid: yup.string(),
+            status: yup.string().required(t('please select status')),
+            email: yup.string().email('please valid email'),
         })
     );
 
@@ -62,10 +64,37 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             ],
         },
         {
+            label: t('status'),
+            type: 'react-select',
+            name: 'status',
+            placeholder: t('please enter status'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: true,
+            options: [
+                { label: 'please select status', value: '' },
+                { label: 'new', value: 'NEW' },
+                { label: 'active', value: 'ACTIVE' },
+                { label: 'inactive', value: 'INACTIVE' },
+                { label: 'banned', value: 'BANNED' },
+                { label: 'delete', value: 'DELETED' },
+            ],
+        },
+        {
             label: t(' name'),
             type: 'text',
             name: 'name',
             placeholder: t('please enter customer name'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: true,
+        },
+
+        {
+            label: t('mobile'),
+            type: 'text',
+            name: 'mobile',
+            placeholder: t('please enter mobile number'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
             required: true,
@@ -77,16 +106,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             placeholder: t('please enter customer father name'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
-            required: true,
-        },
-        {
-            label: t('mobile'),
-            type: 'text',
-            name: 'mobile',
-            placeholder: t('please enter mobile number'),
-            containerClass: 'mb-3',
-            col: 'col-12 col-md-6 col-lg-4',
-            required: true,
+            required: false,
         },
         {
             label: t('email'),
@@ -153,6 +173,15 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             required: false,
         },
         {
+            label: t('country'),
+            type: 'text',
+            name: 'country',
+            placeholder: t('please enter country'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
             label: t('reference name'),
             type: 'text',
             name: 'reference.name',
@@ -197,23 +226,6 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
             required: false,
-        },
-        {
-            label: t('status'),
-            type: 'react-select',
-            name: 'status',
-            placeholder: t('please enter status'),
-            containerClass: 'mb-3',
-            col: 'col-12 col-md-6 col-lg-4',
-            required: false,
-            options: [
-                { label: 'please select status', value: '' },
-                { label: 'new', value: 'NEW' },
-                { label: 'active', value: 'ACTIVE' },
-                { label: 'inactive', value: 'INACTIVE' },
-                { label: 'banned', value: 'BANNED' },
-                { label: 'delete', value: 'DELETED' },
-            ],
         },
     ];
 
