@@ -66,6 +66,16 @@ class AleartMessage {
             }
         });
     }
+    static SuccessFul(message) {
+        return Swal.fire({
+            toast: true,
+            position: 'top',
+            icon: 'success',
+            title: message,
+            showConfirmButton: false,
+            timer: 3000
+        });
+    }
 }
 
 export default AleartMessage;
