@@ -32,10 +32,10 @@ const MappedComponent = ({
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={'formClass'} noValidate>
             <Row>
-                {inputField.map((item) => {
+                {inputField.map((item, i) => {
                     if (editData && item.isVisible == false) {
                         return (
-                            <Col className="d-none">
+                            <Col className="d-none" key={i}>
                                 <FormInput
                                     label={item.label}
                                     type={item.type}
@@ -49,12 +49,12 @@ const MappedComponent = ({
                                     control={control}
                                     watchValue={item.watchValue}
                                     setValue={setValue}
-                                    nested={item?.nested}></FormInput>
+                                    nested={item.nested}></FormInput>
                             </Col>
                         );
                     } else {
                         return (
-                            <Col className={item.col}>
+                            <Col className={item.col} key={i}>
                                 <FormInput
                                     label={item.label}
                                     type={item.type}
@@ -67,7 +67,8 @@ const MappedComponent = ({
                                     option={item.options}
                                     control={control}
                                     watchValue={item.watchValue}
-                                    setValue={setValue}></FormInput>
+                                    setValue={setValue}
+                                    nested={item.nested}></FormInput>
                             </Col>
                         );
                     }
