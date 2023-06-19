@@ -19,7 +19,8 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
     const { t } = useTranslation();
     //store id
     const store = useSelector((state) => state.setting.activeStore?._id);
-    const [customerCreate, { isLoading, isSuccess }] = useCustomerCreateMutation();
+    const [customerCreate, { isLoading, isSuccess, errors }] = useCustomerCreateMutation();
+    console.log(errors);
     const [customerUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCustomerUpdateMutation();
 
     /*
@@ -34,9 +35,12 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                 .required(t('enter mobile number'))
                 .matches(/^(?:\+?88|0088)?01[3-9]\d{8}$/, t('enter valid number')),
 
-            ledgerNumber: yup.string(),
             status: yup.string().required(t('please select status')),
+            ledgerNumber: yup.string().required(t('please select ledgerNumber')),
             email: yup.string().email('please valid email'),
+            reference: yup.object().shape({
+                mobile: yup.string().required(t('reference mobile is required')),
+            }),
         })
     );
 
@@ -146,6 +150,15 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             required: false,
         },
         {
+            label: t('ledger number'),
+            type: 'text',
+            name: 'ledgerNumber',
+            placeholder: t('please enter customer ledger number'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: true,
+        },
+        {
             label: t('remarks'),
             type: 'text',
             name: 'remarks',
@@ -197,7 +210,8 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             placeholder: t('please enter supplier mobile'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
-            required: false,
+            nested: true,
+            required: true,
         },
         {
             label: t('reference address'),

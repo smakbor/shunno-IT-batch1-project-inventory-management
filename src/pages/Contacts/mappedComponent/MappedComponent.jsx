@@ -48,7 +48,8 @@ const MappedComponent = ({
                                     option={item.options}
                                     control={control}
                                     watchValue={item.watchValue}
-                                    setValue={setValue}></FormInput>
+                                    setValue={setValue}
+                                    nested={item?.nested}></FormInput>
                             </Col>
                         );
                     } else {
