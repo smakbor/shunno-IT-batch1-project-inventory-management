@@ -1,7 +1,7 @@
 //External Lib Import
 import { Col, Button } from 'react-bootstrap';
-import { GrDocumentCsv } from 'react-icons/gr';
-import { SiMicrosoftexcel } from 'react-icons/si';
+import { BsFiletypeCsv } from 'react-icons/bs';
+import { AiOutlineFilePdf, AiOutlineFileExcel, AiOutlinePrinter } from 'react-icons/ai';
 import { BiImport } from 'react-icons/bi';
 
 //Internal Lib Import
@@ -22,12 +22,17 @@ const ExportData = ({ fileName = 'data', data = [] }) => {
                     {t('import')}
                 </Button>
 
-                <Button variant="light" className="mb-2 me-1" onClick={() => exportFromJson(data, fileName, 'xls')}>
-                    <SiMicrosoftexcel />
-                    {t('export')}
+                <Button variant="danger" className="mb-2 me-1" onClick={() => exportFromJson(data, fileName, 'pdf')}>
+                    <AiOutlineFilePdf />
                 </Button>
-                <Button variant="light" className="mb-2 me-1" onClick={() => exportFromJson(data, fileName, 'csv')}>
-                    <GrDocumentCsv /> {t('export')}
+                <Button variant="primary" className="mb-2 me-1" onClick={() => exportFromJson(data, fileName, 'xls')}>
+                    <AiOutlineFileExcel />
+                </Button>
+                <Button variant="warning" className="mb-2 me-1" onClick={() => exportFromJson(data, fileName, 'csv')}>
+                    <BsFiletypeCsv />
+                </Button>
+                <Button variant="info" className="mb-2 me-1" onClick={() => exportFromJson(data, fileName, 'xls')}>
+                    <AiOutlinePrinter />
                 </Button>
             </div>
         </Col>

@@ -1,5 +1,5 @@
 //External Lib Import
-import React, { useRef, useEffect, forwardRef } from 'react';
+import React, { useRef, useEffect, forwardRef, useState } from 'react';
 import {
     useTable,
     useSortBy,
@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next';
 //Internal Lib Import
 // components
 import Pagination from './Pagination';
+import { Button, Col, Row } from 'react-bootstrap';
+import ExportData from './ExportData';
 
 // Define a default UI for filtering
 const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, searchBoxClass }) => {
@@ -46,7 +48,7 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, se
 
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
     const defaultRef = useRef();
-    const resolvedRef: any = ref || defaultRef;
+    const resolvedRef = ref || defaultRef;
 
     useEffect(() => {
         resolvedRef.current.indeterminate = indeterminate;
@@ -62,25 +64,10 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
     );
 });
 
-type TableProps = {
-    isSearchable?: boolean,
-    isSortable?: boolean,
-    pagination?: boolean,
-    isSelectable?: boolean,
-    isExpandable?: boolean,
-    pageSize: number,
-    columns: Array<any>,
-    data: Array<any>,
-    searchBoxClass?: string,
-    tableClass?: string,
-    theadClass?: string,
-    sizePerPageList: {
-        text: string,
-        value: number,
-    }[],
-};
+const Table = (props) => {
+    const [exportData, setExportData] = useState({});
 
-const Table = (props: TableProps): React$Element<React$FragmentType> => {
+    const { t } = useTranslation();
     const isSearchable = props['isSearchable'] || false;
     const isSortable = props['isSortable'] || false;
     const pagination = props['pagination'] || false;
@@ -155,8 +142,38 @@ const Table = (props: TableProps): React$Element<React$FragmentType> => {
 
     let rows = pagination ? dataTable.page : dataTable.rows;
 
+    useEffect(() => {
+        if (rows) {
+            const transformDate = rows.reduce(
+                (acc, current) => {
+                    acc.seleced.push(current.isSelected ? '1' : 0);
+                    let { proprietor, store, _id, createdAt, updatedAt, ...others } = current.original;
+                    let { _id: vId, createdAt: vCreatedAt, updatedAt: vUpdatedAt, ...valueOthers } = current.values;
+                    acc.original.push(others);
+                    acc.values.push(valueOthers);
+                    return acc;
+                },
+                { original: [], values: [], seleced: [] }
+            );
+            setExportData(transformDate);
+        }
+    }, [rows]);
+
     return (
         <>
+            <Row className="mb-2">
+                <Col sm={5}>
+                    <Button variant="primary" className="me-2" onClick={'addShowModal'}>
+                        <i className="mdi mdi-plus-circle me-2"></i> {t('add customer')}
+                    </Button>
+
+                    <Button variant="danger">
+                        <i className="mdi mdi-delete"></i>
+                    </Button>
+                </Col>
+
+                <ExportData fileName={props['exportFileName']} data={exportData.values} />
+            </Row>
             {isSearchable && (
                 <GlobalFilter
                     preGlobalFilteredRows={dataTable.preGlobalFilteredRows}
@@ -187,8 +204,9 @@ const Table = (props: TableProps): React$Element<React$FragmentType> => {
                             </tr>
                         ))}
                     </thead>
+
                     <tbody {...dataTable.getTableBodyProps()}>
-                        {(rows || []).map((row, i) => {
+                        {rows.map((row, i) => {
                             dataTable.prepareRow(row);
                             return (
                                 <tr {...row.getRowProps()}>
@@ -201,7 +219,6 @@ const Table = (props: TableProps): React$Element<React$FragmentType> => {
                     </tbody>
                 </table>
             </div>
-
             {pagination && <Pagination tableProps={dataTable} sizePerPageList={props['sizePerPageList']} />}
         </>
     );

@@ -46,7 +46,7 @@ const Suppliers = () => {
     };
 
     const importExcel = () => {
-        const file = importedFile
+        const file = importedFile;
         // Process the file here
         console.log(file);
         closeModal();
@@ -60,7 +60,6 @@ const Suppliers = () => {
         setDefaultValues({});
         setEditData(false);
         setModal(!modal);
-
     };
 
     const toggle = (e) => {
@@ -227,10 +226,11 @@ const Suppliers = () => {
                                     <Col sm={7}>
                                         <div className="text-sm-end">
                                             <Button variant="info" className="mb-2 me-1">
-                                                <i className="dripicons-information"
+                                                <i
+                                                    className="dripicons-information"
                                                     data-toggle="tooltip"
                                                     data-placement="top"
-                                                    title={t("download demo")}
+                                                    title={t('download demo')}
                                                 />
                                             </Button>
                                             {/* <Button variant="success" className="mb-2 me-1">
@@ -241,25 +241,27 @@ const Suppliers = () => {
                                                 />
                                             </Button> */}
 
-                                            <Button variant="light" className="mb-2 me-1" onClick={openModal}
+                                            <Button
+                                                variant="light"
+                                                className="mb-2 me-1"
+                                                onClick={openModal}
                                                 data-toggle="tooltip"
                                                 data-placement="top"
-                                                title={t("import excel")}
-                                            >
+                                                title={t('import excel')}>
                                                 <BiImport />
-                                                {t("import")}
+                                                {t('import')}
                                             </Button>
 
                                             <Button
                                                 variant="light"
                                                 className="mb-2 me-1"
-                                                onClick={() => console.log(data)
+                                                onClick={
+                                                    () => console.log(data)
                                                     // exportFromJson([data], 'roles', 'xls')
                                                 }
                                                 data-toggle="tooltip"
                                                 data-placement="top"
-                                                title={t("export excel")}
-                                            >
+                                                title={t('export excel')}>
                                                 <SiMicrosoftexcel />
                                                 {t('export')}
                                             </Button>
@@ -269,8 +271,7 @@ const Suppliers = () => {
                                                 onClick={() => exportFromJson([data], 'roles', 'csv')}
                                                 data-toggle="tooltip"
                                                 data-placement="top"
-                                                title={t("export csv")}
-                                            >
+                                                title={t('export csv')}>
                                                 <GrDocumentCsv /> {t('export')}
                                             </Button>
                                         </div>

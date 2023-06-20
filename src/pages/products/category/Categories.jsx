@@ -22,7 +22,8 @@ import { useSubCategoryListQuery, useSubCategoryDeleteMutation } from '../../../
 import SubCategoryCreateUpdateModal from '../subCategory/SubCreateUpdateModal';
 import { useSelector } from 'react-redux';
 import { shunnoStorageBaseURL } from '../../../config/config';
-import noImage from '../../../assets/images/no-image.png'
+import noImage from '../../../assets/images/no-image.png';
+
 // main component
 const Categories = () => {
     const { t } = useTranslation();
@@ -81,12 +82,20 @@ const Categories = () => {
             <>
                 <i
                     className="mdi mdi-plus-circle me-2 text-info"
-                    style={{ fontSize: '1.3rem', cursor: "pointer" }}
+                    style={{ fontSize: '1.3rem', cursor: 'pointer' }}
                     onClick={() => subCategoryShowModal(row.original._id)}
-                    data-toggle="tooltip" data-placement="top" title={t("add subcategory")}
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title={t('add subcategory')}
                 />
 
-                <span role="button" className="action-icon text-warning" data-toggle="tooltip" data-placement="top" title={t("edit category")} onClick={edit}>
+                <span
+                    role="button"
+                    className="action-icon text-warning"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title={t('edit category')}
+                    onClick={edit}>
                     <i className="mdi mdi-square-edit-outline"></i>
                 </span>
                 <span
@@ -95,10 +104,8 @@ const Categories = () => {
                     onClick={() => AleartMessage.Delete(row?.original._id, categoryDelete)}
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={t("delete category")}
-                >
+                    title={t('delete category')}>
                     <i className="mdi mdi-delete"></i>
-
                 </span>
             </>
         );
@@ -116,9 +123,13 @@ const Categories = () => {
                     if (item.categoryID === row.original._id) {
                         return (
                             <>
-                                <span role="button" className="action-icon text-warning" onClick={edit}
-                                    data-toggle="tooltip" data-placement="top" title={t("edit subcategory")}
-                                >
+                                <span
+                                    role="button"
+                                    className="action-icon text-warning"
+                                    onClick={edit}
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title={t('edit subcategory')}>
                                     <i className="mdi mdi-square-edit-outline"></i>
                                 </span>
 
@@ -126,8 +137,9 @@ const Categories = () => {
                                     role="button"
                                     className="action-icon text-danger"
                                     onClick={() => AleartMessage.Delete(item._id, subCategoryDelete)}
-                                    data-toggle="tooltip" data-placement="top" title={t("delete subcategory")}
-                                >
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title={t('delete subcategory')}>
                                     <i className="mdi mdi-delete"></i>
                                 </span>
 
@@ -141,7 +153,6 @@ const Categories = () => {
         );
     };
 
-
     // get all columns
     const columns = useMemo(
         () => [
@@ -153,11 +164,15 @@ const Categories = () => {
                 classes: 'table-user',
             },
             {
-                Header: t("image"),
+                Header: t('image'),
                 accessor: 'image',
                 Cell: ({ row }) => (
-                    <img style={{ height: "40px" }} src={row.original.image ? (imageBaseUrl + '/' + row.original?.image?.url) : noImage} alt={row.original.name} />
-                )
+                    <img
+                        style={{ height: '40px' }}
+                        src={row.original.image ? imageBaseUrl + '/' + row.original?.image?.url : noImage}
+                        alt={row.original.name}
+                    />
+                ),
             },
             {
                 Header: t('category name'),

@@ -5,13 +5,13 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 
 //Internal Lib Import
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 //api services
 import { useDepartmentCreateMutation, useDepartmentUpdateMutation } from '../../../redux/services/departmentService';
-import { useSelector } from 'react-redux';
 import MappedComponent from '../../contacts/mappedComponent/MappedComponent';
 
 const DepartmentAddEditModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
