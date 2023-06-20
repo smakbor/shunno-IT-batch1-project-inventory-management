@@ -20,7 +20,6 @@ import { useSelector } from 'react-redux';
 const Customers = () => {
     const { t } = useTranslation();
     const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
-    const [multiSelectedId, setMultiSelectedId] = useState([]);
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
@@ -31,6 +30,10 @@ const Customers = () => {
     const { data, isLoading, isError } = useCustomerListQuery(storeID, {
         skip: !storeID,
     });
+
+    const deleteMulti = () => {
+        console.log();
+    };
 
     /**
      * Show/hide the modal
@@ -200,6 +203,7 @@ const Customers = () => {
                             <Card.Body>
                                 <Table
                                     columns={columns}
+                                    deleteMulti={deleteMulti}
                                     data={data || []}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}

@@ -66,9 +66,9 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 });
 
 const Table = (props) => {
+    const { t } = useTranslation();
     const [exportData, setExportData] = useState({});
     const [showToggle, setShowToggle] = useState(false);
-    const { t } = useTranslation();
     const isSearchable = props['isSearchable'] || false;
     const isSortable = props['isSortable'] || false;
     const pagination = props['pagination'] || false;
@@ -77,7 +77,6 @@ const Table = (props) => {
     const addShowModal = props['addShowModal'];
     const tableInfo = props['tableInfo'] || {};
     const { tableName } = tableInfo || "";
-    const columns = props["columns"];
     const dataTable = useTable(
         {
             columns: props['columns'],
@@ -143,25 +142,20 @@ const Table = (props) => {
                 ]);
         }
     );
-
+    const { allColumns } = dataTable;
     let rows = pagination ? dataTable.page : dataTable.rows;
-    console.log(dataTable)
-    const handleToggle = e => {
-        console.log(e.target.name)
-    }
 
     useEffect(() => {
         if (rows) {
             const transformDate = rows.reduce(
                 (acc, current) => {
-                    acc.seleced.push(current.isSelected ? '1' : 0);
                     let { proprietor, store, _id, createdAt, updatedAt, ...others } = current.original;
                     let { _id: vId, createdAt: vCreatedAt, updatedAt: vUpdatedAt, ...valueOthers } = current.values;
                     acc.original.push(others);
                     acc.values.push(valueOthers);
                     return acc;
                 },
-                { original: [], values: [], seleced: [] }
+                { original: [], values: [] }
             );
             setExportData(transformDate);
         }
@@ -174,19 +168,24 @@ const Table = (props) => {
                     <Button variant="primary" className="me-2" onClick={addShowModal}>
                         <i className="mdi mdi-plus-circle me-2"></i> {t(`add ${tableName}`)}
                     </Button>
-                    <Button variant="danger">
+
+                    <Button variant="danger" onClick={props.deleteMulti}>
                         <i className="mdi mdi-delete"></i>
                     </Button>
                 </Col>
-
-                <ExportData showToggle={showToggle} setShowToggle={setShowToggle} fileName={props['exportFileName']} data={exportData.values} />
+                {exportData.values && <ExportData fileName={props['exportFileName']} data={exportData.values} showToggle={showToggle} setShowToggle={setShowToggle} />}
             </Row>
             {showToggle &&
-                <div className='d-flex'>
+                <div className='d-flex justify-content-start'>
                     {
-                        columns.map((col, i) => {
+                        allColumns.map((col, i) => {
                             return (
-                                <FormInput key={i} name={col.accessor} type='checkbox' onChange={e => handleToggle(e)} label={t(col.accessor)} className='d-inline-block me-2' />
+                                <div key={i} className='me-2'>
+                                    <label>
+                                        <input type="checkbox" {...col.getToggleHiddenProps()} className='me-1' />
+                                        {col.Header}
+                                    </label>
+                                </div>
                             )
                         })
                     }
