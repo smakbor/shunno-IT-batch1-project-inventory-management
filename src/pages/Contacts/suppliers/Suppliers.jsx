@@ -331,15 +331,13 @@ const Suppliers = () => {
                                 </Row>
                                 <Row>
                                     <Col>
-                                        <div className='d-flex'>
-                                            {
-                                                columns.map((col, i) => {
-                                                    return (
-                                                        <FormInput key={i} type='checkbox' label={t(col.accessor)} className='d-inline-block me-2' />
-                                                    )
-                                                })
-                                            }
-                                        </div>
+                                        {
+                                            columns.map((col, i) => {
+                                                return (
+                                                    <FormInput key={i} type='checkbox' label={t(col.acces)} className='d-inline-block me-2' />
+                                                )
+                                            })
+                                        }
                                     </Col>
                                 </Row>
 

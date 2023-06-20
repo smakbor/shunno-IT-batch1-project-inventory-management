@@ -1,23 +1,17 @@
 //External Lib Import
 import React, { useState } from 'react';
-import { Row, Col, Card, Button } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { GrDocumentCsv } from 'react-icons/gr';
-import { SiMicrosoftexcel } from 'react-icons/si';
-import { BiImport } from 'react-icons/bi';
 
 //Internal Lib Import
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
-import exportFromJson from '../../../utils/exportFromJson';
 import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 import AleartMessage from '../../../utils/AleartMessage';
 
 //api services
-
 import { useCustomerListQuery, useCustomerDeleteMutation } from '../../../redux/services/customerService';
-
 import CustomerCreateUpdateModal from './CustomerCreateUpdateModal';
 import DateFormatter from '../../../utils/DateFormatter';
 import { useSelector } from 'react-redux';
@@ -26,6 +20,7 @@ import { useSelector } from 'react-redux';
 const Customers = () => {
     const { t } = useTranslation();
     const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
+    const [multiSelectedId, setMultiSelectedId] = useState([]);
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
@@ -36,10 +31,10 @@ const Customers = () => {
     const { data, isLoading, isError } = useCustomerListQuery(storeID, {
         skip: !storeID,
     });
+
     /**
      * Show/hide the modal
      */
-
     const addShowModal = () => {
         setEditData(false);
         setDefaultValues({ name: '', status: 'ACTIVE' });
@@ -49,8 +44,8 @@ const Customers = () => {
     const toggle = (e) => {
         setModal(!modal);
     };
-
     /* action column render */
+
     const ActionColumn = ({ row }) => {
         const edit = () => {
             toggle();
@@ -203,41 +198,6 @@ const Customers = () => {
                     <Col xs={12}>
                         <Card>
                             <Card.Body>
-                                <Row className="mb-2">
-                                    <Col sm={5}>
-                                        <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add customer')}
-                                        </Button>
-                                    </Col>
-
-                                    <Col sm={7}>
-                                        <div className="text-sm-end">
-                                            <Button variant="success" className="mb-2 me-1">
-                                                <i className="mdi mdi-cog"></i>
-                                            </Button>
-
-                                            <Button variant="light" className="mb-2 me-1">
-                                                <BiImport />
-                                                {t('import')}
-                                            </Button>
-
-                                            <Button
-                                                variant="light"
-                                                className="mb-2 me-1"
-                                                onClick={() => exportFromJson([{ name: 'f' }], 'roles', 'xls')}>
-                                                <SiMicrosoftexcel />
-                                                {t('export')}
-                                            </Button>
-                                            <Button
-                                                variant="light"
-                                                className="mb-2 me-1"
-                                                onClick={() => exportFromJson([{ name: 'f' }], 'roles', 'csv')}>
-                                                <GrDocumentCsv /> {t('export')}
-                                            </Button>
-                                        </div>
-                                    </Col>
-                                </Row>
-
                                 <Table
                                     columns={columns}
                                     data={data || []}
@@ -245,17 +205,17 @@ const Customers = () => {
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}
                                     pagination={true}
-                                    isSelectable={false}
+                                    isSelectable={true}
                                     isSearchable={true}
                                     tableClass="table-striped"
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
+                                    exportFileName="customers"
                                 />
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
-                {/* <ModalCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} /> */}
                 <CustomerCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
