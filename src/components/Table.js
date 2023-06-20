@@ -65,9 +65,9 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 });
 
 const Table = (props) => {
+    const { t } = useTranslation();
     const [exportData, setExportData] = useState({});
 
-    const { t } = useTranslation();
     const isSearchable = props['isSearchable'] || false;
     const isSortable = props['isSortable'] || false;
     const pagination = props['pagination'] || false;
@@ -146,14 +146,13 @@ const Table = (props) => {
         if (rows) {
             const transformDate = rows.reduce(
                 (acc, current) => {
-                    acc.seleced.push(current.isSelected ? '1' : 0);
                     let { proprietor, store, _id, createdAt, updatedAt, ...others } = current.original;
                     let { _id: vId, createdAt: vCreatedAt, updatedAt: vUpdatedAt, ...valueOthers } = current.values;
                     acc.original.push(others);
                     acc.values.push(valueOthers);
                     return acc;
                 },
-                { original: [], values: [], seleced: [] }
+                { original: [], values: [] }
             );
             setExportData(transformDate);
         }
@@ -167,12 +166,11 @@ const Table = (props) => {
                         <i className="mdi mdi-plus-circle me-2"></i> {t('add customer')}
                     </Button>
 
-                    <Button variant="danger">
+                    <Button variant="danger" onClick={props.deleteMulti}>
                         <i className="mdi mdi-delete"></i>
                     </Button>
                 </Col>
-
-                <ExportData fileName={props['exportFileName']} data={exportData.values} />
+                {exportData.values && <ExportData fileName={props['exportFileName']} data={exportData.values} />}
             </Row>
             {isSearchable && (
                 <GlobalFilter
