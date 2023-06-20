@@ -35,5 +35,21 @@
     "delete permanently": "Delete permanently",
     "delete": "Delete",
     "cancel": "Cancel",
-    "yes delete": "Yes, Delete!"
+    "yes delete": "Yes, Delete!",
+    "name": "Name",
+    "father's name": "Father's Name",
+    "address": "Address",
+    "mobile": "Mobile",
+    "ledger number": "Ledger Number",
+    "due": "Due",
+    "date": "Date",
+    "action": "Action",
+    "image": "Image",
+    "category name": "Category Name",
+    "status": "Status",
+    "sub category": "Sub-category",
+    "search": "Search",
+    "unit name": "Unit Name",
+    "warranty name": "Warranty Name",
+    "company name": "Company Name"
 }

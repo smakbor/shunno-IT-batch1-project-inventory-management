@@ -35,5 +35,21 @@
     "delete permanently": "স্থায়ীভাবে ডিলিট করুন",
     "delete": "ডিলিট করুন",
     "cancel": "বাতিল করুন",
-    "yes delete": "হ্যাঁ, ডিলিট করুন"
+    "yes delete": "হ্যাঁ, ডিলিট করুন",
+    "name": "নাম",
+    "father's name": "বাবার নাম",
+    "address": "ঠিকানা",
+    "mobile": "মোবাইল",
+    "ledger number": "খতিয়ান নাম্বার",
+    "due": "বাকি",
+    "date": "তারিখ",
+    "action": "একশন",
+    "image": "ছবি",
+    "category name": "ক্যাটাগরির নাম",
+    "status": "স্ট্যাটাস",
+    "sub category": "সাব-ক্যাটাগরি",
+    "search": "খোঁজ করুন",
+    "unit name": "ইউনিটের নাম",
+    "warranty name": "ওয়ারেন্টির নাম",
+    "company name": "কোম্পানীর নাম"
 }
