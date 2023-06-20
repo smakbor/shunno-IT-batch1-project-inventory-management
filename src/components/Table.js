@@ -75,8 +75,8 @@ const Table = (props) => {
     const isSelectable = props['isSelectable'] || false;
     const isExpandable = props['isExpandable'] || false;
     const addShowModal = props['addShowModal'];
-    const tableInfo = props['tableInfo'];
-    const { tableName } = tableInfo;
+    const tableInfo = props['tableInfo'] || {};
+    const { tableName } = tableInfo || "";
     const columns = props["columns"];
     const dataTable = useTable(
         {
