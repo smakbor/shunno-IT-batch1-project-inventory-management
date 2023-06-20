@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import Pagination from './Pagination';
 import { Button, Col, Row } from 'react-bootstrap';
 import ExportData from './ExportData';
+import FormInput from './FormInput';
 
 // Define a default UI for filtering
 const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, searchBoxClass }) => {
@@ -66,14 +67,17 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 
 const Table = (props) => {
     const [exportData, setExportData] = useState({});
-
+    const [showToggle, setShowToggle] = useState(false);
     const { t } = useTranslation();
     const isSearchable = props['isSearchable'] || false;
     const isSortable = props['isSortable'] || false;
     const pagination = props['pagination'] || false;
     const isSelectable = props['isSelectable'] || false;
     const isExpandable = props['isExpandable'] || false;
-
+    const addShowModal = props['addShowModal'];
+    const tableInfo = props['tableInfo'];
+    const { tableName } = tableInfo;
+    const columns = props["columns"];
     const dataTable = useTable(
         {
             columns: props['columns'],
@@ -141,6 +145,10 @@ const Table = (props) => {
     );
 
     let rows = pagination ? dataTable.page : dataTable.rows;
+    console.log(dataTable)
+    const handleToggle = e => {
+        console.log(e.target.name)
+    }
 
     useEffect(() => {
         if (rows) {
@@ -163,17 +171,27 @@ const Table = (props) => {
         <>
             <Row className="mb-2">
                 <Col sm={5}>
-                    <Button variant="primary" className="me-2" onClick={'addShowModal'}>
-                        <i className="mdi mdi-plus-circle me-2"></i> {t('add customer')}
+                    <Button variant="primary" className="me-2" onClick={addShowModal}>
+                        <i className="mdi mdi-plus-circle me-2"></i> {t(`add ${tableName}`)}
                     </Button>
-
                     <Button variant="danger">
                         <i className="mdi mdi-delete"></i>
                     </Button>
                 </Col>
 
-                <ExportData fileName={props['exportFileName']} data={exportData.values} />
+                <ExportData showToggle={showToggle} setShowToggle={setShowToggle} fileName={props['exportFileName']} data={exportData.values} />
             </Row>
+            {showToggle &&
+                <div className='d-flex'>
+                    {
+                        columns.map((col, i) => {
+                            return (
+                                <FormInput key={i} name={col.accessor} type='checkbox' onChange={e => handleToggle(e)} label={t(col.accessor)} className='d-inline-block me-2' />
+                            )
+                        })
+                    }
+                </div>
+            }
             {isSearchable && (
                 <GlobalFilter
                     preGlobalFilteredRows={dataTable.preGlobalFilteredRows}

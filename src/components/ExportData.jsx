@@ -8,12 +8,12 @@ import { BiImport } from 'react-icons/bi';
 import exportFromJson from '../utils/exportFromJson';
 import { useTranslation } from 'react-i18next';
 
-const ExportData = ({ fileName = 'data', data = [] }) => {
+const ExportData = ({ fileName = 'data', data = [], setShowToggle, showToggle }) => {
     const { t } = useTranslation();
     return (
         <Col sm={7}>
             <div className="text-sm-end">
-                <Button variant="success" className="mb-2 me-1">
+                <Button variant="success" className="mb-2 me-1" onClick={() => setShowToggle(!showToggle)}>
                     <i className="mdi mdi-cog"></i>
                 </Button>
 

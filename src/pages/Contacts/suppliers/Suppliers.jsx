@@ -164,7 +164,7 @@ const Suppliers = () => {
             Cell: ActionColumn,
         },
     ];
-
+    const [updatedColumns, setUpdatedColumns] = useState(columns)
     // get pagelist to display
     const sizePerPageList = [
         {
@@ -220,127 +220,6 @@ const Suppliers = () => {
                     <Col xs={12}>
                         <Card>
                             <Card.Body>
-                                <Row className="mb-2">
-                                    <Col sm={5}>
-                                        <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add supplier')}
-                                        </Button>
-                                    </Col>
-
-                                    <Col sm={7}>
-                                        <div className="text-sm-end">
-                                            {/* <OverlayTrigger
-                                                placement="top"
-                                                overlay={
-                                                    <Tooltip>
-                                                        {t("download demo")}
-                                                    </Tooltip>
-                                                }
-                                            >
-                                                <Button variant="info" className="mb-2 me-1">
-                                                    <i className="dripicons-information" />
-                                                </Button>
-                                            </OverlayTrigger> */}
-                                            <OverlayTrigger
-                                                placement="top"
-                                                overlay={
-                                                    <Tooltip>
-                                                        {t("settings")}
-                                                    </Tooltip>
-                                                }
-                                            >
-                                                <Button variant="success" className="mb-2 me-1">
-                                                    <i className="mdi mdi-cog"
-                                                        data-toggle="tooltip"
-                                                        data-placement="top"
-                                                        title={t("settings")}
-                                                    />
-                                                </Button>
-                                            </OverlayTrigger>
-
-
-                                            <OverlayTrigger
-                                                placement="top"
-                                                overlay={
-                                                    <Tooltip>
-                                                        {t("import excel")}
-                                                    </Tooltip>
-                                                }
-                                            >
-                                                <Button variant="warning" className="mb-2 me-1" onClick={openModal}>
-                                                    <BiImport />
-                                                    {t("import")}
-                                                </Button>
-                                            </OverlayTrigger>
-
-                                            <OverlayTrigger
-                                                placement="top"
-                                                overlay={
-                                                    <Tooltip>
-                                                        {t("export excel")}
-                                                    </Tooltip>
-                                                }
-                                            >
-                                                <Button
-                                                    variant="success"
-                                                    className="mb-2 me-1 text-dark"
-                                                    onClick={() => exportFromJson(data, 'suppliers', 'xls')
-
-                                                    }
-                                                >
-                                                    <SiMicrosoftexcel />
-                                                    {t('export')}
-                                                </Button>
-                                            </OverlayTrigger>
-                                            <OverlayTrigger
-                                                placement="top"
-                                                overlay={
-                                                    <Tooltip>
-                                                        {t("export csv")}
-                                                    </Tooltip>
-                                                }
-                                            >
-                                                <Button
-                                                    variant="success"
-                                                    className="mb-2 me-1 text-dark"
-                                                    onClick={() => exportFromJson([data], 'roles', 'csv')}
-                                                >
-                                                    <GrDocumentCsv /> {t('export')}
-                                                </Button>
-                                            </OverlayTrigger>
-                                            <OverlayTrigger
-                                                placement="top"
-                                                overlay={
-                                                    <Tooltip>
-                                                        {t("export pdf")}
-                                                    </Tooltip>
-                                                }
-                                            >
-                                                <Button
-                                                    variant="danger"
-                                                    className="mb-2 me-1 text-dark"
-                                                    onClick={() => exportFromJson([data], 'roles', 'pdf')}
-                                                >
-                                                    <GrDocumentPdf /> {t('export')}
-                                                </Button>
-                                            </OverlayTrigger>
-
-
-                                        </div>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col>
-                                        {
-                                            columns.map((col, i) => {
-                                                return (
-                                                    <FormInput key={i} type='checkbox' label={t(col.acces)} className='d-inline-block me-2' />
-                                                )
-                                            })
-                                        }
-                                    </Col>
-                                </Row>
-
                                 <Table
                                     columns={columns || []}
                                     data={data}
@@ -353,6 +232,13 @@ const Suppliers = () => {
                                     tableClass="table-striped"
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
+                                    addShowModal={addShowModal}
+                                    tableInfo={
+                                        {
+                                            tableName: "supplier",
+
+                                        }
+                                    }
                                 />
                             </Card.Body>
                         </Card>
