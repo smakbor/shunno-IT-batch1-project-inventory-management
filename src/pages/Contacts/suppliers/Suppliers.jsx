@@ -1,8 +1,8 @@
 //External Lib Import
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Button } from 'react-bootstrap';
+import { Row, Col, Card, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { GrDocumentCsv } from 'react-icons/gr';
+import { GrDocumentCsv, GrDocumentPdf } from 'react-icons/gr';
 import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 
@@ -19,7 +19,8 @@ import AleartMessage from '../../../utils/AleartMessage';
 import { useSupplierListQuery, useSupplierDeleteMutation } from '../../../redux/services/suppliersService';
 import SupplierCreateUpdateModal from './SupplierCreateUpdateModal';
 import { useSelector } from 'react-redux';
-import ExcelImportModal from './ImportExport/ExcelImportModal';
+import ExcelImportModal from '../../modals/ExcelImportModal';
+import { FormInput } from '../../../components';
 
 // main component
 const Suppliers = () => {
@@ -35,6 +36,8 @@ const Suppliers = () => {
     const { data, isLoading, isError } = useSupplierListQuery(store, {
         skip: !store,
     });
+
+    // for import excel modal
     const [showModal, setShowModal] = useState(false);
 
     const openModal = () => {
@@ -53,7 +56,7 @@ const Suppliers = () => {
     };
 
     /**
-     * Show/hide the modal
+     * Show/hide the  modal
      */
 
     const addShowModal = () => {
@@ -126,7 +129,7 @@ const Suppliers = () => {
         {
             Header: t('address'),
             accessor: 'address',
-            sort: true,
+            sort: false,
             Cell: ({ row }) => {
                 const splitAddress = row.original.address.split(',');
                 return splitAddress.map((item, i) => (
@@ -226,53 +229,116 @@ const Suppliers = () => {
 
                                     <Col sm={7}>
                                         <div className="text-sm-end">
-                                            <Button variant="info" className="mb-2 me-1">
-                                                <i className="dripicons-information"
-                                                    data-toggle="tooltip"
-                                                    data-placement="top"
-                                                    title={t("download demo")}
-                                                />
-                                            </Button>
-                                            {/* <Button variant="success" className="mb-2 me-1">
-                                                <i className="mdi mdi-cog"
-                                                    data-toggle="tooltip"
-                                                    data-placement="top"
-                                                    title={t("settings")}
-                                                />
-                                            </Button> */}
-
-                                            <Button variant="light" className="mb-2 me-1" onClick={openModal}
-                                                data-toggle="tooltip"
-                                                data-placement="top"
-                                                title={t("import excel")}
-                                            >
-                                                <BiImport />
-                                                {t("import")}
-                                            </Button>
-
-                                            <Button
-                                                variant="light"
-                                                className="mb-2 me-1"
-                                                onClick={() => console.log(data)
-                                                    // exportFromJson([data], 'roles', 'xls')
+                                            {/* <OverlayTrigger
+                                                placement="top"
+                                                overlay={
+                                                    <Tooltip>
+                                                        {t("download demo")}
+                                                    </Tooltip>
                                                 }
-                                                data-toggle="tooltip"
-                                                data-placement="top"
-                                                title={t("export excel")}
                                             >
-                                                <SiMicrosoftexcel />
-                                                {t('export')}
-                                            </Button>
-                                            <Button
-                                                variant="light"
-                                                className="mb-2 me-1"
-                                                onClick={() => exportFromJson([data], 'roles', 'csv')}
-                                                data-toggle="tooltip"
-                                                data-placement="top"
-                                                title={t("export csv")}
+                                                <Button variant="info" className="mb-2 me-1">
+                                                    <i className="dripicons-information" />
+                                                </Button>
+                                            </OverlayTrigger> */}
+                                            <OverlayTrigger
+                                                placement="top"
+                                                overlay={
+                                                    <Tooltip>
+                                                        {t("settings")}
+                                                    </Tooltip>
+                                                }
                                             >
-                                                <GrDocumentCsv /> {t('export')}
-                                            </Button>
+                                                <Button variant="success" className="mb-2 me-1">
+                                                    <i className="mdi mdi-cog"
+                                                        data-toggle="tooltip"
+                                                        data-placement="top"
+                                                        title={t("settings")}
+                                                    />
+                                                </Button>
+                                            </OverlayTrigger>
+
+
+                                            <OverlayTrigger
+                                                placement="top"
+                                                overlay={
+                                                    <Tooltip>
+                                                        {t("import excel")}
+                                                    </Tooltip>
+                                                }
+                                            >
+                                                <Button variant="warning" className="mb-2 me-1" onClick={openModal}>
+                                                    <BiImport />
+                                                    {t("import")}
+                                                </Button>
+                                            </OverlayTrigger>
+
+                                            <OverlayTrigger
+                                                placement="top"
+                                                overlay={
+                                                    <Tooltip>
+                                                        {t("export excel")}
+                                                    </Tooltip>
+                                                }
+                                            >
+                                                <Button
+                                                    variant="success"
+                                                    className="mb-2 me-1 text-dark"
+                                                    onClick={() => exportFromJson(data, 'suppliers', 'xls')
+
+                                                    }
+                                                >
+                                                    <SiMicrosoftexcel />
+                                                    {t('export')}
+                                                </Button>
+                                            </OverlayTrigger>
+                                            <OverlayTrigger
+                                                placement="top"
+                                                overlay={
+                                                    <Tooltip>
+                                                        {t("export csv")}
+                                                    </Tooltip>
+                                                }
+                                            >
+                                                <Button
+                                                    variant="success"
+                                                    className="mb-2 me-1 text-dark"
+                                                    onClick={() => exportFromJson([data], 'roles', 'csv')}
+                                                >
+                                                    <GrDocumentCsv /> {t('export')}
+                                                </Button>
+                                            </OverlayTrigger>
+                                            <OverlayTrigger
+                                                placement="top"
+                                                overlay={
+                                                    <Tooltip>
+                                                        {t("export pdf")}
+                                                    </Tooltip>
+                                                }
+                                            >
+                                                <Button
+                                                    variant="danger"
+                                                    className="mb-2 me-1 text-dark"
+                                                    onClick={() => exportFromJson([data], 'roles', 'pdf')}
+                                                >
+                                                    <GrDocumentPdf /> {t('export')}
+                                                </Button>
+                                            </OverlayTrigger>
+
+
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <div className='d-flex'>
+                                            {
+                                                columns.map((col, i) => {
+                                                    return (
+                                                        <FormInput key={i} type='checkbox' label={t(col.accessor)} className='d-inline-block me-2' />
+                                                    )
+                                                })
+                                            }
                                         </div>
                                     </Col>
                                 </Row>
@@ -295,7 +361,7 @@ const Suppliers = () => {
                     </Col>
                 </Row>
                 <SupplierCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
-                <ExcelImportModal {...{ showModal, setImportedFile, openModal, closeModal, importExcel }} />
+                <ExcelImportModal {...{ showModal, setImportedFile, openModal, closeModal, importExcel, target: "suppliers", columnOrder: "(*name,*mobile)" }} />
             </>
         );
     }
