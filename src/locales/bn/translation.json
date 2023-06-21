@@ -51,5 +51,14 @@
     "search": "খোঁজ করুন",
     "unit name": "ইউনিটের নাম",
     "warranty name": "ওয়ারেন্টির নাম",
-    "company name": "কোম্পানীর নাম"
+    "company name": "কোম্পানীর নাম",
+    "import": "ইম্পোর্ট করুন",
+    "import suppliers": "সাপ্লায়ার ইম্পোর্ট",
+    "import customers": "গ্রাহক ইম্পোর্ট",
+    "import manufacturers": "ম্যানুফ্যাকচারার ইম্পোর্ট",
+    "import categories": "ক্যাটাগরি ইম্পোর্ট",
+    "import units": "ইউনিট ইম্পোর্ট",
+    "import warranties": "ওয়ারেন্টি ইম্পোর্ট",
+    "correct column order is": "সঠিক কলাম ক্রম",
+    "demo": "ডেমো"
 }

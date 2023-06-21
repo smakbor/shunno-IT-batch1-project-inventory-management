@@ -18,6 +18,7 @@ import Pagination from './Pagination';
 import { Button, Col, Row } from 'react-bootstrap';
 import ExportData from './ExportData';
 import FormInput from './FormInput';
+import CsvImportModal from '../pages/modals/CsvImportModal';
 
 // Define a default UI for filtering
 const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, searchBoxClass }) => {
@@ -67,6 +68,8 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 
 const Table = (props) => {
     const { t } = useTranslation();
+    const [importedFile, setImportedFile] = useState(null);
+    const [showModal, setShowModal] = useState(false);
     const [exportData, setExportData] = useState({});
     const [showToggle, setShowToggle] = useState(false);
     const isSearchable = props['isSearchable'] || false;
@@ -75,9 +78,8 @@ const Table = (props) => {
     const isSelectable = props['isSelectable'] || false;
     const isExpandable = props['isExpandable'] || false;
     const addShowModal = props['addShowModal'];
-    const toggleImportModal = props['toggleImportModal'];
     const tableInfo = props['tableInfo'] || {};
-    const { tableName } = tableInfo || "";
+    const { tableName, columnOrder, demoFile } = tableInfo || "";
     const dataTable = useTable(
         {
             columns: props['columns'],
@@ -145,6 +147,18 @@ const Table = (props) => {
     );
     const { allColumns } = dataTable;
     let rows = pagination ? dataTable.page : dataTable.rows;
+    // for import excel modal
+
+    const toggleImportModal = () => {
+        setShowModal(!showModal)
+    }
+
+    const importCsv = () => {
+        const file = importedFile
+        // Process the file here
+        console.log(file);
+        toggleImportModal();
+    };
 
     useEffect(() => {
         if (rows) {
@@ -177,7 +191,7 @@ const Table = (props) => {
                 {exportData.values && <ExportData fileName={props['exportFileName']} data={exportData.values} showToggle={showToggle} setShowToggle={setShowToggle} toggleImportModal={toggleImportModal} />}
             </Row>
             {showToggle &&
-                <div className='d-flex justify-content-start'>
+                <div className='d-flex justify-content-start bg-dragula p-2'>
                     {
                         allColumns.map((col, i) => {
                             return (
@@ -238,6 +252,7 @@ const Table = (props) => {
                 </table>
             </div>
             {pagination && <Pagination tableProps={dataTable} sizePerPageList={props['sizePerPageList']} />}
+            <CsvImportModal {...{ showModal, setImportedFile, toggleImportModal, importCsv, tableName, columnOrder, demoFile }} />
         </>
     );
 };

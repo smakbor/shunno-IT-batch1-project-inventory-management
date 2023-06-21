@@ -16,6 +16,8 @@ import CustomerCreateUpdateModal from './CustomerCreateUpdateModal';
 import DateFormatter from '../../../utils/DateFormatter';
 import { useSelector } from 'react-redux';
 
+import demoFile from "../../../assets/demo/customerDemo.csv"
+
 // main component
 const Customers = () => {
     const { t } = useTranslation();
@@ -214,7 +216,13 @@ const Customers = () => {
                                     tableClass="table-striped"
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
-                                    exportFileName="customers"
+                                    addShowModal={addShowModal}
+                                    tableInfo={{
+                                        tableName: "customers",
+                                        exportFileName: "customers",
+                                        columnOrder: "( *customerType, *mobile, *name, fatherName, email, remarks, nid, address, thana, district, reference/name, reference/mobile, reference/address, reference/nid, reference/relation, due, *status )",
+                                        demoFile
+                                    }}
                                 />
                             </Card.Body>
                         </Card>

@@ -19,13 +19,13 @@ import AleartMessage from '../../../utils/AleartMessage';
 import { useSupplierListQuery, useSupplierDeleteMutation } from '../../../redux/services/suppliersService';
 import SupplierCreateUpdateModal from './SupplierCreateUpdateModal';
 import { useSelector } from 'react-redux';
-import CsvImportModal from '../../modals/CsvImportModal';
+import demoFile from '../../../assets/demo/suppliersDemo.csv'
+
 
 // main component
 const Suppliers = () => {
     const { t } = useTranslation();
     const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
-    const [importedFile, setImportedFile] = useState(null);
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
     // store id
@@ -36,26 +36,7 @@ const Suppliers = () => {
         skip: !store,
     });
 
-    // for import excel modal
-    const [showModal, setShowModal] = useState(false);
 
-    // const openModal = () => {
-    //     setShowModal(true);
-    // };
-
-    // const closeModal = () => {
-    //     setShowModal(false);
-    // };
-    const toggleImportModal = () => {
-        setShowModal(!showModal)
-    }
-
-    const importExcel = () => {
-        const file = importedFile
-        // Process the file here
-        console.log(file);
-        toggleImportModal();
-    };
 
     /**
      * Show/hide the  modal
@@ -234,11 +215,11 @@ const Suppliers = () => {
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
                                     addShowModal={addShowModal}
-                                    toggleImportModal={toggleImportModal}
                                     tableInfo={
                                         {
-                                            tableName: "supplier",
-
+                                            tableName: "suppliers",
+                                            columnOrder: "( *mobile, *name, fatherName, company, email, remarks, nid, address, thana, district, reference/name, reference/mobile, reference/address, reference/nid, reference/relation, due, status, country )",
+                                            demoFile
                                         }
                                     }
                                 />
@@ -247,7 +228,7 @@ const Suppliers = () => {
                     </Col>
                 </Row>
                 <SupplierCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
-                <CsvImportModal {...{ showModal, setImportedFile, toggleImportModal, importExcel, target: "suppliers", columnOrder: "(*name,*mobile)" }} />
+
             </>
         );
     }
