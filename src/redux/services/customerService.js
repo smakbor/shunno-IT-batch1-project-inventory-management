@@ -32,6 +32,21 @@ export const customerService = apiService.injectEndpoints({
                 }
             },
         }),
+        customersImport: builder.mutation({
+            query: ({ store, postBody }) => ({
+                url: `import-data/${store}/customers`,
+                method: 'POST',
+                body: postBody,
+            }),
+            onQueryStarted({ store, postBody }, { dispatch, queryFulfilled }) {
+                queryFulfilled.then(
+                    ({ data: { data } }) => dispatch(
+                        apiService.util.updateQueryData("customerList", store, (draft) => draft = data.concat(draft)
+                        )
+                    ))
+            },
+
+        }),
 
         customerUpdate: builder.mutation({
             query: (postBody) => ({
@@ -76,5 +91,5 @@ export const customerService = apiService.injectEndpoints({
         }),
     }),
 });
-export const { useCustomerListQuery, useCustomerDeleteMutation, useCustomerCreateMutation, useCustomerUpdateMutation } =
+export const { useCustomerListQuery, useCustomerDeleteMutation, useCustomerCreateMutation, useCustomerUpdateMutation, useCustomersImportMutation } =
     customerService;

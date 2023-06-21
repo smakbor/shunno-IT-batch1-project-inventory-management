@@ -11,7 +11,7 @@ import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 import AleartMessage from '../../../utils/AleartMessage';
 
 //api services
-import { useCustomerListQuery, useCustomerDeleteMutation } from '../../../redux/services/customerService';
+import { useCustomerListQuery, useCustomerDeleteMutation, useCustomersImportMutation } from '../../../redux/services/customerService';
 import CustomerCreateUpdateModal from './CustomerCreateUpdateModal';
 import DateFormatter from '../../../utils/DateFormatter';
 import { useSelector } from 'react-redux';
@@ -28,7 +28,7 @@ const Customers = () => {
 
     const storeID = useSelector((state) => state.setting.activeStore?._id);
     const [customerDelete] = useCustomerDeleteMutation();
-
+    const [customersImport] = useCustomersImportMutation();
     const { data, isLoading, isError } = useCustomerListQuery(storeID, {
         skip: !storeID,
     });
@@ -134,7 +134,7 @@ const Customers = () => {
         {
             Header: t('date'),
             accessor: 'createdAt',
-            sort: false,
+            sort: true,
             Cell: ({ row }) => DateFormatter(row.original.createdAt),
             classes: 'table-user',
         },
@@ -217,11 +217,12 @@ const Customers = () => {
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
                                     addShowModal={addShowModal}
+                                    importFunc={customersImport}
                                     tableInfo={{
                                         tableName: "customers",
                                         exportFileName: "customers",
                                         columnOrder: "( *customerType, *mobile, *name, fatherName, email, remarks, nid, address, thana, district, reference/name, reference/mobile, reference/address, reference/nid, reference/relation, due, *status )",
-                                        demoFile
+                                        demoFile,
                                     }}
                                 />
                             </Card.Body>

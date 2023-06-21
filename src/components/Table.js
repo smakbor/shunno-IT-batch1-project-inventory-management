@@ -19,6 +19,7 @@ import { Button, Col, Row } from 'react-bootstrap';
 import ExportData from './ExportData';
 import FormInput from './FormInput';
 import CsvImportModal from '../pages/modals/CsvImportModal';
+import { useSelector } from 'react-redux';
 
 // Define a default UI for filtering
 const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, searchBoxClass }) => {
@@ -78,8 +79,11 @@ const Table = (props) => {
     const isSelectable = props['isSelectable'] || false;
     const isExpandable = props['isExpandable'] || false;
     const addShowModal = props['addShowModal'];
+    const importFunc = props['importFunc'];
     const tableInfo = props['tableInfo'] || {};
     const { tableName, columnOrder, demoFile } = tableInfo || "";
+
+    const store = useSelector(state => state.setting?.activeStore?._id)
     const dataTable = useTable(
         {
             columns: props['columns'],
@@ -155,8 +159,9 @@ const Table = (props) => {
 
     const importCsv = () => {
         const file = importedFile
-        // Process the file here
-        console.log(file);
+        const formData = new FormData();
+        formData.append("file", file);
+        importFunc({ store: store, postBody: formData })
         toggleImportModal();
     };
 
