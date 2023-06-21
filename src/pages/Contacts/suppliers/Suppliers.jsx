@@ -19,8 +19,7 @@ import AleartMessage from '../../../utils/AleartMessage';
 import { useSupplierListQuery, useSupplierDeleteMutation } from '../../../redux/services/suppliersService';
 import SupplierCreateUpdateModal from './SupplierCreateUpdateModal';
 import { useSelector } from 'react-redux';
-import ExcelImportModal from '../../modals/ExcelImportModal';
-import { FormInput } from '../../../components';
+import CsvImportModal from '../../modals/CsvImportModal';
 
 // main component
 const Suppliers = () => {
@@ -40,19 +39,22 @@ const Suppliers = () => {
     // for import excel modal
     const [showModal, setShowModal] = useState(false);
 
-    const openModal = () => {
-        setShowModal(true);
-    };
+    // const openModal = () => {
+    //     setShowModal(true);
+    // };
 
-    const closeModal = () => {
-        setShowModal(false);
-    };
+    // const closeModal = () => {
+    //     setShowModal(false);
+    // };
+    const toggleImportModal = () => {
+        setShowModal(!showModal)
+    }
 
     const importExcel = () => {
         const file = importedFile
         // Process the file here
         console.log(file);
-        closeModal();
+        toggleImportModal();
     };
 
     /**
@@ -131,11 +133,11 @@ const Suppliers = () => {
             accessor: 'address',
             sort: false,
             Cell: ({ row }) => {
-                const splitAddress = row.original.address.split(',');
-                return splitAddress.map((item, i) => (
+                const splitAddress = row.original?.address?.split(',');
+                return splitAddress?.map((item, i) => (
                     <p className="mb-0" key={i}>
                         {item}
-                        {i !== splitAddress.length - 1 ? ',' : ''}
+                        {i !== splitAddress?.length - 1 ? ',' : ''}
                     </p>
                 ));
             },
@@ -164,7 +166,6 @@ const Suppliers = () => {
             Cell: ActionColumn,
         },
     ];
-    const [updatedColumns, setUpdatedColumns] = useState(columns)
     // get pagelist to display
     const sizePerPageList = [
         {
@@ -233,6 +234,7 @@ const Suppliers = () => {
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
                                     addShowModal={addShowModal}
+                                    toggleImportModal={toggleImportModal}
                                     tableInfo={
                                         {
                                             tableName: "supplier",
@@ -245,7 +247,7 @@ const Suppliers = () => {
                     </Col>
                 </Row>
                 <SupplierCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
-                <ExcelImportModal {...{ showModal, setImportedFile, openModal, closeModal, importExcel, target: "suppliers", columnOrder: "(*name,*mobile)" }} />
+                <CsvImportModal {...{ showModal, setImportedFile, toggleImportModal, importExcel, target: "suppliers", columnOrder: "(*name,*mobile)" }} />
             </>
         );
     }

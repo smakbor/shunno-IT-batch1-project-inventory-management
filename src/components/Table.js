@@ -75,6 +75,7 @@ const Table = (props) => {
     const isSelectable = props['isSelectable'] || false;
     const isExpandable = props['isExpandable'] || false;
     const addShowModal = props['addShowModal'];
+    const toggleImportModal = props['toggleImportModal'];
     const tableInfo = props['tableInfo'] || {};
     const { tableName } = tableInfo || "";
     const dataTable = useTable(
@@ -173,7 +174,7 @@ const Table = (props) => {
                         <i className="mdi mdi-delete"></i>
                     </Button>
                 </Col>
-                {exportData.values && <ExportData fileName={props['exportFileName']} data={exportData.values} showToggle={showToggle} setShowToggle={setShowToggle} />}
+                {exportData.values && <ExportData fileName={props['exportFileName']} data={exportData.values} showToggle={showToggle} setShowToggle={setShowToggle} toggleImportModal={toggleImportModal} />}
             </Row>
             {showToggle &&
                 <div className='d-flex justify-content-start'>

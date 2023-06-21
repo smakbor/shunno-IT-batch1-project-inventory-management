@@ -1,11 +1,11 @@
 import { t } from 'i18next';
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-const ToggleColumnModal = ({ showModal, setImportedFile, openModal, closeModal, importExcel, target, columnOrder }) => {
+const CsvImportModal = ({ showModal, setImportedFile, toggleImportModal, importCsv, target, columnOrder }) => {
 
 
     return (
-        <Modal show={showModal} onHide={closeModal}>
+        <Modal className='custom-import-modal' show={showModal} onHide={toggleImportModal}>
             <Modal.Header className='justify-content-center' closeButton>
                 <Modal.Title>
                     {t(`import ${target}`)}
@@ -15,7 +15,7 @@ const ToggleColumnModal = ({ showModal, setImportedFile, openModal, closeModal, 
                 <h6 className='mb-3 mt-0'>{t("labels marked with star are required")}</h6>
                 <h4 className='mb-4'>{t("correct column order is")}:{columnOrder}</h4>
                 <div className='d-flex justify-content-between'>
-                    <input className='form-control d-inline-block w-75' type="file" accept=".xlsx, .xls" onChange={(e) => setImportedFile(e.target.files[0])} />
+                    <input className='form-control d-inline-block w-75' type="file" accept=".csv" onChange={(e) => setImportedFile(e.target.files[0])} />
                     <Button variant="info" className='d-block'>
                         <i className='dripicons-download me-1' />
                         {t("demo")}
@@ -23,10 +23,10 @@ const ToggleColumnModal = ({ showModal, setImportedFile, openModal, closeModal, 
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" onClick={importExcel}>
+                <Button variant="primary" onClick={importCsv}>
                     {t("import")}
                 </Button>
-                <Button variant="secondary" onClick={closeModal}>
+                <Button variant="danger" onClick={toggleImportModal}>
                     {t("cancel")}
                 </Button>
             </Modal.Footer>
@@ -34,4 +34,4 @@ const ToggleColumnModal = ({ showModal, setImportedFile, openModal, closeModal, 
     );
 };
 
-export default ToggleColumnModal;
+export default CsvImportModal;

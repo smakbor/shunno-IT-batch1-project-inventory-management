@@ -129,6 +129,15 @@ button#dropdown-languages {
     background: #fff;
 }
 
+.custom-import-modal .modal-dialog {
+    width: 80%;
+    /* Set the desired width for the modal */
+    max-width: 900px;
+    margin: 0 auto;
+    /* Optionally, set a maximum width for the modal */
+}
+
+
 .enlarged {
     cursor: zoom-out;
     position: fixed;

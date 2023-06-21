@@ -172,15 +172,6 @@ const UserRolePage = () => {
                     <Col xs={12}>
                         <Card>
                             <Card.Body>
-                                <Row className="mb-2">
-                                    <Col sm={5}>
-                                        <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add user role')}
-                                        </Button>
-                                    </Col>
-                                    <ExportData name="roles" data={roles} />
-                                </Row>
-
                                 <Table
                                     columns={columns}
                                     data={roles || []}

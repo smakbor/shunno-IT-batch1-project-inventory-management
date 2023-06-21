@@ -8,7 +8,7 @@ import { BiImport } from 'react-icons/bi';
 import exportFromJson from '../utils/exportFromJson';
 import { useTranslation } from 'react-i18next';
 
-const ExportData = ({ fileName = 'data', data = [], setShowToggle, showToggle }) => {
+const ExportData = ({ fileName = 'data', data = [], setShowToggle, showToggle, toggleImportModal }) => {
     const { t } = useTranslation();
     return (
         <Col sm={7}>
@@ -17,7 +17,7 @@ const ExportData = ({ fileName = 'data', data = [], setShowToggle, showToggle })
                     <i className="mdi mdi-cog"></i>
                 </Button>
 
-                <Button variant="light" className="mb-2 me-1">
+                <Button variant="light" className="mb-2 me-1" onClick={toggleImportModal}>
                     <BiImport />
                     {t('import')}
                 </Button>
