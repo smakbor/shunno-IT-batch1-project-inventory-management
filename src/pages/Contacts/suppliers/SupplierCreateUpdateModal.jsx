@@ -10,17 +10,17 @@ import { useSelector } from 'react-redux';
 //Internal Lib Import
 
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
-import MappedComponent from '../mappedComponent/MappedComponent';
+import MappedComponent from '../../../pages/mappedComponent/MappedComponent';
+
 //api services
 
 import { useSupplierCreateMutation, useSupplierUpdateMutation } from '../../../redux/services/suppliersService';
-import AleartMessage from '../../../utils/AleartMessage';
 
 const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
     const storeID = useSelector((state) => state.setting.activeStore?._id);
     const store = useSelector((state) => state.setting.activeStore);
-    const [supplierCreate, { isLoading, isSuccess }] = useSupplierCreateMutation();
+    const [supplierCreate, { isLoading, isSuccess, error }] = useSupplierCreateMutation();
     const [supplierUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useSupplierUpdateMutation();
 
     /*
@@ -28,22 +28,22 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            company: yup.string().required(t('please enter company name')),
-            name: yup.string().required(t('please enter customer name')),
-            // .min(3, t('minimum containing 3 letter')),
+            // company: yup.string().required(t('please enter company name')),
+            name: yup.string().required(t('please enter customer name')).min(3, t('minimum containing 3 letter')),
             fatherName: yup.string(),
             address: yup.string(),
-            mobile: yup.string().required(t('enter mobile number')).matches(/^(?:\+?88|0088)?01[3-9]\d{8}$/, t("please enter valid mobile number")),
+            mobile: yup
+                .string()
+                .required(t('enter mobile number'))
+                .matches(/^(?:\+?88|0088)?01[3-9]\d{8}$/, t('please enter valid mobile number')),
             email: yup.string().email(),
             nid: yup.string(),
             reference: yup.object().shape({
                 name: yup.string(),
-                mobile: yup.string().required(t("reference mobile is required")).matches(/^(?:\+?88|0088)?01[3-9]\d{8}$/, t("please enter valid mobile number")),
                 address: yup.string(),
                 nid: yup.string(),
                 relation: yup.string(),
             }),
-            status: yup.string().required(t("please select status"))
         })
     );
 
@@ -61,13 +61,13 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             placeholder: t('please enter company name'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
-            required: true,
+            required: false,
         },
         {
-            label: t(' name'),
+            label: t('name'),
             type: 'text',
             name: 'name',
-            placeholder: t('please enter suppliler name'),
+            placeholder: t('please enter name'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
             required: true,
@@ -85,7 +85,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             label: t('email'),
             type: 'email',
             name: 'email',
-            placeholder: t('please enter supplier email'),
+            placeholder: t('please enter email'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
             required: false,
@@ -94,7 +94,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             label: t('NID'),
             type: 'text',
             name: 'nid',
-            placeholder: t('please enter supplier nid'),
+            placeholder: t('please enter nid'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
             required: false,
@@ -103,7 +103,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             label: t('address'),
             type: 'text',
             name: 'address',
-            placeholder: t('please enter supplier address'),
+            placeholder: t('please enter address'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
             required: false,
@@ -157,7 +157,7 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             label: t('previous due'),
             type: 'number',
             name: 'due',
-            placeholder: t('please enter supplier previous due'),
+            placeholder: t('please enter previous due'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
             required: false,
@@ -176,11 +176,11 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             label: t('reference mobile'),
             type: 'text',
             name: 'reference.mobile',
-            placeholder: t('please enter supplier mobile'),
+            placeholder: t('please enter reference mobile'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
             nested: true,
-            required: true,
+            required: false,
         },
         {
             label: t('reference address'),
@@ -212,35 +212,17 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             nested: true,
             required: false,
         },
-        {
-            label: t('status'),
-            type: 'react-select',
-            name: 'status',
-            placeholder: t('please enter status'),
-            containerClass: 'mb-3',
-            col: 'col-12 col-md-6 col-lg-4',
-            required: true,
-            options: [
-                { label: 'please select status', value: '' },
-                { label: 'new', value: 'NEW' },
-                { label: 'active', value: 'ACTIVE' },
-                { label: 'inactive', value: 'INACTIVE' },
-                { label: 'banned', value: 'BANNED' },
-                { label: 'deleted', value: 'DELETED' },
-            ],
-            // control: control,
-        },
     ];
 
     const onSubmit = (formData) => {
         formData.store = storeID;
         formData.due = Number(formData.due);
         if (!editData) {
-            supplierCreate(removeEmptyObj(formData))
+            supplierCreate(removeEmptyObj(formData));
             // .then(({ data: { message } }) => AleartMessage.SuccessFul(message));
         } else {
             const updatedData = { ...editData, ...formData };
-            supplierUpdate(removeEmptyObj(updatedData))
+            supplierUpdate(removeEmptyObj(updatedData));
             // .then(({ data: { message } }) => AleartMessage.SuccessFul(message));
         }
     };
@@ -263,7 +245,8 @@ const SupplierCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                             updateLoad={updateLoad}
                             editData={editData}
                             updateTitle={t('update supplier')}
-                            createTitle={t('create supplier')}
+                            createTitle={t('add supplier')}
+                            error={error?.data}
                         />
                     </Modal.Body>
                 </Modal>

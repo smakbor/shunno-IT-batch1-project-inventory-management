@@ -38,7 +38,7 @@ const Department = () => {
 
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: 'ACTIVE' });
+        setDefaultValues({});
         setModal(!modal);
     };
 

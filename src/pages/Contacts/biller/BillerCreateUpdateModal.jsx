@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button, Modal, Spinner, Col, Row } from 'react-bootstrap';
 import * as yup from 'yup';
-import { ValidationError } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
@@ -12,28 +11,30 @@ import { useSelector } from 'react-redux';
 
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
 import MappedComponent from '../../../pages/mappedComponent/MappedComponent';
-import { MobileRegx } from '../../../helpers/FormValidation';
 //api services
-import { useCustomerCreateMutation, useCustomerUpdateMutation } from '../../../redux/services/customerService';
 
-const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
+import { useBillerCreateMutation, useBillerUpdateMutation } from '../../../redux/services/billerService';
+
+const BillerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
     //store id
     const store = useSelector((state) => state.setting.activeStore?._id);
-    const [customerCreate, { isLoading, isSuccess, error }] = useCustomerCreateMutation();
-
-    const [customerUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCustomerUpdateMutation();
+    const [billerCreate, { isLoading, isSuccess, error }] = useBillerCreateMutation();
+    const [billerUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useBillerUpdateMutation();
+    const [err, setErr] = useState('');
 
     /*
      * form validation schema
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter  name')).min(3, t('minimum containing 3 letter')),
-            customerType: yup.string().required(t('please select customer type')),
-            mobile: yup.string().required(t('enter mobile number')).matches(MobileRegx, t('enter valid number')),
+            name: yup.string().required(t('please enter name')).min(3, t('minimum containing 3 letter')),
+            mobile: yup
+                .string()
+                .required(t('please enter mobile number'))
+                .matches(/^(?:\+?88|0088)?01[3-9]\d{8}$/, t('enter valid number')),
 
-            ledgerNumber: yup.string().required(t('please select ledger number')),
+            status: yup.string().required(t('please select status')),
             email: yup.string().email('please valid email'),
             reference: yup.object().shape({
                 name: yup.string(),
@@ -54,21 +55,6 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
 
     const inputData = [
         {
-            label: t('customer type'),
-            type: 'react-select',
-            name: 'customerType',
-            placeholder: t('please enter customer type'),
-            containerClass: 'mb-3',
-            col: 'col-12 col-md-6 col-lg-4',
-            required: true,
-            options: [
-                { label: 'please select customer type', value: '' },
-                { label: 'retail', value: 'RETAIL' },
-                { label: 'wholesale', value: 'WHOLESALE' },
-            ],
-        },
-
-        {
             label: t(' name'),
             type: 'text',
             name: 'name',
@@ -88,7 +74,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             required: true,
         },
         {
-            label: t('father name'),
+            label: t('father name '),
             type: 'text',
             name: 'fatherName',
             placeholder: t('please enter father name'),
@@ -106,7 +92,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             required: false,
         },
         {
-            label: t('nid'),
+            label: t('NID'),
             type: 'text',
             name: 'nid',
             placeholder: t('please enter nid'),
@@ -133,15 +119,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             col: 'col-12 col-md-6 col-lg-4',
             required: false,
         },
-        {
-            label: t('ledger number'),
-            type: 'text',
-            name: 'ledgerNumber',
-            placeholder: t('please enter ledger number'),
-            containerClass: 'mb-3',
-            col: 'col-12 col-md-6 col-lg-4',
-            required: true,
-        },
+
         {
             label: t('remarks'),
             type: 'text',
@@ -170,10 +148,28 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             required: false,
         },
         {
+            label: t('city'),
+            type: 'text',
+            name: 'city',
+            placeholder: t('please enter city'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
             label: t('country'),
             type: 'text',
             name: 'country',
             placeholder: t('please enter country'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: false,
+        },
+        {
+            label: t('description'),
+            type: 'text',
+            name: 'description',
+            placeholder: t('please enter description'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
             required: false,
@@ -185,7 +181,6 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             placeholder: t('please enter reference name'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
-            nested: true,
             required: false,
         },
         {
@@ -205,7 +200,6 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             placeholder: t('please enter reference address'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
-            nested: true,
             required: false,
         },
         {
@@ -215,7 +209,6 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             placeholder: t('please enter reference nid'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
-            nested: true,
             required: false,
         },
 
@@ -226,8 +219,24 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             placeholder: t('please enter reference relation'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-6 col-lg-4',
-            nested: true,
             required: false,
+        },
+        {
+            label: t('status'),
+            type: 'react-select',
+            name: 'status',
+            placeholder: t('please enter status'),
+            containerClass: 'mb-3',
+            col: 'col-12 col-md-6 col-lg-4',
+            required: true,
+            options: [
+                { label: 'please select status', value: '' },
+                { label: 'new', value: 'NEW' },
+                { label: 'active', value: 'ACTIVE' },
+                { label: 'inactive', value: 'INACTIVE' },
+                { label: 'banned', value: 'BANNED' },
+                { label: 'delete', value: 'DELETED' },
+            ],
         },
     ];
 
@@ -236,13 +245,14 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
      */
 
     const onSubmit = (formData) => {
+        console.log(formData);
         formData.store = store;
         formData.due = Number(formData.due);
         if (!editData) {
-            customerCreate(removeEmptyObj(formData));
+            billerCreate(removeEmptyObj(formData));
         } else {
             const updatedData = { ...editData, ...formData };
-            customerUpdate(removeEmptyObj(updatedData));
+            billerUpdate(removeEmptyObj(updatedData));
         }
     };
 
@@ -251,7 +261,7 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
             <Card.Body>
                 <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false} size="xl">
                     <Modal.Header onHide={toggle} closeButton>
-                        <h4 className="modal-title">{editData ? t('update customer') : t('add customer')}</h4>
+                        <h4 className="modal-title">{editData ? t('update biller') : t('add biller')}</h4>
                     </Modal.Header>
 
                     <Modal.Body>
@@ -263,9 +273,8 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
                             isLoading={isLoading}
                             updateLoad={updateLoad}
                             editData={editData}
-                            updateTitle={t('update customer')}
-                            createTitle={t('add customer')}
-                            error={error?.data}
+                            updateTitle={t('update biller')}
+                            createTitle={t('add biller')}
                         />
                     </Modal.Body>
                 </Modal>
@@ -274,4 +283,4 @@ const CustomerCreateUpdateModal = ({ modal, setModal, toggle, editData, defaultV
     );
 };
 
-export default CustomerCreateUpdateModal;
+export default BillerCreateUpdateModal;

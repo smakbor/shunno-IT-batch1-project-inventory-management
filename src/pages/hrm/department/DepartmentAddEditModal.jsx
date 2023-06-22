@@ -8,11 +8,10 @@ import classNames from 'classnames';
 
 //Internal Lib Import
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
-
+import MappedComponent from '../../../pages/mappedComponent/MappedComponent';
 //api services
 import { useDepartmentCreateMutation, useDepartmentUpdateMutation } from '../../../redux/services/departmentService';
 import { useSelector } from 'react-redux';
-import MappedComponent from '../../contacts/mappedComponent/MappedComponent';
 
 const DepartmentAddEditModal = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
@@ -35,7 +34,7 @@ const DepartmentAddEditModal = ({ modal, setModal, toggle, editData, defaultValu
             label: t('department name'),
             type: 'text',
             name: 'name',
-            placeholder: t('please enter department name'),
+            placeholder: t('please enter name'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-12 col-lg-12',
             required: true,

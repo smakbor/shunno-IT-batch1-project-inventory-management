@@ -43,7 +43,6 @@ const Suppliers = () => {
         setDefaultValues({});
         setEditData(false);
         setModal(!modal);
-
     };
 
     const toggle = (e) => {
@@ -111,8 +110,8 @@ const Suppliers = () => {
             accessor: 'address',
             sort: true,
             Cell: ({ row }) => {
-                const splitAddress = row.original.address.split(',');
-                return splitAddress.map((item, i) => (
+                const splitAddress = row.original?.address?.split(',');
+                return splitAddress?.map((item, i) => (
                     <p className="mb-0" key={i}>
                         {item}
                         {i !== splitAddress.length - 1 ? ',' : ''}

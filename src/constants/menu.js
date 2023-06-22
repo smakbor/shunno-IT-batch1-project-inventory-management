@@ -51,7 +51,7 @@ const MENU_ITEMS = () => {
 
         {
             key: 'people',
-            label: t('people'),
+            label: t('People'),
             isTitle: false,
             icon: 'dripicons-user',
             children: [
@@ -69,6 +69,14 @@ const MENU_ITEMS = () => {
                     isTitle: false,
                     icon: 'uil-users-alt',
                     url: '/customers',
+                    parentKey: 'people',
+                },
+                {
+                    key: 'billers',
+                    label: t('billers'),
+                    isTitle: false,
+                    icon: 'uil-users-alt',
+                    url: '/billers',
                     parentKey: 'people',
                 },
             ],

@@ -78,7 +78,7 @@ const Warranty = () => {
             classes: 'table-user',
         },
         {
-            Header: t('warranty name'),
+            Header: t('name'),
             accessor: 'name',
             sort: true,
             Cell: ({ row }) => row.original.name,

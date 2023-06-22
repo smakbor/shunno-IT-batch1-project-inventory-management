@@ -16,25 +16,24 @@ import AleartMessage from '../../../utils/AleartMessage';
 
 //api services
 
-import { useCustomerListQuery, useCustomerDeleteMutation } from '../../../redux/services/customerService';
-
-import CustomerCreateUpdateModal from './CustomerCreateUpdateModal';
+import BillerCreateUpdateModal from './BillerCreateUpdateModal';
 import DateFormatter from '../../../utils/DateFormatter';
 import { useSelector } from 'react-redux';
+import { useBillerDeleteMutation, useBillerListQuery } from '../../../redux/services/billerService';
 
 // main component
-const Customers = () => {
+const Billers = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
+    const [defaultValues, setDefaultValues] = useState({});
 
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
 
-    const storeID = useSelector((state) => state.setting.activeStore?._id);
-    const [customerDelete] = useCustomerDeleteMutation();
+    const store = useSelector((state) => state.setting.activeStore?._id);
+    const [billerDelete] = useBillerDeleteMutation();
 
-    const { data, isLoading, isError } = useCustomerListQuery(storeID, {
-        skip: !storeID,
+    const { data, isLoading, isError } = useBillerListQuery(store, {
+        skip: !store,
     });
     /**
      * Show/hide the modal
@@ -72,7 +71,7 @@ const Customers = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, customerDelete)}>
+                    onClick={() => AleartMessage.Delete(row?.original._id, billerDelete)}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
@@ -89,7 +88,7 @@ const Customers = () => {
             classes: 'table-user',
         },
         {
-            Header: t("father's name"),
+            Header: t('father name'),
             accessor: 'fatherName',
             sort: true,
             Cell: ({ row }) => row.original.fatherName,
@@ -168,8 +167,8 @@ const Customers = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('customers'), path: '/customers', active: true }]}
-                    title={t('customers')}
+                    breadCrumbItems={[{ label: t('billers'), path: '/billers', active: true }]}
+                    title={t('billers')}
                 />
                 <Card>
                     <Card.Body>
@@ -182,8 +181,8 @@ const Customers = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('customers'), path: '/customers', active: true }]}
-                    title={t('customers')}
+                    breadCrumbItems={[{ label: t('billers'), path: '/billers', active: true }]}
+                    title={t('billers')}
                 />
                 <Card>
                     <Card.Body>
@@ -196,8 +195,8 @@ const Customers = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('customers'), path: '/customers', active: true }]}
-                    title={t('customers')}
+                    breadCrumbItems={[{ label: t('billers'), path: '/billers', active: true }]}
+                    title={t('billers')}
                 />
                 <Row>
                     <Col xs={12}>
@@ -206,7 +205,7 @@ const Customers = () => {
                                 <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add customer')}
+                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add biller')}
                                         </Button>
                                     </Col>
 
@@ -255,10 +254,11 @@ const Customers = () => {
                         </Card>
                     </Col>
                 </Row>
-                <CustomerCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
+
+                <BillerCreateUpdateModal {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }
 };
 
-export default Customers;
+export default Billers;

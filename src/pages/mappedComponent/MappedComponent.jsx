@@ -1,5 +1,5 @@
 import { Button, Col, Row, Spinner } from 'react-bootstrap';
-import { FormInput } from '../../../components';
+import FormInput from '../../../src/components/FormInput';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -13,9 +13,9 @@ const MappedComponent = ({
     editData,
     updateTitle,
     createTitle,
+    error,
 }) => {
     const methods = useForm({ mode: 'onChange', defaultValues, resolver: schemaResolver });
-
     const {
         handleSubmit,
         register,
@@ -23,7 +23,19 @@ const MappedComponent = ({
         setValue,
         reset,
         formState: { errors },
+        setError,
     } = methods;
+
+    useEffect(() => {
+        if (error?.code == 400 && Array.isArray(error?.data)) {
+            error.data.forEach((item) => {
+                setError(item.field, {
+                    type: 'server',
+                    message: item?.message,
+                });
+            });
+        }
+    }, [error]);
 
     useEffect(() => {
         reset(defaultValues);

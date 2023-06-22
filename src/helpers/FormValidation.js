@@ -1,5 +1,5 @@
 let EmailRegx = /\S+@\S+\.\S+/;
-let MobileRegx = /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/;
+export let MobileRegx = /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/;
 let validFileExtensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'PNG', 'png'];
 
 class FormValidation {

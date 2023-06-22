@@ -10,7 +10,7 @@ import Select from 'react-select';
 //Internal Lib Import
 import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
-import MappedComponent from '../../contacts/mappedComponent/MappedComponent';
+import MappedComponent from '../../../pages/mappedComponent/MappedComponent';
 
 //api services
 import { useWarrantyCreateMutation, useWarrantyUpdateMutation } from '../../../redux/services/warrantyService';
@@ -27,7 +27,7 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter unit name')).min(2, t('minimum containing 2 letters')),
+            name: yup.string().required(t('please enter name')).min(2, t('minimum containing 2 letters')),
             status: yup.string().required(t('please select status')),
         })
     );
@@ -37,7 +37,7 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
             label: t('warranty name'),
             type: 'text',
             name: 'name',
-            placeholder: t('please enter warranty name'),
+            placeholder: t('please enter name'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-12 col-lg-12',
             required: true,
@@ -83,7 +83,7 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
             <Card.Body>
                 <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false}>
                     <Modal.Header onHide={toggle} closeButton>
-                        <h4 className="modal-title">{editData ? t('update warranty') : t('create warranty')}</h4>
+                        <h4 className="modal-title">{editData ? t('update warranty') : t('add warranty')}</h4>
                     </Modal.Header>
 
                     <Modal.Body>
@@ -96,7 +96,7 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
                             updateLoad={updateLoad}
                             editData={editData}
                             updateTitle={t('update warrnaty')}
-                            createTitle={t('create warranty')}
+                            createTitle={t('add warranty')}
                         />
                     </Modal.Body>
                 </Modal>

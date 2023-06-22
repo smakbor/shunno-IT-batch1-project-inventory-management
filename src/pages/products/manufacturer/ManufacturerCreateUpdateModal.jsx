@@ -8,7 +8,7 @@ import classNames from 'classnames';
 
 //Internal Lib Import
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
-import MappedComponent from '../../contacts/mappedComponent/MappedComponent';
+import MappedComponent from '../../../pages/mappedComponent/MappedComponent';
 //api services
 
 import {
@@ -28,7 +28,7 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
      */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter manufacturer name')).min(2, t('minimum containing 2 letter')),
+            name: yup.string().required(t('please enter name')).min(2, t('minimum containing 2 letter')),
         })
     );
 
@@ -37,7 +37,7 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
             label: t('manufacturer name'),
             type: 'text',
             name: 'name',
-            placeholder: t('please enter manufacturer name'),
+            placeholder: t('please enter name'),
             containerClass: 'mb-3',
             col: 'col-12 col-md-12 col-lg-12',
             required: true,
@@ -80,9 +80,7 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
             <Card.Body>
                 <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false}>
                     <Modal.Header onHide={toggle} closeButton>
-                        <h4 className="modal-title">
-                            {editData ? t('update manufacturer') : t('create manufacturer')}
-                        </h4>
+                        <h4 className="modal-title">{editData ? t('update manufacturer') : t('add manufacturer')}</h4>
                     </Modal.Header>
 
                     <Modal.Body>
@@ -95,7 +93,7 @@ const ManufacturerCreateUpdateModal = ({ modal, setModal, toggle, setEditData, e
                             updateLoad={updateLoad}
                             editData={editData}
                             updateTitle={t('update manufacturer')}
-                            createTitle={t('create manufacturer')}
+                            createTitle={t('add manufacturer')}
                         />
                     </Modal.Body>
                 </Modal>

@@ -74,7 +74,7 @@ const ModalCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues })
                                 <input
                                     type="text"
                                     name="name"
-                                    placeholder="unit name"
+                                    placeholder="name"
                                     className="form-control"
                                     onChange={unitHandlerChange}
                                 />

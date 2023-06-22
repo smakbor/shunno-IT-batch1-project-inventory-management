@@ -11,7 +11,7 @@ import { useForm, useWatch } from 'react-hook-form';
 //Internal Lib Import
 import removeEmptyObj from '../../helpers/removeEmptyObj';
 import { useRoleListQuery } from '../../redux/services/roleService';
-import MappedComponent from '../contacts/mappedComponent/MappedComponent';
+import MappedComponent from '../../../src/pages/mappedComponent/MappedComponent';
 
 //api services
 import { useStaffCreateMutation, useStaffUpdateMutation } from '../../redux/services/staffService';

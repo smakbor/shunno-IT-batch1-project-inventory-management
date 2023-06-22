@@ -11,6 +11,7 @@ const Inbox = lazy(() => import('../pages/message/Inbox.jsx'));
 const Warranty = lazy(() => import('../pages/products/warranty/Warranty.jsx'));
 const Suppliers = lazy(() => import('../pages/contacts/suppliers/Suppliers.jsx'));
 const Customers = lazy(() => import('..//pages/contacts/customers/Customers.jsx'));
+const Billers = lazy(() => import('../pages/contacts/biller/Biller.jsx'));
 const Units = lazy(() => import('../pages/products/unit/Units.jsx'));
 const UserRolePage = lazy(() => import('../pages/permissions/UserRolePage.jsx'));
 const Permissions = lazy(() => import('../pages/permissions/Permissions.jsx'));
@@ -70,6 +71,12 @@ const privateRoutes = [
     {
         path: '/customers',
         element: <LazyLoad component={Customers} />,
+        roles: ['ALL', 'PROPRIETOR'],
+        routePermission: 'ALL',
+    },
+    {
+        path: '/billers',
+        element: <LazyLoad component={Billers} />,
         roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
