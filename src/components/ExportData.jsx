@@ -13,7 +13,7 @@ const ExportData = ({ fileName, data, setShowToggle, showToggle, toggleImportMod
         <Col sm={7}>
             <div className="text-sm-end">
                 <Button variant="success" className="mb-2 me-1" onClick={() => setShowToggle(!showToggle)}>
-                    <i className="mdi mdi-cog"></i>
+                    <i className="dripicons-toggles"></i>
                 </Button>
 
                 <Button variant="light" className="mb-2 me-1" onClick={toggleImportModal}>

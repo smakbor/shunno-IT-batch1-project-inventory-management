@@ -16,7 +16,7 @@ import AleartMessage from '../../../utils/AleartMessage';
 
 //api services
 
-import { useSupplierListQuery, useSupplierDeleteMutation } from '../../../redux/services/suppliersService';
+import { useSupplierListQuery, useSupplierDeleteMutation, useSuppliersImportMutation, useSupplierMultiDeleteMutation } from '../../../redux/services/suppliersService';
 import SupplierCreateUpdateModal from './SupplierCreateUpdateModal';
 import { useSelector } from 'react-redux';
 import demoFile from '../../../assets/demo/suppliersDemo.csv'
@@ -31,13 +31,22 @@ const Suppliers = () => {
     // store id
     const store = useSelector((state) => state.setting.activeStore?._id);
     const [supplierDelete] = useSupplierDeleteMutation();
-
+    const [supplierMultiDelete] = useSupplierMultiDeleteMutation();
+    const [suppliersImport] = useSuppliersImportMutation();
     const { data, isLoading, isError } = useSupplierListQuery(store, {
         skip: !store,
     });
 
-
-
+    //fake visibility
+    const visibility = {
+        district: false,
+        thana: false,
+        referenceName: false,
+        referenceMobile: false,
+        referenceAddress: false,
+        referenceRelation: false,
+        referenceNid: false,
+    }
     /**
      * Show/hide the  modal
      */
@@ -110,6 +119,27 @@ const Suppliers = () => {
             classes: 'table-user',
         },
         {
+            Header: t('mobile'),
+            accessor: 'mobile',
+            sort: false,
+            Cell: ({ row }) => row.original.mobile,
+            classes: 'table-user',
+        },
+        {
+            Header: t('email'),
+            accessor: 'email',
+            sort: false,
+            Cell: ({ row }) => row.original.email,
+            classes: 'table-user',
+        },
+        {
+            Header: t('due'),
+            accessor: 'due',
+            sort: true,
+            Cell: ({ row }) => row.original.due,
+            classes: 'table-user',
+        },
+        {
             Header: t('address'),
             accessor: 'address',
             sort: false,
@@ -125,20 +155,82 @@ const Suppliers = () => {
             classes: 'table-user',
         },
         {
-            Header: t('mobile'),
-            accessor: 'mobile',
-            sort: true,
-            Cell: ({ row }) => row.original.mobile,
+            Header: t('district'),
+            accessor: 'district',
+            sort: false,
+            Cell: ({ row }) => row.original.district,
             classes: 'table-user',
         },
         {
-            Header: t('due'),
-            accessor: 'due',
-            sort: true,
-            Cell: ({ row }) => row.original.due,
+            Header: t('thana'),
+            accessor: 'thana',
+            sort: false,
+            Cell: ({ row }) => row.original.thana,
             classes: 'table-user',
         },
-
+        {
+            Header: t('father name'),
+            accessor: 'fatherName',
+            sort: false,
+            Cell: ({ row }) => row.original.fatherName,
+            classes: 'table-user',
+        },
+        {
+            Header: t('nid'),
+            accessor: 'nid',
+            sort: false,
+            Cell: ({ row }) => row.original.nid,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference name'),
+            accessor: 'referenceName',
+            sort: false,
+            Cell: ({ row }) => row.original.reference.name,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference mobile'),
+            accessor: 'referenceMobile',
+            sort: false,
+            Cell: ({ row }) => row.original.reference.mobile,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference nid'),
+            accessor: 'referenceNid',
+            sort: false,
+            Cell: ({ row }) => row.original.reference.nid,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference relation'),
+            accessor: 'referenceRelation',
+            sort: false,
+            Cell: ({ row }) => row.original.reference.relation,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference address'),
+            accessor: 'referenceAddress',
+            sort: false,
+            Cell: ({ row }) => row.original.reference.address,
+            classes: 'table-user',
+        },
+        {
+            Header: t('status'),
+            accessor: 'status',
+            sort: true,
+            Cell: ({ row }) => t(row.original.status.toLowerCase()),
+            classes: 'table-user',
+        },
+        {
+            Header: t('remarks'),
+            accessor: 'remarks',
+            sort: false,
+            Cell: ({ row }) => row.original.remarks,
+            classes: 'table-user',
+        },
         {
             Header: t('action'),
             accessor: 'action',
@@ -203,7 +295,7 @@ const Suppliers = () => {
                         <Card>
                             <Card.Body>
                                 <Table
-                                    columns={columns || []}
+                                    columns={columns}
                                     data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
@@ -215,11 +307,15 @@ const Suppliers = () => {
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
                                     addShowModal={addShowModal}
+                                    importFunc={suppliersImport}
+                                    deleteMulti={supplierMultiDelete}
                                     tableInfo={
                                         {
                                             tableName: "suppliers",
+                                            exportFileName: "suppliers",
                                             columnOrder: "( *mobile, *name, fatherName, company, email, remarks, nid, address, thana, district, reference/name, reference/mobile, reference/address, reference/nid, reference/relation, due, status, country )",
-                                            demoFile
+                                            demoFile,
+                                            visibility
                                         }
                                     }
                                 />

@@ -160,7 +160,6 @@ const Table = (props) => {
         }
     );
     const multiSelectIds = dataTable.selectedFlatRows.map(item => item.original._id)
-    console.log(multiSelectIds)
     const { allColumns } = dataTable;
     let rows = pagination ? dataTable.page : dataTable.rows;
     // for import excel modal
@@ -209,7 +208,7 @@ const Table = (props) => {
                 {exportData.values && <ExportData fileName={tableName} data={exportData.values} showToggle={showToggle} setShowToggle={setShowToggle} toggleImportModal={toggleImportModal} />}
             </Row>
             {showToggle &&
-                <div className='d-flex flex-wrap justify-content-start bg-dragula p-2'>
+                <div className='d-flex align-content-start flex-wrap  bg-dragula p-2'>
                     {
                         allColumns.map((col, i) => {
                             return (

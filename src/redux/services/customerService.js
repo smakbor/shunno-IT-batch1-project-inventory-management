@@ -34,7 +34,7 @@ export const customerService = apiService.injectEndpoints({
         }),
         customersImport: builder.mutation({
             query: ({ store, postBody }) => ({
-                url: `import-data/${store}/customers`,
+                url: `imports/${store}/customers`,
                 method: 'POST',
                 body: postBody,
             }),

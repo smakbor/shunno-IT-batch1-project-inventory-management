@@ -275,7 +275,6 @@ const Customers = () => {
                             <Card.Body>
                                 <Table
                                     columns={columns}
-                                    deleteMulti={customerMultiDelete}
                                     data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
@@ -288,6 +287,7 @@ const Customers = () => {
                                     searchBoxClass="mt-2 mb-3"
                                     addShowModal={addShowModal}
                                     importFunc={customersImport}
+                                    deleteMulti={customerMultiDelete}
                                     tableInfo={{
                                         tableName: "customers",
                                         exportFileName: "customers",

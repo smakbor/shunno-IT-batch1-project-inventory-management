@@ -32,6 +32,21 @@ export const suppliersService = apiService.injectEndpoints({
                 }
             },
         }),
+        suppliersImport: builder.mutation({
+            query: ({ store, postBody }) => ({
+                url: `imports/${store}/suppliers`,
+                method: 'POST',
+                body: postBody,
+            }),
+            onQueryStarted({ store, postBody }, { dispatch, queryFulfilled }) {
+                queryFulfilled.then(
+                    ({ data: { data } }) => dispatch(
+                        apiService.util.updateQueryData("supplierList", store, (draft) => draft = data.concat(draft)
+                        )
+                    ))
+            },
+
+        }),
 
         supplierUpdate: builder.mutation({
             query: (postBody) => ({
@@ -75,7 +90,27 @@ export const suppliersService = apiService.injectEndpoints({
                 }
             },
         }),
+        supplierMultiDelete: builder.mutation({
+            query: ({ ids, store }) => {
+                console.log(ids)
+                return ({
+                    url: `bulk/${store}/suppliers`,
+                    method: 'DELETE',
+                    body: ids
+                })
+            },
+            onQueryStarted({ ids, store }, { queryFulfilled, dispatch }) {
+                queryFulfilled.then(
+                    ({ data: { data } }) => dispatch(
+                        apiService.util.updateQueryData("supplierList", store, (draft) => draft.filter(item => data.find(i => item._id === i) ? false : true)
+
+                        )
+                    )
+                )
+
+            },
+        }),
     }),
 });
-export const { useSupplierListQuery, useSupplierDeleteMutation, useSupplierCreateMutation, useSupplierUpdateMutation } =
+export const { useSupplierListQuery, useSupplierDeleteMutation, useSupplierCreateMutation, useSupplierUpdateMutation, useSuppliersImportMutation, useSupplierMultiDeleteMutation } =
     suppliersService;
