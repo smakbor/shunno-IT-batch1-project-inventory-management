@@ -1,0 +1,1796 @@
+openapi: 3.0.0
+info:
+    version: 2.0.0
+    title: Hisabnikash ERP
+    description: >
+        Online based inventory management software which provides stock management, Customer management, Customer payment in installment, SMS service etc.
+    termsOfService: https://hisabnikash.biz/terms
+    contact:
+        name: Api Support
+        url: https://hisabnikash.biz/api-support
+        email: support@hisabnikash.biz
+    license:
+        name: Apache 2.0
+        url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+    # Added by API Auto Mocking Plugin
+    - description: SwaggerHub API Auto Mocking
+      url: https://virtserver.swaggerhub.com/developer-sujon/hisabnikash/2.0.0
+    - description: The production API server
+      url: http://20.212.156.134:5050/api/v2
+    - description: The development API server
+      url: http://localhost:5050/api/v2
+tags:
+    - name: Auth
+      description: Authentication Endpoints (public)
+    - name: Accounting
+      description: Accounting Endpoints (private)
+    - name: HRM
+      description: HRM Endpoints (private)
+    - name: Department
+      description: Department Endpoints (private)
+    - name: Brand
+      description: Brand Endpoints (private)
+    - name: Customer
+      description: Customer Endpoints (private)
+    - name: Supplier
+      description: Supplier Endpoints (private)
+    - name: Biller
+      description: Biller Endpoints (private)
+
+paths:
+    /auth/login:
+        post:
+            tags:
+                - Auth
+            description: login to the app
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/auth_signup_body'
+            responses:
+                '201':
+                    description: Signup successul
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/auth_response_201'
+    /accounts:
+        get:
+            tags:
+                - 'Accounting'
+            responses:
+                '200':
+                    description: Retrive all account
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items:
+                                            allOf:
+                                                - $ref: '#/components/schemas/Account'
+                                    pagination:
+                                        $ref: '#/components/schemas/pagination'
+                                    links:
+                                        $ref: '#/components/schemas/links'
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+            security:
+                - bearerAuth: []
+        post:
+            tags:
+                - 'Accounting'
+            responses:
+                '201':
+                    description: To create a new account user must need to provide valid data
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - 'code'
+                                    - 'message'
+                                    - 'data'
+                                properties:
+                                    code:
+                                        type: integer
+                                        format: int32
+                                        example: 201
+                                    message:
+                                        type: string
+                                        example: Account created successfully
+                                    data:
+                                        $ref: '#/components/schemas/Account'
+
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+            security:
+                - bearerAuth: []
+    /Brands:
+        post:
+            tags:
+                - 'Brand'
+            responses:
+                '201':
+                    description: To create a new Brand user must need to provide valid data
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - 'code'
+                                    - 'message'
+                                    - 'data'
+                                properties:
+                                    code:
+                                        type: integer
+                                        format: int32
+                                        example: 201
+                                    message:
+                                        type: string
+                                        example: Brand created successfully
+                                    data:
+                                        $ref: '#/components/schemas/Brand'
+
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+            security:
+                - bearerAuth: []
+    /Brands/{store}:
+        get:
+            tags:
+                - 'Brand'
+            description: Retrive all Brand
+            parameters:
+                - name: store
+                  in: path
+                  schema:
+                      type: string
+                      example: 507f1f77bcf86cd799439011
+                  required: true
+                  description: Mongo ID of the Brand to get
+            responses:
+                '200':
+                    description: Return a list of Brands
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items:
+                                            allOf:
+                                                - $ref: '#/components/schemas/Brand'
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+            security:
+                - bearerAuth: []
+    /Departments:
+        post:
+            tags: [Department]
+            summary: Department created
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Department'
+            responses:
+                '201':
+                    description: To create a new Department user must need to provide valid data
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - code
+                                    - message
+                                    - data
+                                properties:
+                                    code:
+                                        type: integer
+                                        format: int32
+                                        example: 201
+                                    message:
+                                        type: string
+                                        example: Department created successfully
+                                    data:
+                                        $ref: '#/components/schemas/Department'
+
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+            security:
+                - bearerAuth: []
+    /Departments/{store}:
+        get:
+            tags:
+                - 'Department'
+            summary: Return a list of Departments
+            description: Retrive all Department
+            parameters:
+                - name: store
+                  in: path
+                  schema:
+                      type: string
+                      example: 507f1f77bcf86cd799439011
+                  required: true
+                  description: Mongo ID of the Department to get
+            responses:
+                '200':
+                    description: Return a list of Departments
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items:
+                                            oneOf:
+                                                - $ref: '#/components/schemas/Department'
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+            security:
+                - bearerAuth: []
+    /Departments/{id}:
+        patch:
+            security:
+                - bearerAuth: []
+            summary: Update a Department
+            tags: [Department]
+            description: Update a Department
+            parameters:
+                - name: id
+                  in: path
+                  schema:
+                      type: string
+                      example: 507f1f77bcf86cd799439011
+                  required: true
+                  description: Mongo ID of the Department to update
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Department'
+            responses:
+                '201':
+                    description: To create a new Department user must need to provide valid data
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - code
+                                    - message
+                                    - data
+                                properties:
+                                    code:
+                                        type: integer
+                                        format: int32
+                                        example: 201
+                                    message:
+                                        type: string
+                                        example: Department created successfully
+                                    data:
+                                        $ref: '#/components/schemas/Department'
+
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+        delete:
+            tags: [Department]
+            summary: delete a Department
+            description: delete a Department
+            parameters:
+                - name: id
+                  in: path
+                  schema:
+                      type: string
+                      example: 507f1f77bcf86cd799439011
+                  required: true
+                  description: Mongo ID of the Department to delete
+            responses:
+                '204':
+                    description: To delete Department user must need to provide valid data
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - code
+                                    - message
+                                    - data
+                                properties:
+                                    code:
+                                        type: integer
+                                        format: int32
+                                        example: 204
+                                    message:
+                                        type: string
+                                        example: Department delete successfully
+                                    data:
+                                        $ref: '#/components/schemas/Department'
+
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+            security:
+                - bearerAuth: []
+    /Customers:
+        post:
+            tags: [Customer]
+            summary: Customer created
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Customer'
+            responses:
+                '201':
+                    description: To create a new Customer user must need to provide valid data
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - code
+                                    - message
+                                    - data
+                                properties:
+                                    code:
+                                        type: integer
+                                        format: int32
+                                        example: 201
+                                    message:
+                                        type: string
+                                        example: Customer created successfully
+                                    data:
+                                        $ref: '#/components/schemas/Customer'
+
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+            security:
+                - bearerAuth: []
+    /Customers/{store}:
+        get:
+            tags:
+                - 'Customer'
+            summary: Return a list of Customers
+            description: Retrive all Customer
+            parameters:
+                - name: store
+                  in: path
+                  schema:
+                      type: string
+                      example: 507f1f77bcf86cd799439011
+                  required: true
+                  description: Mongo ID of the Customer to get
+            responses:
+                '200':
+                    description: Return a list of Customers
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items:
+                                            oneOf:
+                                                - $ref: '#/components/schemas/Customer'
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+            security:
+                - bearerAuth: []
+    /Customers/{id}:
+        patch:
+            security:
+                - bearerAuth: []
+            summary: Update a Customer
+            tags: [Customer]
+            description: Update a Customer
+            parameters:
+                - name: id
+                  in: path
+                  schema:
+                      type: string
+                      example: 507f1f77bcf86cd799439011
+                  required: true
+                  description: Mongo ID of the Customer to update
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Customer'
+            responses:
+                '201':
+                    description: To create a new Customer user must need to provide valid data
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - code
+                                    - message
+                                    - data
+                                properties:
+                                    code:
+                                        type: integer
+                                        format: int32
+                                        example: 201
+                                    message:
+                                        type: string
+                                        example: Customer created successfully
+                                    data:
+                                        $ref: '#/components/schemas/Customer'
+
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+        delete:
+            tags: [Customer]
+            summary: delete a Customer
+            description: delete a Customer
+            parameters:
+                - name: id
+                  in: path
+                  schema:
+                      type: string
+                      example: 507f1f77bcf86cd799439011
+                  required: true
+                  description: Mongo ID of the Customer to delete
+            responses:
+                '204':
+                    description: To delete Customer user must need to provide valid data
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - code
+                                    - message
+                                    - data
+                                properties:
+                                    code:
+                                        type: integer
+                                        format: int32
+                                        example: 204
+                                    message:
+                                        type: string
+                                        example: Customer delete successfully
+                                    data:
+                                        $ref: '#/components/schemas/Customer'
+
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+            security:
+                - bearerAuth: []
+    /Suppliers:
+        post:
+            tags: [Supplier]
+            summary: Supplier created
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Supplier'
+            responses:
+                '201':
+                    description: To create a new Supplier user must need to provide valid data
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - code
+                                    - message
+                                    - data
+                                properties:
+                                    code:
+                                        type: integer
+                                        format: int32
+                                        example: 201
+                                    message:
+                                        type: string
+                                        example: Supplier created successfully
+                                    data:
+                                        $ref: '#/components/schemas/Supplier'
+
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+            security:
+                - bearerAuth: []
+    /Suppliers/{store}:
+        get:
+            tags:
+                - 'Supplier'
+            description: Retrive all Supplier
+            parameters:
+                - name: store
+                  in: path
+                  schema:
+                      type: string
+                      example: 507f1f77bcf86cd799439011
+                  required: true
+                  description: Mongo ID of the Supplier to get
+            responses:
+                '200':
+                    description: Return a list of Suppliers
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items:
+                                            oneOf:
+                                                - $ref: '#/components/schemas/Supplier'
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+            security:
+                - bearerAuth: []
+    /Suppliers/{id}:
+        patch:
+            security:
+                - bearerAuth: []
+            tags: [Supplier]
+            description: Update a Supplier
+            parameters:
+                - name: id
+                  in: path
+                  schema:
+                      type: string
+                      example: 507f1f77bcf86cd799439011
+                  required: true
+                  description: Mongo ID of the Supplier to update
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Supplier'
+            responses:
+                '201':
+                    description: To create a new Supplier user must need to provide valid data
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - code
+                                    - message
+                                    - data
+                                properties:
+                                    code:
+                                        type: integer
+                                        format: int32
+                                        example: 201
+                                    message:
+                                        type: string
+                                        example: Supplier created successfully
+                                    data:
+                                        $ref: '#/components/schemas/Supplier'
+
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+        delete:
+            tags: [Supplier]
+            description: delete a Supplier
+            parameters:
+                - name: id
+                  in: path
+                  schema:
+                      type: string
+                      example: 507f1f77bcf86cd799439011
+                  required: true
+                  description: Mongo ID of the Supplier to delete
+            responses:
+                '204':
+                    description: To delete Supplier user must need to provide valid data
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - code
+                                    - message
+                                    - data
+                                properties:
+                                    code:
+                                        type: integer
+                                        format: int32
+                                        example: 204
+                                    message:
+                                        type: string
+                                        example: Supplier delete successfully
+                                    data:
+                                        $ref: '#/components/schemas/Supplier'
+
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+            security:
+                - bearerAuth: []
+    /Billers:
+        post:
+            tags: [Biller]
+            summary: Biller created
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Biller'
+            responses:
+                '201':
+                    description: To create a new Biller user must need to provide valid data
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - code
+                                    - message
+                                    - data
+                                properties:
+                                    code:
+                                        type: integer
+                                        format: int32
+                                        example: 201
+                                    message:
+                                        type: string
+                                        example: Biller created successfully
+                                    data:
+                                        $ref: '#/components/schemas/Biller'
+
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+            security:
+                - bearerAuth: []
+    /Billers/{store}:
+        get:
+            tags:
+                - 'Biller'
+            description: Retrive all Biller
+            parameters:
+                - name: store
+                  in: path
+                  schema:
+                      type: string
+                      example: 507f1f77bcf86cd799439011
+                  required: true
+                  description: Mongo ID of the Biller to get
+            responses:
+                '200':
+                    description: Return a list of Billers
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items:
+                                            oneOf:
+                                                - $ref: '#/components/schemas/Biller'
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+            security:
+                - bearerAuth: []
+    /Billers/{id}:
+        patch:
+            security:
+                - bearerAuth: []
+            tags: [Biller]
+            description: Update a Biller
+            parameters:
+                - name: id
+                  in: path
+                  schema:
+                      type: string
+                      example: 507f1f77bcf86cd799439011
+                  required: true
+                  description: Mongo ID of the Biller to update
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Biller'
+            responses:
+                '201':
+                    description: To create a new Biller user must need to provide valid data
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - code
+                                    - message
+                                    - data
+                                properties:
+                                    code:
+                                        type: integer
+                                        format: int32
+                                        example: 201
+                                    message:
+                                        type: string
+                                        example: Biller created successfully
+                                    data:
+                                        $ref: '#/components/schemas/Biller'
+
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+        delete:
+            tags: [Biller]
+            description: delete a Biller
+            parameters:
+                - name: id
+                  in: path
+                  schema:
+                      type: string
+                      example: 507f1f77bcf86cd799439011
+                  required: true
+                  description: Mongo ID of the Biller to delete
+            responses:
+                '204':
+                    description: To delete Biller user must need to provide valid data
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - code
+                                    - message
+                                    - data
+                                properties:
+                                    code:
+                                        type: integer
+                                        format: int32
+                                        example: 204
+                                    message:
+                                        type: string
+                                        example: Biller delete successfully
+                                    data:
+                                        $ref: '#/components/schemas/Biller'
+
+                '500':
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_500'
+                '400':
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_400'
+                '401':
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_401'
+                '404':
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/inline_response_404'
+            security:
+                - bearerAuth: []
+components:
+    schemas:
+        links:
+            type: object
+            properties:
+                self:
+                    type: string
+                    format: url
+                    example: /accounts?page=2&limit=10
+                next:
+                    type: string
+                    format: url
+                    example: /accounts?page=3&limit=10
+                prev:
+                    type: string
+                    format: url
+                    example: /accounts?page=1&limit=10
+        pagination:
+            required:
+                - limit
+                - page
+                - totalItems
+                - totalPage
+            type: object
+            properties:
+                page:
+                    type: integer
+                    format: int32
+                    example: 2
+                limit:
+                    type: integer
+                    format: int32
+                    example: 10
+                next:
+                    type: integer
+                    format: int32
+                    example: 3
+                prev:
+                    type: integer
+                    format: int32
+                    example: 1
+                totalPage:
+                    type: integer
+                    format: int32
+                    example: 5
+                totalItems:
+                    type: integer
+                    format: int32
+                    example: 50
+        timestamp:
+            required:
+                - createdAt
+                - updatedAt
+            type: object
+            properties:
+                createdAt:
+                    type: string
+                    format: datetime
+                updatedAt:
+                    type: string
+                    format: datetime
+        auth_signup_body:
+            type: object
+            properties:
+                mobile:
+                    type: string
+                    example: 01725******
+                password:
+                    type: string
+                    example: password-12354
+            required:
+                - mobile
+                - password
+        auth_response_201:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                    example: 201
+                message:
+                    type: string
+                    example: Login successul
+                data:
+                    type: object
+                    properties:
+                        access_token:
+                            type: string
+                            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        inline_response_400:
+            type: object
+            required:
+                - 'code'
+                - 'message'
+                - 'data'
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                    example: 400
+                error:
+                    type: string
+                    example: Bad Request
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/inline_response_400_data'
+        inline_response_401:
+            type: object
+            required:
+                - 'code'
+                - 'message'
+                - 'data'
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                    example: 401
+                error:
+                    type: string
+                    example: Unauthorized
+                message:
+                    type: string
+                    example: You don't have the right permissions
+        inline_response_404:
+            type: object
+            required:
+                - 'code'
+                - 'message'
+                - 'data'
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                    example: 404
+                error:
+                    type: string
+                    example: Not Found
+                message:
+                    type: string
+                    example: You requested content was not found
+        inline_response_500:
+            type: object
+            required:
+                - 'code'
+                - 'message'
+                - 'data'
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                    example: 500
+                error:
+                    type: string
+                    example: Internal Server Error
+                message:
+                    type: string
+                    example: We are sorry for the inconvenience. Please try again later
+        inline_response_400_data:
+            type: object
+            required:
+                - 'code'
+                - 'message'
+                - 'data'
+            properties:
+                field:
+                    type: string
+                    example: email
+                message:
+                    type: string
+                    example: Invalid email
+                in:
+                    type: string
+                    example: body
+                    enum:
+                        - query
+                        - body
+                        - params
+                        - headers
+        Department:
+            type: object
+            allOf:
+                - required:
+                      - id
+                      - store
+                      - name
+                      - status
+                  properties:
+                      id:
+                          type: string
+                          example: 507f1f77bcf86cd799439010
+                      proprietor:
+                          type: string
+                          example: 507f1f77bcf86cd799439011
+                      store:
+                          type: string
+                          example: 507f1f77bcf86cd799439012
+                      name:
+                          type: string
+                          example: sales
+                      description:
+                          type: string
+                      status:
+                          type: string
+                          enum:
+                              - ACTIVE
+                              - DEACTIVE
+                          default: ACTIVE
+                - $ref: '#/components/schemas/timestamp'
+        Brand:
+            type: object
+            allOf:
+                - required:
+                      - id
+                      - store
+                      - name
+                      - isEcom
+                      - status
+                  properties:
+                      id:
+                          type: string
+                          example: 507f1f77bcf86cd799439010
+                      proprietor:
+                          type: string
+                          example: 507f1f77bcf86cd799439011
+                      store:
+                          type: string
+                          example: 507f1f77bcf86cd799439012
+                      storeUserName:
+                          type: string
+                          example: tusubee
+                      name:
+                          type: string
+                      isEcom:
+                          type: boolean
+                          default: false
+                      status:
+                          type: string
+                          default: ACTIVE
+                          enum:
+                              - ACTIVE
+                              - INACTIVE
+                      description:
+                          type: string
+                - $ref: '#/components/schemas/timestamp'
+        Account:
+            type: object
+            allOf:
+                - required:
+                      - id
+                      - store
+                      - accountNumber
+                      - name
+                      - initialBalance
+                  properties:
+                      id:
+                          type: string
+                          example: 507f1f77bcf86cd799439010
+                      proprietor:
+                          type: string
+                          example: 507f1f77bcf86cd799439011
+                      store:
+                          type: string
+                          example: 507f1f77bcf86cd799439012
+                      accountNumber:
+                          type: string
+                          example: 976562020323414
+                      name:
+                          type: string
+                          example: islami bank
+                      initialBalance:
+                          type: integer
+                          example: 1000
+                      note:
+                          type: string
+                - $ref: '#/components/schemas/timestamp'
+        Customer:
+            type: object
+            allOf:
+                - required:
+                      - id
+                      - proprietor
+                      - store
+                      - CustomerType
+                      - ledgerNumber
+                      - mobile
+                      - name
+                      - status
+                  properties:
+                      id:
+                          type: string
+                          example: 507f1f77bcf86cd799439010
+                      proprietor:
+                          type: string
+                          example: 507f1f77bcf86cd799439011
+                      store:
+                          type: string
+                          example: 507f1f77bcf86cd799439012
+                      CustomerType:
+                          type: string
+                          enum:
+                              - RETAIL
+                              - WHOLESALE
+                          default: RETAIL
+                      ledgerNumber:
+                          type: string
+                      mobile:
+                          type: string
+                          example: +8801772703036
+                      name:
+                          type: string
+                      netfeeCustomerMID:
+                          type: string
+                          example: 507f1f77bcf86cd799439012
+                      fatherName:
+                          type: string
+                      image:
+                          type: string
+                      email:
+                          type: string
+                          format: email
+                      nid:
+                          type: string
+                      country:
+                          type: string
+                      address:
+                          type: string
+                      city:
+                          type: string
+                      thana:
+                          type: string
+                      district:
+                          type: string
+                      remarks:
+                          type: string
+                      description:
+                          type: string
+                      reference:
+                          type: object
+                          properties:
+                              name:
+                                  type: string
+                              mobile:
+                                  type: string
+                                  default: +8801772703036
+                              nid:
+                                  type: string
+                              address:
+                                  type: string
+                              relation:
+                                  type: string
+                      due:
+                          type: integer
+                          format: int32
+                          default: 0
+                      status:
+                          type: string
+                          enum:
+                              - ACTIVE
+                              - DEACTIVE
+                          default: ACTIVE
+                - $ref: '#/components/schemas/timestamp'
+        Supplier:
+            type: object
+            allOf:
+                - required:
+                      - id
+                      - proprietor
+                      - store
+                      - ledgerNumber
+                      - mobile
+                      - name
+                      - status
+                  properties:
+                      id:
+                          type: string
+                          example: 507f1f77bcf86cd799439010
+                      proprietor:
+                          type: string
+                          example: 507f1f77bcf86cd799439011
+                      store:
+                          type: string
+                          example: 507f1f77bcf86cd799439012
+                      CustomerType:
+                          type: string
+                          enum:
+                              - RETAIL
+                              - WHOLESALE
+                          default: RETAIL
+                      ledgerNumber:
+                          type: string
+                      mobile:
+                          type: string
+                          example: +8801772703036
+                      name:
+                          type: string
+                      fatherName:
+                          type: string
+                      image:
+                          type: string
+                      email:
+                          type: string
+                          format: email
+                      nid:
+                          type: string
+                      country:
+                          type: string
+                      address:
+                          type: string
+                      city:
+                          type: string
+                      thana:
+                          type: string
+                      district:
+                          type: string
+                      remarks:
+                          type: string
+                      description:
+                          type: string
+                      reference:
+                          type: object
+                          properties:
+                              name:
+                                  type: string
+                              mobile:
+                                  type: string
+                                  default: +8801772703036
+                              nid:
+                                  type: string
+                              address:
+                                  type: string
+                              relation:
+                                  type: string
+                      due:
+                          type: integer
+                          format: int32
+                          default: 0
+                      status:
+                          type: string
+                          enum:
+                              - ACTIVE
+                              - DEACTIVE
+                          default: ACTIVE
+                - $ref: '#/components/schemas/timestamp'
+        Biller:
+            type: object
+            allOf:
+                - required:
+                      - id
+                      - proprietor
+                      - store
+                      - mobile
+                      - name
+                      - status
+                  properties:
+                      id:
+                          type: string
+                          example: 507f1f77bcf86cd799439010
+                      proprietor:
+                          type: string
+                          example: 507f1f77bcf86cd799439011
+                      store:
+                          type: string
+                          example: 507f1f77bcf86cd799439012
+                      CustomerType:
+                          type: string
+                          enum:
+                              - RETAIL
+                              - WHOLESALE
+                          default: RETAIL
+                      mobile:
+                          type: string
+                          example: +8801772703036
+                      name:
+                          type: string
+                      fatherName:
+                          type: string
+                      image:
+                          type: string
+                      email:
+                          type: string
+                          format: email
+                      nid:
+                          type: string
+                      country:
+                          type: string
+                      address:
+                          type: string
+                      city:
+                          type: string
+                      thana:
+                          type: string
+                      district:
+                          type: string
+                      remarks:
+                          type: string
+                      description:
+                          type: string
+                      reference:
+                          type: object
+                          properties:
+                              name:
+                                  type: string
+                              mobile:
+                                  type: string
+                                  default: +8801772703036
+                              nid:
+                                  type: string
+                              address:
+                                  type: string
+                              relation:
+                                  type: string
+                      due:
+                          type: integer
+                          format: int32
+                          default: 0
+                      status:
+                          type: string
+                          enum:
+                              - ACTIVE
+                              - DEACTIVE
+                          default: ACTIVE
+                - $ref: '#/components/schemas/timestamp'
+
+    responses:
+        '500':
+            description: Internal Server Error
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/inline_response_500'
+        '400':
+            description: Bad Request
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/inline_response_400'
+        '401':
+            description: Unauthorized
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/inline_response_401'
+        '404':
+            description: Not Found
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/inline_response_404'
+    parameters:
+        pageParam:
+            name: page
+            in: query
+            description: current page number
+            required: false
+            style: form
+            explode: true
+            schema:
+                type: integer
+                format: int32
+                example: 2
+        limitParam:
+            name: limit
+            in: query
+            description: maximum items to be returned
+            required: false
+            style: form
+            explode: true
+            schema:
+                type: integer
+                format: int32
+                example: 10
+        sortTypeParam:
+            name: sort_type
+            in: query
+            description: type of sort (asc or dsc)
+            required: false
+            style: form
+            explode: true
+            schema:
+                type: string
+                example: dsc
+                enum:
+                    - asc
+                    - dsc
+        sortByParam:
+            name: sort_by
+            in: query
+            description: Sort key
+            required: false
+            style: form
+            explode: true
+            schema:
+                type: string
+                example: updatedAt
+        searchParam:
+            name: search
+            in: query
+            description: Search term
+            required: false
+            style: form
+            explode: true
+            schema:
+                type: string
+                example: title
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
