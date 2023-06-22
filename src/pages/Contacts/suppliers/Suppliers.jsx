@@ -209,7 +209,7 @@ const Suppliers = () => {
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}
                                     pagination={true}
-                                    isSelectable={false}
+                                    isSelectable={true}
                                     isSearchable={true}
                                     tableClass="table-striped"
                                     theadClass="table-light"

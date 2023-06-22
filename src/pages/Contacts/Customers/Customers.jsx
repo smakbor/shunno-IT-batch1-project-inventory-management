@@ -1,5 +1,5 @@
 //External Lib Import
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Row, Col, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -11,7 +11,7 @@ import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 import AleartMessage from '../../../utils/AleartMessage';
 
 //api services
-import { useCustomerListQuery, useCustomerDeleteMutation, useCustomersImportMutation } from '../../../redux/services/customerService';
+import { useCustomerListQuery, useCustomerDeleteMutation, useCustomersImportMutation, useCustomerMultiDeleteMutation } from '../../../redux/services/customerService';
 import CustomerCreateUpdateModal from './CustomerCreateUpdateModal';
 import DateFormatter from '../../../utils/DateFormatter';
 import { useSelector } from 'react-redux';
@@ -28,14 +28,19 @@ const Customers = () => {
 
     const storeID = useSelector((state) => state.setting.activeStore?._id);
     const [customerDelete] = useCustomerDeleteMutation();
+    const [customerMultiDelete] = useCustomerMultiDeleteMutation();
     const [customersImport] = useCustomersImportMutation();
     const { data, isLoading, isError } = useCustomerListQuery(storeID, {
         skip: !storeID,
     });
 
-    const deleteMulti = () => {
-        console.log();
-    };
+    //fake visibility
+    const visibility = {
+        sl: true,
+        name: false,
+        mobile: false,
+        referenceName: false
+    }
 
     /**
      * Show/hide the modal
@@ -78,21 +83,57 @@ const Customers = () => {
             </>
         );
     };
-
+    console.log(data)
     // get all columns
-    const columns = [
+    const columns = useMemo(() => [
+        {
+            Header: t('#'),
+            accessor: 'sl',
+            sort: true,
+            Cell: ({ row }) => row.index + 1,
+            classes: 'table-user',
+        },
         {
             Header: t('name'),
             accessor: 'name',
             sort: true,
-            Cell: ({ row }) => row.original.name,
+            Cell: ({ row }) => row.original?.name,
+            classes: 'table-user',
+        },
+        {
+            Header: t('mobile'),
+            accessor: 'mobile',
+            sort: false,
+            Cell: ({ row }) => row.original?.mobile,
+            classes: 'table-user',
+        },
+        {
+            Header: t('email'),
+            accessor: 'email',
+            sort: false,
+            Cell: ({ row }) => row.original?.email,
+            classes: 'table-user',
+        },
+        {
+            Header: t('customer type'),
+            accessor: 'customerType',
+            sort: true,
+            Cell: ({ row }) => row.original?.customerType === "RETAIL" ? t("retail") : t("wholesale"),
+            classes: 'table-user',
+        },
+
+        {
+            Header: t("nid"),
+            accessor: 'nid',
+            sort: false,
+            Cell: ({ row }) => row.original?.nid,
             classes: 'table-user',
         },
         {
             Header: t("father's name"),
             accessor: 'fatherName',
             sort: true,
-            Cell: ({ row }) => row.original.fatherName,
+            Cell: ({ row }) => row.original?.fatherName,
             classes: 'table-user',
         },
         {
@@ -100,7 +141,7 @@ const Customers = () => {
             accessor: 'address',
             sort: true,
             Cell: ({ row }) => {
-                const splitAddress = row.original.address?.split(',');
+                const splitAddress = row.original?.address?.split(',');
                 return splitAddress?.map((item, i) => (
                     <p className="mb-0" key={i}>
                         {item}
@@ -110,25 +151,54 @@ const Customers = () => {
             },
             classes: 'table-user',
         },
-        {
-            Header: t('mobile'),
-            accessor: 'mobile',
-            sort: false,
-            Cell: ({ row }) => row.original.mobile,
-            classes: 'table-user',
-        },
+
         {
             Header: t('ledger number'),
             accessor: 'ledgerNumber',
             sort: true,
-            Cell: ({ row }) => row.original.ledgerNumber,
+            Cell: ({ row }) => row.original?.ledgerNumber,
             classes: 'table-user',
         },
         {
             Header: t('due'),
             accessor: 'due',
             sort: false,
-            Cell: ({ row }) => row.original.due,
+            Cell: ({ row }) => row.original?.due,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference name'),
+            accessor: 'referenceName',
+            sort: false,
+            Cell: ({ row }) => row.original?.reference?.name,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference mobile'),
+            accessor: 'referenceMobile',
+            sort: false,
+            Cell: ({ row }) => row.original?.reference?.mobile,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference address'),
+            accessor: 'referenceAddress',
+            sort: false,
+            Cell: ({ row }) => row.original?.reference?.address,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference nid'),
+            accessor: 'referenceNid',
+            sort: false,
+            Cell: ({ row }) => row.original?.reference?.nid,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference relation'),
+            accessor: 'referenceRelation',
+            sort: false,
+            Cell: ({ row }) => row.original?.reference?.relation,
             classes: 'table-user',
         },
         {
@@ -146,7 +216,7 @@ const Customers = () => {
             classes: 'table-action',
             Cell: ActionColumn,
         },
-    ];
+    ], [data]);
 
     // get pagelist to display
     const sizePerPageList = [
@@ -205,8 +275,8 @@ const Customers = () => {
                             <Card.Body>
                                 <Table
                                     columns={columns}
-                                    deleteMulti={deleteMulti}
-                                    data={data || []}
+                                    deleteMulti={customerMultiDelete}
+                                    data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}
@@ -223,6 +293,7 @@ const Customers = () => {
                                         exportFileName: "customers",
                                         columnOrder: "( *customerType, *mobile, *name, fatherName, email, remarks, nid, address, thana, district, reference/name, reference/mobile, reference/address, reference/nid, reference/relation, due, *status )",
                                         demoFile,
+                                        visibility
                                     }}
                                 />
                             </Card.Body>

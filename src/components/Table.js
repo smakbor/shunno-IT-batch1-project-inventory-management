@@ -17,9 +17,9 @@ import { useTranslation } from 'react-i18next';
 import Pagination from './Pagination';
 import { Button, Col, Row } from 'react-bootstrap';
 import ExportData from './ExportData';
-import FormInput from './FormInput';
 import CsvImportModal from '../pages/modals/CsvImportModal';
 import { useSelector } from 'react-redux';
+import AleartMessage from '../utils/AleartMessage';
 
 // Define a default UI for filtering
 const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, searchBoxClass }) => {
@@ -81,14 +81,25 @@ const Table = (props) => {
     const addShowModal = props['addShowModal'];
     const importFunc = props['importFunc'];
     const tableInfo = props['tableInfo'] || {};
-    const { tableName, columnOrder, demoFile } = tableInfo || "";
-
+    const { tableName, columnOrder, demoFile, visibility } = tableInfo || "";
+    const deleteMulti = props['deleteMulti'];
     const store = useSelector(state => state.setting?.activeStore?._id)
+    let hiddenColumns = []
+    for (const key in visibility) {
+        if (visibility[key] === false) {
+            hiddenColumns.push(key)
+        }
+    }
+
     const dataTable = useTable(
         {
             columns: props['columns'],
             data: props['data'],
-            initialState: { pageSize: props['pageSize'] || 10 },
+            initialState: {
+                pageSize: props['pageSize'] || 10,
+                hiddenColumns,
+            },
+            useRowSelect
         },
         isSearchable && useGlobalFilter,
         isSortable && useSortBy,
@@ -118,7 +129,6 @@ const Table = (props) => {
                     },
                     ...columns,
                 ]);
-
             isExpandable &&
                 hooks.visibleColumns.push((columns) => [
                     // Let's make a column for selection
@@ -149,6 +159,8 @@ const Table = (props) => {
                 ]);
         }
     );
+    const multiSelectIds = dataTable.selectedFlatRows.map(item => item.original._id)
+    console.log(multiSelectIds)
     const { allColumns } = dataTable;
     let rows = pagination ? dataTable.page : dataTable.rows;
     // for import excel modal
@@ -167,7 +179,7 @@ const Table = (props) => {
 
     useEffect(() => {
         if (rows) {
-            const transformDate = rows.reduce(
+            const transformData = rows.reduce(
                 (acc, current) => {
                     let { proprietor, store, _id, createdAt, updatedAt, ...others } = current.original;
                     let { _id: vId, createdAt: vCreatedAt, updatedAt: vUpdatedAt, ...valueOthers } = current.values;
@@ -177,7 +189,7 @@ const Table = (props) => {
                 },
                 { original: [], values: [] }
             );
-            setExportData(transformDate);
+            setExportData(transformData);
         }
     }, [rows]);
 
@@ -189,19 +201,20 @@ const Table = (props) => {
                         <i className="mdi mdi-plus-circle me-2"></i> {t(`add ${tableName}`)}
                     </Button>
 
-                    <Button variant="danger" onClick={props.deleteMulti}>
-                        <i className="mdi mdi-delete"></i>
-                    </Button>
+                    {dataTable.selectedFlatRows.length > 0 &&
+                        <Button variant="danger" onClick={() => AleartMessage.Delete({ ids: multiSelectIds, store }, deleteMulti)}>
+                            <i className="mdi mdi-delete"></i>
+                        </Button>}
                 </Col>
-                {exportData.values && <ExportData fileName={props['exportFileName']} data={exportData.values} showToggle={showToggle} setShowToggle={setShowToggle} toggleImportModal={toggleImportModal} />}
+                {exportData.values && <ExportData fileName={tableName} data={exportData.values} showToggle={showToggle} setShowToggle={setShowToggle} toggleImportModal={toggleImportModal} />}
             </Row>
             {showToggle &&
-                <div className='d-flex justify-content-start bg-dragula p-2'>
+                <div className='d-flex flex-wrap justify-content-start bg-dragula p-2'>
                     {
                         allColumns.map((col, i) => {
                             return (
                                 <div key={i} className='me-2'>
-                                    <label>
+                                    <label style={{ cursor: "pointer" }}>
                                         <input type="checkbox" {...col.getToggleHiddenProps()} className='me-1' />
                                         {col.Header}
                                     </label>
@@ -227,17 +240,19 @@ const Table = (props) => {
                     <thead className={props['theadClass']}>
                         {dataTable.headerGroups.map((headerGroup) => (
                             <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map((column) => (
-                                    <th
-                                        {...column.getHeaderProps(column.sort && column.getSortByToggleProps())}
-                                        className={classNames({
-                                            sorting_desc: column.isSortedDesc === true,
-                                            sorting_asc: column.isSortedDesc === false,
-                                            sortable: column.sort === true,
-                                        })}>
-                                        {column.render('Header')}
-                                    </th>
-                                ))}
+                                {headerGroup.headers.map((column) => {
+                                    return (
+                                        <th
+                                            {...column.getHeaderProps(column.sort && column.getSortByToggleProps())}
+                                            className={classNames({
+                                                sorting_desc: column.isSortedDesc === true,
+                                                sorting_asc: column.isSortedDesc === false,
+                                                sortable: column.sort === true,
+                                            })}>
+                                            {column.render('Header')}
+                                        </th>
+                                    )
+                                })}
                             </tr>
                         ))}
                     </thead>

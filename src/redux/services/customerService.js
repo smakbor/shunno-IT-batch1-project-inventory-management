@@ -89,7 +89,27 @@ export const customerService = apiService.injectEndpoints({
                 }
             },
         }),
+        customerMultiDelete: builder.mutation({
+            query: ({ ids, store }) => {
+                console.log(ids)
+                return ({
+                    url: `bulk/${store}/customers`,
+                    method: 'DELETE',
+                    body: ids
+                })
+            },
+            onQueryStarted({ ids, store }, { queryFulfilled, dispatch }) {
+                queryFulfilled.then(
+                    ({ data: { data } }) => dispatch(
+                        apiService.util.updateQueryData("customerList", store, (draft) => draft.filter(item => data.find(i => item._id === i) ? false : true)
+
+                        )
+                    )
+                )
+
+            },
+        }),
     }),
 });
-export const { useCustomerListQuery, useCustomerDeleteMutation, useCustomerCreateMutation, useCustomerUpdateMutation, useCustomersImportMutation } =
+export const { useCustomerListQuery, useCustomerDeleteMutation, useCustomerCreateMutation, useCustomerUpdateMutation, useCustomersImportMutation, useCustomerMultiDeleteMutation } =
     customerService;

@@ -6,10 +6,9 @@ import { BiImport } from 'react-icons/bi';
 
 //Internal Lib Import
 import exportFromJson from '../utils/exportFromJson';
-import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
-const ExportData = ({ fileName = 'data', data = [], setShowToggle, showToggle, toggleImportModal }) => {
-    const { t } = useTranslation();
+const ExportData = ({ fileName, data, setShowToggle, showToggle, toggleImportModal }) => {
     return (
         <Col sm={7}>
             <div className="text-sm-end">

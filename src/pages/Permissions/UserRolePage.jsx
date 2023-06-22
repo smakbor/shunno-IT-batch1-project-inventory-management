@@ -1,5 +1,5 @@
 //External Lib Import
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 
 //Internal Lib Import
@@ -33,6 +33,10 @@ const UserRolePage = () => {
     } = useRoleListQuery(activeStore?._id, {
         skip: !activeStore?._id,
     });
+
+    const visibilty = {
+        sl: true
+    }
 
     /**
      * Show/hide the modal
@@ -74,7 +78,7 @@ const UserRolePage = () => {
     };
 
     // get all columns
-    const columns = [
+    const columns = useMemo(() => [
         {
             Header: '#',
             accessor: 'sl',
@@ -115,7 +119,7 @@ const UserRolePage = () => {
             classes: 'table-action',
             Cell: ActionColumn,
         },
-    ];
+    ], [roles]);
 
     // get pagelist to display
     const sizePerPageList = [
@@ -174,7 +178,7 @@ const UserRolePage = () => {
                             <Card.Body>
                                 <Table
                                     columns={columns}
-                                    data={roles || []}
+                                    data={roles}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}
@@ -184,6 +188,10 @@ const UserRolePage = () => {
                                     tableClass="table-striped"
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
+                                    tableInfo={{
+                                        tableName: "userRoles",
+                                        visibilty
+                                    }}
                                 />
                             </Card.Body>
                         </Card>
