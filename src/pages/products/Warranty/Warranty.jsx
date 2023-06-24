@@ -158,6 +158,7 @@ const Warranty = () => {
                                     data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
+                                    addShowModal={addShowModal}
                                     isSortable={true}
                                     pagination={true}
                                     isSelectable={false}
@@ -165,6 +166,12 @@ const Warranty = () => {
                                     tableClass="table-striped"
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
+                                    tableInfo={{
+                                        tableName: 'warranties',
+                                        exportFileName: 'warranties',
+                                        columnOrder:
+                                            '( *mobile, *name, fatherName, company, email, remarks, nid, address, thana, district, reference/name, reference/mobile, reference/address, reference/nid, reference/relation, due, status, country )',
+                                    }}
                                 />
                             </Card.Body>
                         </Card>

@@ -11,12 +11,17 @@ import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 import AleartMessage from '../../../utils/AleartMessage';
 
 //api services
-import { useCustomerListQuery, useCustomerDeleteMutation, useCustomersImportMutation, useCustomerMultiDeleteMutation } from '../../../redux/services/customerService';
+import {
+    useCustomerListQuery,
+    useCustomerDeleteMutation,
+    useCustomersImportMutation,
+    useCustomerMultiDeleteMutation,
+} from '../../../redux/services/customerService';
 import CustomerCreateUpdateModal from './CustomerCreateUpdateModal';
 import DateFormatter from '../../../utils/DateFormatter';
 import { useSelector } from 'react-redux';
 
-import demoFile from "../../../assets/demo/customerDemo.csv"
+import demoFile from '../../../assets/demo/customerDemo.csv';
 
 // main component
 const Customers = () => {
@@ -37,10 +42,10 @@ const Customers = () => {
     //fake visibility
     const visibility = {
         sl: true,
-        name: false,
+        name: true,
         mobile: false,
-        referenceName: false
-    }
+        referenceName: false,
+    };
 
     /**
      * Show/hide the modal
@@ -83,140 +88,143 @@ const Customers = () => {
             </>
         );
     };
-    console.log(data)
+
     // get all columns
-    const columns = useMemo(() => [
-        {
-            Header: t('#'),
-            accessor: 'sl',
-            sort: true,
-            Cell: ({ row }) => row.index + 1,
-            classes: 'table-user',
-        },
-        {
-            Header: t('name'),
-            accessor: 'name',
-            sort: true,
-            Cell: ({ row }) => row.original?.name,
-            classes: 'table-user',
-        },
-        {
-            Header: t('mobile'),
-            accessor: 'mobile',
-            sort: false,
-            Cell: ({ row }) => row.original?.mobile,
-            classes: 'table-user',
-        },
-        {
-            Header: t('email'),
-            accessor: 'email',
-            sort: false,
-            Cell: ({ row }) => row.original?.email,
-            classes: 'table-user',
-        },
-        {
-            Header: t('customer type'),
-            accessor: 'customerType',
-            sort: true,
-            Cell: ({ row }) => row.original?.customerType === "RETAIL" ? t("retail") : t("wholesale"),
-            classes: 'table-user',
-        },
-
-        {
-            Header: t("nid"),
-            accessor: 'nid',
-            sort: false,
-            Cell: ({ row }) => row.original?.nid,
-            classes: 'table-user',
-        },
-        {
-            Header: t("father's name"),
-            accessor: 'fatherName',
-            sort: true,
-            Cell: ({ row }) => row.original?.fatherName,
-            classes: 'table-user',
-        },
-        {
-            Header: t('address'),
-            accessor: 'address',
-            sort: true,
-            Cell: ({ row }) => {
-                const splitAddress = row.original?.address?.split(',');
-                return splitAddress?.map((item, i) => (
-                    <p className="mb-0" key={i}>
-                        {item}
-                        {i !== splitAddress.length - 1 ? ',' : ''}
-                    </p>
-                ));
+    const columns = useMemo(
+        () => [
+            {
+                Header: t('#'),
+                accessor: 'sl',
+                sort: true,
+                Cell: ({ row }) => row.index + 1,
+                classes: 'table-user',
             },
-            classes: 'table-user',
-        },
+            {
+                Header: t('name'),
+                accessor: 'name',
+                sort: true,
+                Cell: ({ row }) => row.original?.name,
+                classes: 'table-user',
+            },
+            {
+                Header: t('mobile'),
+                accessor: 'mobile',
+                sort: false,
+                Cell: ({ row }) => row.original?.mobile,
+                classes: 'table-user',
+            },
+            {
+                Header: t('email'),
+                accessor: 'email',
+                sort: false,
+                Cell: ({ row }) => row.original?.email,
+                classes: 'table-user',
+            },
+            {
+                Header: t('customer type'),
+                accessor: 'customerType',
+                sort: true,
+                Cell: ({ row }) => (row.original?.customerType === 'RETAIL' ? t('retail') : t('wholesale')),
+                classes: 'table-user',
+            },
 
-        {
-            Header: t('ledger number'),
-            accessor: 'ledgerNumber',
-            sort: true,
-            Cell: ({ row }) => row.original?.ledgerNumber,
-            classes: 'table-user',
-        },
-        {
-            Header: t('due'),
-            accessor: 'due',
-            sort: false,
-            Cell: ({ row }) => row.original?.due,
-            classes: 'table-user',
-        },
-        {
-            Header: t('reference name'),
-            accessor: 'referenceName',
-            sort: false,
-            Cell: ({ row }) => row.original?.reference?.name,
-            classes: 'table-user',
-        },
-        {
-            Header: t('reference mobile'),
-            accessor: 'referenceMobile',
-            sort: false,
-            Cell: ({ row }) => row.original?.reference?.mobile,
-            classes: 'table-user',
-        },
-        {
-            Header: t('reference address'),
-            accessor: 'referenceAddress',
-            sort: false,
-            Cell: ({ row }) => row.original?.reference?.address,
-            classes: 'table-user',
-        },
-        {
-            Header: t('reference nid'),
-            accessor: 'referenceNid',
-            sort: false,
-            Cell: ({ row }) => row.original?.reference?.nid,
-            classes: 'table-user',
-        },
-        {
-            Header: t('reference relation'),
-            accessor: 'referenceRelation',
-            sort: false,
-            Cell: ({ row }) => row.original?.reference?.relation,
-            classes: 'table-user',
-        },
-        {
-            Header: t('date'),
-            accessor: 'createdAt',
-            sort: true,
-            Cell: ({ row }) => DateFormatter(row.original.createdAt),
-            classes: 'table-user',
-        },
+            {
+                Header: t('nid'),
+                accessor: 'nid',
+                sort: false,
+                Cell: ({ row }) => row.original?.nid,
+                classes: 'table-user',
+            },
+            {
+                Header: t("father's name"),
+                accessor: 'fatherName',
+                sort: true,
+                Cell: ({ row }) => row.original?.fatherName,
+                classes: 'table-user',
+            },
+            {
+                Header: t('address'),
+                accessor: 'address',
+                sort: true,
+                Cell: ({ row }) => {
+                    const splitAddress = row.original?.address?.split(',');
+                    return splitAddress?.map((item, i) => (
+                        <p className="mb-0" key={i}>
+                            {item}
+                            {i !== splitAddress.length - 1 ? ',' : ''}
+                        </p>
+                    ));
+                },
+                classes: 'table-user',
+            },
 
-        {
-            Header: t('action'),
-            accessor: 'action',
-            sort: false,
-            classes: 'table-action',
-            Cell: ActionColumn,
-        },
-    ], [data]);
+            {
+                Header: t('ledger number'),
+                accessor: 'ledgerNumber',
+                sort: true,
+                Cell: ({ row }) => row.original?.ledgerNumber,
+                classes: 'table-user',
+            },
+            {
+                Header: t('due'),
+                accessor: 'due',
+                sort: false,
+                Cell: ({ row }) => row.original?.due,
+                classes: 'table-user',
+            },
+            {
+                Header: t('reference name'),
+                accessor: 'referenceName',
+                sort: false,
+                Cell: ({ row }) => row.original?.reference?.name,
+                classes: 'table-user',
+            },
+            {
+                Header: t('reference mobile'),
+                accessor: 'referenceMobile',
+                sort: false,
+                Cell: ({ row }) => row.original?.reference?.mobile,
+                classes: 'table-user',
+            },
+            {
+                Header: t('reference address'),
+                accessor: 'referenceAddress',
+                sort: false,
+                Cell: ({ row }) => row.original?.reference?.address,
+                classes: 'table-user',
+            },
+            {
+                Header: t('reference nid'),
+                accessor: 'referenceNid',
+                sort: false,
+                Cell: ({ row }) => row.original?.reference?.nid,
+                classes: 'table-user',
+            },
+            {
+                Header: t('reference relation'),
+                accessor: 'referenceRelation',
+                sort: false,
+                Cell: ({ row }) => row.original?.reference?.relation,
+                classes: 'table-user',
+            },
+            {
+                Header: t('date'),
+                accessor: 'createdAt',
+                sort: true,
+                Cell: ({ row }) => DateFormatter(row.original.createdAt),
+                classes: 'table-user',
+            },
+
+            {
+                Header: t('action'),
+                accessor: 'action',
+                sort: false,
+                classes: 'table-action',
+                Cell: ActionColumn,
+            },
+        ],
+        [data]
+    );
 
     // get pagelist to display
     const sizePerPageList = [
@@ -289,11 +297,12 @@ const Customers = () => {
                                     importFunc={customersImport}
                                     deleteMulti={customerMultiDelete}
                                     tableInfo={{
-                                        tableName: "customers",
-                                        exportFileName: "customers",
-                                        columnOrder: "( *customerType, *mobile, *name, fatherName, email, remarks, nid, address, thana, district, reference/name, reference/mobile, reference/address, reference/nid, reference/relation, due, *status )",
+                                        tableName: 'customers',
+                                        exportFileName: 'customers',
+                                        columnOrder:
+                                            '( *customerType, *mobile, *name, fatherName, email, remarks, nid, address, thana, district, reference/name, reference/mobile, reference/address, reference/nid, reference/relation, due, *status )',
                                         demoFile,
-                                        visibility
+                                        visibility,
                                     }}
                                 />
                             </Card.Body>

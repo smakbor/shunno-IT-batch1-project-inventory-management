@@ -110,5 +110,19 @@
     "import units": "Import Units",
     "import warranties": "Import Warranties",
     "correct column order is": "Correct column order is",
-    "demo": "Demo"
+    "demo": "Demo",
+    "accountNumber": "Account Number",
+    "debit": "Debit",
+    "credit": "Credit",
+    "note": "Note",
+    "account": "Account",
+    "please enter account number": "Please enter account number",
+    "please enter initial balance": "Please enter initial balance",
+    "please enter debit": "Please enter debit",
+    "please enter credit": "Please enter credit",
+    "please enter note": "Please enter note",
+    "update account": "Update Account",
+    "add account": "Add Account",
+    "initial balance": "Initial Balance",
+    "account number": "Account Number"
 }

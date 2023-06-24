@@ -114,5 +114,19 @@
     "import units": "ইউনিট ইম্পোর্ট",
     "import warranties": "ওয়ারেন্টি ইম্পোর্ট",
     "correct column order is": "সঠিক কলাম ক্রম",
-    "demo": "ডেমো"
+    "demo": "ডেমো",
+    "accountNumber": "একাউন্ট নাম্বার",
+    "debit": "ডেবিট",
+    "credit": "ক্রেডিট",
+    "note": "নোট",
+    "account": "একাউন্ট",
+    "please enter account number": "একাউন্ট নাম্বার দিন",
+    "please enter initial balance": "প্রারম্ভিক ব্যালেন্স দিন",
+    "please enter debit": "ডেবিট পূরণ করুন",
+    "please enter credit": "ক্রেডিট পূরণ করুন",
+    "please enter note": "নোট পূরণ করুন",
+    "update account": "আপডেট একাউন্ট",
+    "add account": "অ্যাড একাউন্ট",
+    "initial balance": "প্রারম্ভিক ব্যালেন্স",
+    "account number": "একাউন্ট নাম্বার"
 }

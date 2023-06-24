@@ -202,7 +202,7 @@ const Billers = () => {
                     <Col xs={12}>
                         <Card>
                             <Card.Body>
-                                <Row className="mb-2">
+                                {/* <Row className="mb-2">
                                     <Col sm={5}>
                                         <Button variant="danger" className="mb-2" onClick={addShowModal}>
                                             <i className="mdi mdi-plus-circle me-2"></i> {t('add biller')}
@@ -235,7 +235,7 @@ const Billers = () => {
                                             </Button>
                                         </div>
                                     </Col>
-                                </Row>
+                                </Row> */}
 
                                 <Table
                                     columns={columns}
@@ -249,6 +249,13 @@ const Billers = () => {
                                     tableClass="table-striped"
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
+                                    addShowModal={addShowModal}
+                                    tableInfo={{
+                                        tableName: 'billers',
+                                        exportFileName: 'billers',
+                                        columnOrder:
+                                            '( *customerType, *mobile, *name, fatherName, email, remarks, nid, address, thana, district, reference/name, reference/mobile, reference/address, reference/nid, reference/relation, due, *status )',
+                                    }}
                                 />
                             </Card.Body>
                         </Card>

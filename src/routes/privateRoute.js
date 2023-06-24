@@ -3,6 +3,7 @@ import { lazy } from 'react';
 
 //Internal Lib Import
 import LazyLoad from '../components/common/LazyLoad.jsx';
+
 const Media = lazy(() => import('../pages/media/Media.jsx'));
 const Salary = lazy(() => import('../pages/employee/Salary.jsx'));
 const Ui = lazy(() => import('../pages/settings/Ui.jsx'));
@@ -24,6 +25,9 @@ const Expenditure = lazy(() => import('../pages/expenditure/expenditure/Expendit
 const Staffs = lazy(() => import('../pages/settings/Staffs.jsx'));
 const MediaUpload = lazy(() => import('../pages/media/MediaUpload.jsx'));
 const Department = lazy(() => import('../pages/hrm/department/Department.jsx'));
+const Account = lazy(() => import('../pages/hrm/department/account/accounting/Account.jsx'));
+const MoneyTransfer = lazy(() => import('../pages/hrm/department/account/moneyTransfer/MoneyTransfer.jsx'));
+const AccountStatement = lazy(() => import('../pages/hrm/department/account/accountStatement/AccountStatement.jsx'));
 
 const privateRoutes = [
     {
@@ -141,6 +145,26 @@ const privateRoutes = [
         roles: ['ALL', 'PROPRIETOR'],
         routePermission: 'ALL',
     },
+    //Accounting path start
+    {
+        path: '/accounts',
+        element: <LazyLoad component={Account} />,
+        roles: ['ALL', 'PROPRIETOR'],
+        routePermission: 'ALL',
+    },
+    {
+        path: '/money-transfer',
+        element: <LazyLoad component={MoneyTransfer} />,
+        roles: ['ALL', 'PROPRIETOR'],
+        routePermission: 'ALL',
+    },
+    {
+        path: '/account-statement',
+        element: <LazyLoad component={AccountStatement} />,
+        roles: ['ALL', 'PROPRIETOR'],
+        routePermission: 'ALL',
+    },
+    //Accounting path end
     {
         path: '/settings/ui',
         element: <LazyLoad component={Ui} />,
