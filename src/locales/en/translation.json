@@ -94,5 +94,21 @@
     "please enter reference nid": "Please enter reference nid",
     "please enter reference relation": "Please enter reference relation",
     "please enter description": "Please enter description",
-    "add manufacturer": "Add Manufacturer"
+    "add manufacturer": "Add Manufacturer",
+    "father's name": "Father's Name",
+    "image": "Image",
+    "category name": "Category Name",
+    "sub category": "Sub-category",
+    "search": "Search",
+    "unit name": "Unit Name",
+    "warranty name": "Warranty Name",
+    "import": "Import",
+    "import suppliers": "Import Suppliers",
+    "import customers": "Import Customers",
+    "import manufacturers": "Import Manufacturers",
+    "import categories": "Import Categories",
+    "import units": "Import Units",
+    "import warranties": "Import Warranties",
+    "correct column order is": "Correct column order is",
+    "demo": "Demo"
 }

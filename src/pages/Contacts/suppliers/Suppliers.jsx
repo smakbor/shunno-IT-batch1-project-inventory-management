@@ -1,8 +1,8 @@
 //External Lib Import
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Button } from 'react-bootstrap';
+import { Row, Col, Card, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { GrDocumentCsv } from 'react-icons/gr';
+import { GrDocumentCsv, GrDocumentPdf } from 'react-icons/gr';
 import { SiMicrosoftexcel } from 'react-icons/si';
 import { BiImport } from 'react-icons/bi';
 
@@ -16,27 +16,43 @@ import AleartMessage from '../../../utils/AleartMessage';
 
 //api services
 
-import { useSupplierListQuery, useSupplierDeleteMutation } from '../../../redux/services/suppliersService';
+import {
+    useSupplierListQuery,
+    useSupplierDeleteMutation,
+    useSuppliersImportMutation,
+    useSupplierMultiDeleteMutation,
+} from '../../../redux/services/suppliersService';
 import SupplierCreateUpdateModal from './SupplierCreateUpdateModal';
 import { useSelector } from 'react-redux';
+import demoFile from '../../../assets/demo/suppliersDemo.csv';
 
 // main component
 const Suppliers = () => {
     const { t } = useTranslation();
     const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
-
     const [modal, setModal] = useState(false);
     const [editData, setEditData] = useState(false);
     // store id
     const store = useSelector((state) => state.setting.activeStore?._id);
     const [supplierDelete] = useSupplierDeleteMutation();
-
+    const [supplierMultiDelete] = useSupplierMultiDeleteMutation();
+    const [suppliersImport] = useSuppliersImportMutation();
     const { data, isLoading, isError } = useSupplierListQuery(store, {
         skip: !store,
     });
 
+    //fake visibility
+    const visibility = {
+        district: false,
+        thana: false,
+        referenceName: false,
+        referenceMobile: false,
+        referenceAddress: false,
+        referenceRelation: false,
+        referenceNid: false,
+    };
     /**
-     * Show/hide the modal
+     * Show/hide the  modal
      */
 
     const addShowModal = () => {
@@ -106,25 +122,17 @@ const Suppliers = () => {
             classes: 'table-user',
         },
         {
-            Header: t('address'),
-            accessor: 'address',
-            sort: true,
-            Cell: ({ row }) => {
-                const splitAddress = row.original?.address?.split(',');
-                return splitAddress?.map((item, i) => (
-                    <p className="mb-0" key={i}>
-                        {item}
-                        {i !== splitAddress.length - 1 ? ',' : ''}
-                    </p>
-                ));
-            },
+            Header: t('mobile'),
+            accessor: 'mobile',
+            sort: false,
+            Cell: ({ row }) => row.original.mobile,
             classes: 'table-user',
         },
         {
-            Header: t('mobile'),
-            accessor: 'mobile',
-            sort: true,
-            Cell: ({ row }) => row.original.mobile,
+            Header: t('email'),
+            accessor: 'email',
+            sort: false,
+            Cell: ({ row }) => row.original.email,
             classes: 'table-user',
         },
         {
@@ -134,7 +142,98 @@ const Suppliers = () => {
             Cell: ({ row }) => row.original.due,
             classes: 'table-user',
         },
-
+        {
+            Header: t('address'),
+            accessor: 'address',
+            sort: false,
+            Cell: ({ row }) => {
+                const splitAddress = row.original?.address?.split(',');
+                return splitAddress?.map((item, i) => (
+                    <p className="mb-0" key={i}>
+                        {item}
+                        {i !== splitAddress?.length - 1 ? ',' : ''}
+                    </p>
+                ));
+            },
+            classes: 'table-user',
+        },
+        {
+            Header: t('district'),
+            accessor: 'district',
+            sort: false,
+            Cell: ({ row }) => row.original.district,
+            classes: 'table-user',
+        },
+        {
+            Header: t('thana'),
+            accessor: 'thana',
+            sort: false,
+            Cell: ({ row }) => row.original.thana,
+            classes: 'table-user',
+        },
+        {
+            Header: t('father name'),
+            accessor: 'fatherName',
+            sort: false,
+            Cell: ({ row }) => row.original.fatherName,
+            classes: 'table-user',
+        },
+        {
+            Header: t('nid'),
+            accessor: 'nid',
+            sort: false,
+            Cell: ({ row }) => row.original.nid,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference name'),
+            accessor: 'referenceName',
+            sort: false,
+            Cell: ({ row }) => row.original.reference.name,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference mobile'),
+            accessor: 'referenceMobile',
+            sort: false,
+            Cell: ({ row }) => row.original.reference.mobile,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference nid'),
+            accessor: 'referenceNid',
+            sort: false,
+            Cell: ({ row }) => row.original.reference.nid,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference relation'),
+            accessor: 'referenceRelation',
+            sort: false,
+            Cell: ({ row }) => row.original.reference.relation,
+            classes: 'table-user',
+        },
+        {
+            Header: t('reference address'),
+            accessor: 'referenceAddress',
+            sort: false,
+            Cell: ({ row }) => row.original.reference.address,
+            classes: 'table-user',
+        },
+        {
+            Header: t('status'),
+            accessor: 'status',
+            sort: true,
+            Cell: ({ row }) => t(row.original.status.toLowerCase()),
+            classes: 'table-user',
+        },
+        {
+            Header: t('remarks'),
+            accessor: 'remarks',
+            sort: false,
+            Cell: ({ row }) => row.original.remarks,
+            classes: 'table-user',
+        },
         {
             Header: t('action'),
             accessor: 'action',
@@ -143,7 +242,6 @@ const Suppliers = () => {
             Cell: ActionColumn,
         },
     ];
-
     // get pagelist to display
     const sizePerPageList = [
         {
@@ -199,53 +297,29 @@ const Suppliers = () => {
                     <Col xs={12}>
                         <Card>
                             <Card.Body>
-                                <Row className="mb-2">
-                                    <Col sm={5}>
-                                        <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add supplier')}
-                                        </Button>
-                                    </Col>
-
-                                    <Col sm={7}>
-                                        <div className="text-sm-end">
-                                            <Button variant="success" className="mb-2 me-1">
-                                                <i className="mdi mdi-cog"></i>
-                                            </Button>
-
-                                            <Button variant="light" className="mb-2 me-1">
-                                                <BiImport />
-                                                {t('import')}
-                                            </Button>
-
-                                            <Button
-                                                variant="light"
-                                                className="mb-2 me-1"
-                                                onClick={() => exportFromJson([{ name: 'f' }], 'roles', 'xls')}>
-                                                <SiMicrosoftexcel />
-                                                {t('export')}
-                                            </Button>
-                                            <Button
-                                                variant="light"
-                                                className="mb-2 me-1"
-                                                onClick={() => exportFromJson([{ name: 'f' }], 'roles', 'csv')}>
-                                                <GrDocumentCsv /> {t('export')}
-                                            </Button>
-                                        </div>
-                                    </Col>
-                                </Row>
-
                                 <Table
-                                    columns={columns || []}
+                                    columns={columns}
                                     data={data}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}
                                     pagination={true}
-                                    isSelectable={false}
+                                    isSelectable={true}
                                     isSearchable={true}
                                     tableClass="table-striped"
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
+                                    addShowModal={addShowModal}
+                                    importFunc={suppliersImport}
+                                    deleteMulti={supplierMultiDelete}
+                                    tableInfo={{
+                                        tableName: 'suppliers',
+                                        exportFileName: 'suppliers',
+                                        columnOrder:
+                                            '( *mobile, *name, fatherName, company, email, remarks, nid, address, thana, district, reference/name, reference/mobile, reference/address, reference/nid, reference/relation, due, status, country )',
+                                        demoFile,
+                                        visibility,
+                                    }}
                                 />
                             </Card.Body>
                         </Card>

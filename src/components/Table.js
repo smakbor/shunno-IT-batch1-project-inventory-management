@@ -1,5 +1,5 @@
 //External Lib Import
-import React, { useRef, useEffect, forwardRef } from 'react';
+import React, { useRef, useEffect, forwardRef, useState } from 'react';
 import {
     useTable,
     useSortBy,
@@ -15,12 +15,17 @@ import { useTranslation } from 'react-i18next';
 //Internal Lib Import
 // components
 import Pagination from './Pagination';
+import { Button, Col, Row } from 'react-bootstrap';
+import ExportData from './ExportData';
+import CsvImportModal from '../pages/modals/CsvImportModal';
+import { useSelector } from 'react-redux';
+import AleartMessage from '../utils/AleartMessage';
 
 // Define a default UI for filtering
 const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, searchBoxClass }) => {
     const { t } = useTranslation();
 
-    const count = preGlobalFilteredRows.length;
+    const count = preGlobalFilteredRows?.length;
     const [value, setValue] = React.useState(globalFilter);
     const onChange = useAsyncDebounce((value) => {
         setGlobalFilter(value || undefined);
@@ -46,7 +51,7 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, se
 
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
     const defaultRef = useRef();
-    const resolvedRef: any = ref || defaultRef;
+    const resolvedRef = ref || defaultRef;
 
     useEffect(() => {
         resolvedRef.current.indeterminate = indeterminate;
@@ -62,36 +67,39 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
     );
 });
 
-type TableProps = {
-    isSearchable?: boolean,
-    isSortable?: boolean,
-    pagination?: boolean,
-    isSelectable?: boolean,
-    isExpandable?: boolean,
-    pageSize: number,
-    columns: Array<any>,
-    data: Array<any>,
-    searchBoxClass?: string,
-    tableClass?: string,
-    theadClass?: string,
-    sizePerPageList: {
-        text: string,
-        value: number,
-    }[],
-};
-
-const Table = (props: TableProps): React$Element<React$FragmentType> => {
+const Table = (props) => {
+    const { t } = useTranslation();
+    const [importedFile, setImportedFile] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [exportData, setExportData] = useState({});
+    const [showToggle, setShowToggle] = useState(false);
     const isSearchable = props['isSearchable'] || false;
     const isSortable = props['isSortable'] || false;
     const pagination = props['pagination'] || false;
     const isSelectable = props['isSelectable'] || false;
     const isExpandable = props['isExpandable'] || false;
+    const addShowModal = props['addShowModal'];
+    const importFunc = props['importFunc'];
+    const tableInfo = props['tableInfo'] || {};
+    const { tableName, columnOrder, demoFile, visibility } = tableInfo || '';
+    const deleteMulti = props['deleteMulti'];
+    const store = useSelector((state) => state.setting?.activeStore?._id);
+    let hiddenColumns = [];
+    for (const key in visibility) {
+        if (visibility[key] === false) {
+            hiddenColumns.push(key);
+        }
+    }
 
     const dataTable = useTable(
         {
             columns: props['columns'],
             data: props['data'],
-            initialState: { pageSize: props['pageSize'] || 10 },
+            initialState: {
+                pageSize: props['pageSize'] || 10,
+                hiddenColumns,
+            },
+            useRowSelect,
         },
         isSearchable && useGlobalFilter,
         isSortable && useSortBy,
@@ -121,7 +129,6 @@ const Table = (props: TableProps): React$Element<React$FragmentType> => {
                     },
                     ...columns,
                 ]);
-
             isExpandable &&
                 hooks.visibleColumns.push((columns) => [
                     // Let's make a column for selection
@@ -152,11 +159,79 @@ const Table = (props: TableProps): React$Element<React$FragmentType> => {
                 ]);
         }
     );
-
+    const multiSelectIds = dataTable.selectedFlatRows?.map((item) => item.original._id);
+    const { allColumns } = dataTable;
     let rows = pagination ? dataTable.page : dataTable.rows;
+    // for import excel modal
+
+    const toggleImportModal = () => {
+        setShowModal(!showModal);
+    };
+
+    const importCsv = () => {
+        const file = importedFile;
+        const formData = new FormData();
+        formData.append('file', file);
+        importFunc({ store: store, postBody: formData });
+        toggleImportModal();
+    };
+
+    useEffect(() => {
+        if (rows) {
+            const transformData = rows.reduce(
+                (acc, current) => {
+                    let { proprietor, store, _id, createdAt, updatedAt, ...others } = current.original;
+                    let { _id: vId, createdAt: vCreatedAt, updatedAt: vUpdatedAt, ...valueOthers } = current.values;
+                    acc.original.push(others);
+                    acc.values.push(valueOthers);
+                    return acc;
+                },
+                { original: [], values: [] }
+            );
+            setExportData(transformData);
+        }
+    }, [rows]);
 
     return (
         <>
+            <Row className="mb-2">
+                <Col sm={5}>
+                    <Button variant="primary" className="me-2" onClick={addShowModal}>
+                        <i className="mdi mdi-plus-circle me-2"></i> {t(`add ${tableName}`)}
+                    </Button>
+
+                    {dataTable.selectedFlatRows?.length > 0 && (
+                        <Button
+                            variant="danger"
+                            onClick={() => AleartMessage.Delete({ ids: multiSelectIds, store }, deleteMulti)}>
+                            <i className="mdi mdi-delete"></i>
+                        </Button>
+                    )}
+                </Col>
+                {exportData.values && (
+                    <ExportData
+                        fileName={tableName}
+                        data={exportData.values}
+                        showToggle={showToggle}
+                        setShowToggle={setShowToggle}
+                        toggleImportModal={toggleImportModal}
+                    />
+                )}
+            </Row>
+            {showToggle && (
+                <div className="d-flex align-content-start flex-wrap  bg-dragula p-2">
+                    {allColumns?.map((col, i) => {
+                        return (
+                            <div key={i} className="me-2">
+                                <label style={{ cursor: 'pointer' }}>
+                                    <input type="checkbox" {...col.getToggleHiddenProps()} className="me-1" />
+                                    {col.Header}
+                                </label>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
             {isSearchable && (
                 <GlobalFilter
                     preGlobalFilteredRows={dataTable.preGlobalFilteredRows}
@@ -173,22 +248,25 @@ const Table = (props: TableProps): React$Element<React$FragmentType> => {
                     <thead className={props['theadClass']}>
                         {dataTable.headerGroups.map((headerGroup) => (
                             <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map((column) => (
-                                    <th
-                                        {...column.getHeaderProps(column.sort && column.getSortByToggleProps())}
-                                        className={classNames({
-                                            sorting_desc: column.isSortedDesc === true,
-                                            sorting_asc: column.isSortedDesc === false,
-                                            sortable: column.sort === true,
-                                        })}>
-                                        {column.render('Header')}
-                                    </th>
-                                ))}
+                                {headerGroup.headers.map((column) => {
+                                    return (
+                                        <th
+                                            {...column.getHeaderProps(column.sort && column.getSortByToggleProps())}
+                                            className={classNames({
+                                                sorting_desc: column.isSortedDesc === true,
+                                                sorting_asc: column.isSortedDesc === false,
+                                                sortable: column.sort === true,
+                                            })}>
+                                            {column.render('Header')}
+                                        </th>
+                                    );
+                                })}
                             </tr>
                         ))}
                     </thead>
+
                     <tbody {...dataTable.getTableBodyProps()}>
-                        {(rows || []).map((row, i) => {
+                        {rows.map((row, i) => {
                             dataTable.prepareRow(row);
                             return (
                                 <tr {...row.getRowProps()}>
@@ -201,8 +279,10 @@ const Table = (props: TableProps): React$Element<React$FragmentType> => {
                     </tbody>
                 </table>
             </div>
-
             {pagination && <Pagination tableProps={dataTable} sizePerPageList={props['sizePerPageList']} />}
+            <CsvImportModal
+                {...{ showModal, setImportedFile, toggleImportModal, importCsv, tableName, columnOrder, demoFile }}
+            />
         </>
     );
 };

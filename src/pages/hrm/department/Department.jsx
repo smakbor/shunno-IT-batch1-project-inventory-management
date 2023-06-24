@@ -161,41 +161,6 @@ const Department = () => {
                     <Col xs={12}>
                         <Card>
                             <Card.Body>
-                                <Row className="mb-2">
-                                    <Col sm={5}>
-                                        <Button variant="danger" className="mb-2" onClick={addShowModal}>
-                                            <i className="mdi mdi-plus-circle me-2"></i> {t('add department')}
-                                        </Button>
-                                    </Col>
-
-                                    <Col sm={7}>
-                                        <div className="text-sm-end">
-                                            <Button variant="success" className="mb-2 me-1">
-                                                <i className="mdi mdi-cog"></i>
-                                            </Button>
-
-                                            <Button variant="light" className="mb-2 me-1">
-                                                <BiImport />
-                                                {t('import')}
-                                            </Button>
-
-                                            <Button
-                                                variant="light"
-                                                className="mb-2 me-1"
-                                                onClick={() => exportFromJson([{ name: 'f' }], 'roles', 'xls')}>
-                                                <SiMicrosoftexcel />
-                                                {t('export')}
-                                            </Button>
-                                            <Button
-                                                variant="light"
-                                                className="mb-2 me-1"
-                                                onClick={() => exportFromJson([{ name: 'f' }], 'roles', 'csv')}>
-                                                <GrDocumentCsv /> {t('export')}
-                                            </Button>
-                                        </div>
-                                    </Col>
-                                </Row>
-
                                 <Table
                                     columns={columns}
                                     data={data}
