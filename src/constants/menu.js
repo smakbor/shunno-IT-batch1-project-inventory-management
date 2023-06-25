@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { PermissionEnum } from './enums/permission.enums';
 
 const MENU_ITEMS = () => {
     const { t } = useTranslation();
@@ -8,52 +9,59 @@ const MENU_ITEMS = () => {
             label: t('products'),
             isTitle: false,
             icon: 'dripicons-weight',
+            routePermission: 'ALL',
             children: [
                 {
                     key: 'products',
                     label: t('products'),
                     url: '/products',
                     parentKey: 'products',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'category',
                     label: t('category'),
                     url: '/products/categories',
                     parentKey: 'products',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'unit',
                     label: t('unit'),
                     url: 'products/units',
                     parentKey: 'products',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'manufacturer',
                     label: t('manufacturer'),
                     url: '/products/manufacturers',
                     parentKey: 'products',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'warranty',
                     label: t('warranty'),
                     url: '/products/warranties',
                     parentKey: 'products',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'stock',
                     label: t('stock'),
                     url: '/stock',
                     parentKey: 'products',
+                    routePermission: 'ALL',
                 },
             ],
         },
         { key: 'contacts', label: t('contacts'), isTitle: true },
-
         {
             key: 'people',
             label: t('People'),
             isTitle: false,
             icon: 'dripicons-user',
+            routePermission: 'ALL',
             children: [
                 {
                     key: 'suppliers',
@@ -62,6 +70,7 @@ const MENU_ITEMS = () => {
                     icon: 'uil-briefcase',
                     url: '/suppliers',
                     parentKey: 'people',
+                    routePermission: PermissionEnum.READ_SUPPLIERS,
                 },
                 {
                     key: 'customers',
@@ -70,6 +79,7 @@ const MENU_ITEMS = () => {
                     icon: 'uil-users-alt',
                     url: '/customers',
                     parentKey: 'people',
+                    routePermission: PermissionEnum.READ_CUSTOMERS,
                 },
                 {
                     key: 'billers',
@@ -78,6 +88,7 @@ const MENU_ITEMS = () => {
                     icon: 'uil-users-alt',
                     url: '/billers',
                     parentKey: 'people',
+                    routePermission: 'ALL',
                 },
             ],
         },
@@ -88,18 +99,21 @@ const MENU_ITEMS = () => {
             label: t('expenditure'),
             isTitle: false,
             icon: 'dripicons-weight',
+            routePermission: 'ALL',
             children: [
                 {
                     key: 'costSection',
                     label: t('cost section'),
                     url: '/costSections',
                     parentKey: 'Expenditure',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'expenditure',
                     label: t('expenditure'),
                     url: '/expenditure',
                     parentKey: 'Expenditure',
+                    routePermission: 'ALL',
                 },
             ],
         },
@@ -110,6 +124,7 @@ const MENU_ITEMS = () => {
             isTitle: false,
             icon: 'uil-comment-alt-dots',
             url: '/messages/inbox',
+            routePermission: 'ALL',
         },
         { key: 'permissions', label: 'permissions', isTitle: true },
         {
@@ -117,18 +132,21 @@ const MENU_ITEMS = () => {
             label: t('permissions'),
             isTitle: false,
             icon: 'uil-shield-exclamation',
+            routePermission: 'ALL',
             children: [
                 {
                     key: 'user-role',
                     label: t('user role'),
                     url: '/user-role',
                     parentKey: 'permissions',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'permission',
                     label: t('permissions'),
                     url: '/permissions',
                     parentKey: 'permissions',
+                    routePermission: 'ALL',
                 },
             ],
         },
@@ -138,18 +156,21 @@ const MENU_ITEMS = () => {
             label: t('media'),
             isTitle: false,
             icon: 'dripicons-photo',
+            routePermission: 'ALL',
             children: [
                 {
                     key: 'media',
                     label: t('media'),
                     url: '/media',
                     parentKey: 'media',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'upload',
                     label: t('upload'),
                     url: '/media/upload',
                     parentKey: 'media',
+                    routePermission: 'ALL',
                 },
             ],
         },
@@ -159,6 +180,7 @@ const MENU_ITEMS = () => {
             label: t('HRM'),
             isTitle: false,
             icon: 'dripicons-user',
+            routePermission: 'ALL',
             children: [
                 {
                     key: 'department',
@@ -167,6 +189,7 @@ const MENU_ITEMS = () => {
                     icon: 'uil-briefcase',
                     url: '/department',
                     parentKey: 'HRM',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'employee',
@@ -175,6 +198,7 @@ const MENU_ITEMS = () => {
                     icon: 'uil-users-alt',
                     url: '/employees',
                     parentKey: 'HRM',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'attendance',
@@ -183,6 +207,7 @@ const MENU_ITEMS = () => {
                     icon: 'uil-users-alt',
                     url: '/attendance',
                     parentKey: 'HRM',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'payroll',
@@ -191,6 +216,7 @@ const MENU_ITEMS = () => {
                     icon: 'uil-users-alt',
                     url: '/payroll',
                     parentKey: 'HRM',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'holiday',
@@ -199,6 +225,7 @@ const MENU_ITEMS = () => {
                     icon: 'uil-users-alt',
                     url: '/holiday',
                     parentKey: 'HRM',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'hrmsetting',
@@ -207,6 +234,7 @@ const MENU_ITEMS = () => {
                     icon: 'dripicons-gear',
                     url: '/hrmSetting',
                     parentKey: 'HRM',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'accounts',
@@ -214,6 +242,7 @@ const MENU_ITEMS = () => {
                     isTitle: false,
                     icon: 'dripicons-gear',
                     parentKey: 'HRM',
+                    routePermission: 'ALL',
                     children: [
                         {
                             key: 'accounts',
@@ -222,6 +251,7 @@ const MENU_ITEMS = () => {
                             icon: 'dripicons-gear',
                             url: '/accounts',
                             parentKey: 'accounts',
+                            routePermission: 'ALL',
                         },
                         {
                             key: 'money transfer',
@@ -230,6 +260,7 @@ const MENU_ITEMS = () => {
                             icon: 'dripicons-gear',
                             url: '/money-transfer',
                             parentKey: 'accounts',
+                            routePermission: 'ALL',
                         },
                         {
                             key: 'account statement',
@@ -238,6 +269,7 @@ const MENU_ITEMS = () => {
                             icon: 'dripicons-gear',
                             url: '/account-statement',
                             parentKey: 'accounts',
+                            routePermission: 'ALL',
                         },
                     ],
                 },
@@ -250,18 +282,21 @@ const MENU_ITEMS = () => {
             label: t('settings'),
             isTitle: false,
             icon: 'dripicons-gear',
+            routePermission: 'ALL',
             children: [
                 {
                     key: 'user',
                     label: t('users'),
                     url: '/staffs',
                     parentKey: 'settings',
+                    routePermission: 'ALL',
                 },
                 {
                     key: 'ui',
                     label: t('ui'),
                     url: '/settings/ui',
                     parentKey: 'settings',
+                    routePermission: 'ALL',
                 },
             ],
         },

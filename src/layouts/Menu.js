@@ -3,10 +3,17 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Collapse } from 'react-bootstrap';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 
 import { findAllParent, findMenuItem } from '../helpers/menu';
+import { useProfileDetailsQuery } from '../redux/services/profileService';
 
 const MenuItemWithChildren = ({ item, linkClassName, subMenuClassNames, activeMenuItems, toggleMenu }) => {
+    const { accessToken } = useSelector((state) => state.auth);
+    const { data: loginCurrentUser, isLoading } = useProfileDetailsQuery(undefined, {
+        skip: !accessToken,
+    });
+
     const [open, setOpen] = useState(activeMenuItems.includes(item.key));
 
     useEffect(() => {
@@ -42,36 +49,39 @@ const MenuItemWithChildren = ({ item, linkClassName, subMenuClassNames, activeMe
                         {item.badge.text}
                     </span>
                 )}
-                <span> {item.label} </span>
+                <span> {item.label}</span>
             </Link>
             <Collapse in={open}>
                 <ul className={classNames(subMenuClassNames)}>
                     {item.children.map((child, i) => {
-                        return (
-                            <React.Fragment key={i}>
-                                {child.children ? (
-                                    <>
-                                        {/* parent */}
-                                        <MenuItemWithChildren
-                                            item={child}
-                                            linkClassName={activeMenuItems.includes(child.key) ? 'active' : ''}
-                                            activeMenuItems={activeMenuItems}
-                                            subMenuClassNames="side-nav-third-level"
-                                            toggleMenu={toggleMenu}
-                                        />
-                                    </>
-                                ) : (
-                                    <>
-                                        {/* child */}
-                                        <MenuItem
-                                            item={child}
-                                            className={activeMenuItems.includes(child.key) ? 'menuitem-active' : ''}
-                                            linkClassName={activeMenuItems.includes(child.key) ? 'active' : ''}
-                                        />
-                                    </>
-                                )}
-                            </React.Fragment>
-                        );
+                        console.log(child);
+                        if (child?.routePermission !== 'ALL' && loginCurrentUser?.permissions[child?.routePermission]) {
+                            return (
+                                <React.Fragment key={i}>
+                                    {child.children ? (
+                                        <>
+                                            {/* parent */}
+                                            <MenuItemWithChildren
+                                                item={child}
+                                                linkClassName={activeMenuItems.includes(child.key) ? 'active' : ''}
+                                                activeMenuItems={activeMenuItems}
+                                                subMenuClassNames="side-nav-third-level"
+                                                toggleMenu={toggleMenu}
+                                            />
+                                        </>
+                                    ) : (
+                                        <>
+                                            {/* child */}
+                                            <MenuItem
+                                                item={child}
+                                                className={activeMenuItems.includes(child.key) ? 'menuitem-active' : ''}
+                                                linkClassName={activeMenuItems.includes(child.key) ? 'active' : ''}
+                                            />
+                                        </>
+                                    )}
+                                </React.Fragment>
+                            );
+                        }
                     })}
                 </ul>
             </Collapse>
@@ -112,11 +122,7 @@ const MenuItemLink = ({ item, className }) => {
  * Renders the application menu
  */
 
-type AppMenuProps = {
-    menuItems: Array<any>,
-};
-
-const AppMenu = ({ menuItems }: AppMenuProps): React$Element<React$FragmentType> => {
+const AppMenu = ({ menuItems }) => {
     let location = useLocation();
     const menuRef = useRef(null);
 
@@ -137,7 +143,7 @@ const AppMenu = ({ menuItems }: AppMenuProps): React$Element<React$FragmentType>
         let matchingMenuItem = null;
 
         if (div) {
-            let items: any = div.getElementsByClassName('side-nav-link-ref');
+            let items = div.getElementsByClassName('side-nav-link-ref');
             for (let i = 0; i < items.length; ++i) {
                 if (location.pathname === items[i].pathname) {
                     matchingMenuItem = items[i];

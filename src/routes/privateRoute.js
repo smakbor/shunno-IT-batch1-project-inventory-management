@@ -3,6 +3,7 @@ import { lazy } from 'react';
 
 //Internal Lib Import
 import LazyLoad from '../components/common/LazyLoad.jsx';
+import { PermissionEnum } from '../constants/enums/permission.enums.js';
 
 const Media = lazy(() => import('../pages/media/Media.jsx'));
 const Salary = lazy(() => import('../pages/employee/Salary.jsx'));
@@ -70,13 +71,13 @@ const privateRoutes = [
         path: '/suppliers',
         element: <LazyLoad component={Suppliers} />,
         roles: ['ALL', 'PROPRIETOR'],
-        routePermission: 'ALL',
+        routePermission: PermissionEnum.READ_SUPPLIERS,
     },
     {
         path: '/customers',
         element: <LazyLoad component={Customers} />,
         roles: ['ALL', 'PROPRIETOR'],
-        routePermission: 'ALL',
+        routePermission: PermissionEnum.READ_CUSTOMERS,
     },
     {
         path: '/billers',
