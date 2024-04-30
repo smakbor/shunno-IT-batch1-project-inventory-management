@@ -18,40 +18,22 @@ import { useCategoryDeleteMutation, useCategoryListQuery } from '../../../redux/
 
 import AleartMessage from '../../../utils/AleartMessage';
 import CategoryCreateUpdate from './CategoryCreateUpdate';
-import { useSubCategoryListQuery, useSubCategoryDeleteMutation } from '../../../redux/services/subCategory';
-import SubCategoryCreateUpdateModal from '../subCategory/SubCreateUpdateModal';
 import { useSelector } from 'react-redux';
-import noImage from '../../../assets/images/no-image.png';
 
 // main component
 const Categories = () => {
     const { t } = useTranslation();
     const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
-    const [subCategoryDefaultValues, setSubCategoryDefaultValues] = useState({
-        name: '',
-        status: 'ACTIVE',
-        categoryID: '',
-    });
 
     const [modal, setModal] = useState(false);
-    const [subCategoryModal, setSubCategoryModal] = useState(false);
+
     const [editData, setEditData] = useState(false);
-    const [subCategoryEditData, setSubCategoryEditData] = useState(false);
-    const storeID = useSelector((state) => state.setting.activeStore?._id);
+
     const [categoryDelete] = useCategoryDeleteMutation();
     const { data, isLoading, isError } = useCategoryListQuery();
     //     storeID, {
     //     skip: !storeID,
     // }
-    console.log(data);
-    const {
-        data: subCategory,
-        isLoading: loading,
-        isError: error,
-    } = useSubCategoryListQuery(storeID, {
-        skip: !storeID,
-    });
-    const [subCategoryDelete] = useSubCategoryDeleteMutation();
 
     /**
      * Show/hide the modal
@@ -61,17 +43,11 @@ const Categories = () => {
         setDefaultValues({ name: '', status: 'ACTIVE' });
         setModal(!modal);
     };
-    const subCategoryShowModal = (id) => {
-        setSubCategoryEditData(false);
-        setSubCategoryDefaultValues({ name: '', status: 'ACTIVE', categoryID: id });
-        setSubCategoryModal(true);
-    };
+
     const toggle = (e) => {
         setModal(!modal);
     };
-    const subCategoryModalToggle = () => {
-        setSubCategoryModal(!subCategoryModal);
-    };
+
     /* action column render */
     const ActionColumn = ({ row }) => {
         const edit = () => {
@@ -84,7 +60,7 @@ const Categories = () => {
                 <i
                     className="mdi mdi-plus-circle me-2 text-info"
                     style={{ fontSize: '1.3rem', cursor: 'pointer' }}
-                    onClick={() => subCategoryShowModal(row.original._id)}
+                    // onClick={}
                     data-toggle="tooltip"
                     data-placement="top"
                     title={t('add subcategory')}
@@ -108,48 +84,6 @@ const Categories = () => {
                     title={t('delete category')}>
                     <i className="mdi mdi-delete"></i>
                 </span>
-            </>
-        );
-    };
-    const SubCategoryActionColumn = ({ row }) => {
-        return (
-            <>
-                {subCategory?.map((item) => {
-                    const edit = () => {
-                        setSubCategoryModal(true);
-                        setSubCategoryEditData(item._id);
-                        setSubCategoryDefaultValues(item);
-                    };
-
-                    if (item.categoryID === row.original._id) {
-                        return (
-                            <>
-                                <span
-                                    role="button"
-                                    className="action-icon text-warning"
-                                    onClick={edit}
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title={t('edit subcategory')}>
-                                    <i className="mdi mdi-square-edit-outline"></i>
-                                </span>
-
-                                <span
-                                    role="button"
-                                    className="action-icon text-danger"
-                                    onClick={() => AleartMessage.Delete(item._id, subCategoryDelete)}
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title={t('delete subcategory')}>
-                                    <i className="mdi mdi-delete"></i>
-                                </span>
-
-                                <span>{item.name}</span>
-                                <br />
-                            </>
-                        );
-                    }
-                })}
             </>
         );
     };
@@ -191,13 +125,7 @@ const Categories = () => {
             //         ),
             //     classes: 'table-user',
             // },
-            {
-                Header: t('sub category'),
-                accessor: '_id',
-                sort: false,
-                Cell: SubCategoryActionColumn,
-                classes: 'table-user',
-            },
+
             {
                 Header: t('action'),
                 accessor: 'action',
@@ -206,7 +134,7 @@ const Categories = () => {
                 Cell: ActionColumn,
             },
         ],
-        [subCategory]
+        []
     );
 
     // get pagelist to display
@@ -284,15 +212,6 @@ const Categories = () => {
                     </Col>
                 </Row>
                 <CategoryCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
-                <SubCategoryCreateUpdateModal
-                    {...{
-                        setSubCategoryModal,
-                        subCategoryModal,
-                        subCategoryModalToggle,
-                        subCategoryEditData,
-                        subCategoryDefaultValues,
-                    }}
-                />
             </>
         );
     }

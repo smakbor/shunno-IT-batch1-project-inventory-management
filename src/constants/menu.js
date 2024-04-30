@@ -23,24 +23,7 @@ const MENU_ITEMS = () => {
                     url: '/products/categories',
                     parentKey: 'products',
                 },
-                {
-                    key: 'unit',
-                    label: t('unit'),
-                    url: 'products/units',
-                    parentKey: 'products',
-                },
-                {
-                    key: 'manufacturer',
-                    label: t('manufacturer'),
-                    url: '/products/manufacturers',
-                    parentKey: 'products',
-                },
-                {
-                    key: 'warranty',
-                    label: t('warranty'),
-                    url: '/products/warranties',
-                    parentKey: 'products',
-                },
+
                 {
                     key: 'stock',
                     label: t('stock'),
@@ -63,22 +46,6 @@ const MENU_ITEMS = () => {
                     isTitle: false,
                     icon: 'uil-briefcase',
                     url: '/suppliers',
-                    parentKey: 'people',
-                },
-                {
-                    key: 'customers',
-                    label: t('customers'),
-                    isTitle: false,
-                    icon: 'uil-users-alt',
-                    url: '/customers',
-                    parentKey: 'people',
-                },
-                {
-                    key: 'billers',
-                    label: t('billers'),
-                    isTitle: false,
-                    icon: 'uil-users-alt',
-                    url: '/billers',
                     parentKey: 'people',
                 },
             ],
@@ -136,28 +103,7 @@ const MENU_ITEMS = () => {
                 },
             ],
         },
-        { key: 'media', label: 'media', isTitle: true },
-        {
-            key: 'media',
-            label: t('media'),
-            isTitle: false,
-            icon: 'dripicons-photo',
 
-            children: [
-                {
-                    key: 'media',
-                    label: t('media'),
-                    url: '/media',
-                    parentKey: 'media',
-                },
-                {
-                    key: 'upload',
-                    label: t('upload'),
-                    url: '/media/upload',
-                    parentKey: 'media',
-                },
-            ],
-        },
         { key: 'HRM', label: 'HRM', isTitle: true },
         {
             key: 'HRM',
