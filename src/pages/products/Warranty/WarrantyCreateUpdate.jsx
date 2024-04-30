@@ -10,7 +10,7 @@ import Select from 'react-select';
 //Internal Lib Import
 import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
-import MappedComponent from '../../../pages/mappedComponent/MappedComponent';
+import MappedComponent from '../../mappedComponent/MappedComponent';
 
 //api services
 import { useWarrantyCreateMutation, useWarrantyUpdateMutation } from '../../../redux/services/warrantyService';

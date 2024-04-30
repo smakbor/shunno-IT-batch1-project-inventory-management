@@ -5,7 +5,7 @@ export const profileService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         profileDetails: builder.query({
             query: () => ({
-                url: `profile`,
+                url: `v1/profile`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data,

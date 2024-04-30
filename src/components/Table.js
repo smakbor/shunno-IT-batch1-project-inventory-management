@@ -197,7 +197,7 @@ const Table = (props) => {
             <Row className="mb-2">
                 <Col sm={5}>
                     <Button variant="primary" className="me-2" onClick={addShowModal}>
-                        <i className="mdi mdi-plus-circle me-2"></i> {t(`add ${tableName}`)}
+                        <i className="mdi mdi-plus-circle me-2"></i> {t(`Add ${tableName}`)}
                     </Button>
 
                     {dataTable.selectedFlatRows?.length > 0 && (

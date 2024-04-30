@@ -19,7 +19,10 @@ export const authService = apiService.injectEndpoints({
             }),
             onQueryStarted(_arg, { queryFulfilled, dispatch }) {
                 queryFulfilled
-                    .then(({ data }) => dispatch(userLogin(data?.data?.accessToken)))
+                    .then(({ data }) => {
+                        console.log(data);
+                        dispatch(userLogin(data?.accessToken));
+                    })
                     .catch(() => {
                         dispatch(userLogout());
                     });
@@ -34,7 +37,7 @@ export const authService = apiService.injectEndpoints({
                 try {
                     await queryFulfilled;
                     dispatch(userLogout());
-                } catch (error) { }
+                } catch (error) {}
             },
         }),
         forgetPassword: builder.mutation({

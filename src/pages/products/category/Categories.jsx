@@ -21,7 +21,6 @@ import CategoryCreateUpdate from './CategoryCreateUpdate';
 import { useSubCategoryListQuery, useSubCategoryDeleteMutation } from '../../../redux/services/subCategory';
 import SubCategoryCreateUpdateModal from '../subCategory/SubCreateUpdateModal';
 import { useSelector } from 'react-redux';
-import { shunnoStorageBaseURL } from '../../../config/config';
 import noImage from '../../../assets/images/no-image.png';
 
 // main component
@@ -40,9 +39,11 @@ const Categories = () => {
     const [subCategoryEditData, setSubCategoryEditData] = useState(false);
     const storeID = useSelector((state) => state.setting.activeStore?._id);
     const [categoryDelete] = useCategoryDeleteMutation();
-    const { data, isLoading, isError } = useCategoryListQuery(storeID, {
-        skip: !storeID,
-    });
+    const { data, isLoading, isError } = useCategoryListQuery();
+    //     storeID, {
+    //     skip: !storeID,
+    // }
+    console.log(data);
     const {
         data: subCategory,
         isLoading: loading,
@@ -51,7 +52,7 @@ const Categories = () => {
         skip: !storeID,
     });
     const [subCategoryDelete] = useSubCategoryDeleteMutation();
-    const imageBaseUrl = shunnoStorageBaseURL;
+
     /**
      * Show/hide the modal
      */
@@ -163,17 +164,7 @@ const Categories = () => {
                 Cell: ({ row }) => row.index + 1,
                 classes: 'table-user',
             },
-            {
-                Header: t('image'),
-                accessor: 'image',
-                Cell: ({ row }) => (
-                    <img
-                        style={{ height: '40px' }}
-                        src={row.original.image ? imageBaseUrl + '/' + row.original?.image?.url : noImage}
-                        alt={row.original.name}
-                    />
-                ),
-            },
+
             {
                 Header: t('category name'),
                 accessor: 'name',
@@ -182,17 +173,24 @@ const Categories = () => {
                 classes: 'table-user',
             },
             {
-                Header: t('status'),
-                accessor: 'status',
+                Header: t('Remarks'),
+                accessor: 'note',
                 sort: true,
-                Cell: ({ row }) =>
-                    row.original.status === 'ACTIVE' ? (
-                        <div className="badge badge-success-lighten">{t('active')}</div>
-                    ) : (
-                        <div className="badge badge-danger-lighten">{t('inactive')}</div>
-                    ),
+                Cell: ({ row }) => row.original.note,
                 classes: 'table-user',
             },
+            // {
+            //     Header: t('status'),
+            //     accessor: 'status',
+            //     sort: true,
+            //     Cell: ({ row }) =>
+            //         row.original.status === 'ACTIVE' ? (
+            //             <div className="badge badge-success-lighten">{t('active')}</div>
+            //         ) : (
+            //             <div className="badge badge-danger-lighten">{t('inactive')}</div>
+            //         ),
+            //     classes: 'table-user',
+            // },
             {
                 Header: t('sub category'),
                 accessor: '_id',
@@ -278,6 +276,8 @@ const Categories = () => {
                                     tableClass="table-striped"
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
+                                    addShowModal={addShowModal}
+                                    tableInfo={{ tableName: 'Category' }}
                                 />
                             </Card.Body>
                         </Card>

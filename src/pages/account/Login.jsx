@@ -39,18 +39,8 @@ const Login = () => {
     */
     const schemaResolver = yupResolver(
         yup.object().shape({
-            mobile: yup
-                .string()
-                .required(t('please enter mobile'))
-                .matches(/(^(\+88|0088|88)?(01){1}[3456789]{1}(\d){8})$/, t('write 11 digit mobile number')),
-            password: yup
-                .string()
-                .required(t('please enter password'))
-                .min(8, t('password must be at least 8 characters'))
-                .matches(
-                    /^(?=.*[0-9])(?=.*[a-zA-Z])(?=\S+$).{6,20}$/,
-                    'password must contain at least 1 letter and 1 number'
-                ),
+            mobile: yup.string().required(t('please enter mobile')),
+            password: yup.string().required(t('please enter password')),
         })
     );
 
@@ -79,7 +69,7 @@ const Login = () => {
             <VerticalForm
                 onSubmit={onSubmit}
                 resolver={schemaResolver}
-                defaultValues={{ mobile: '01725785171', password: 'team@ss#2021$' }}>
+                defaultValues={{ mobile: '01518453965', password: '12345678' }}>
                 <FormInput
                     label={t('Mobile')}
                     type="text"

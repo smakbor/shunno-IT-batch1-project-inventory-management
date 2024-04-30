@@ -16,7 +16,9 @@ const ProtectRoute = ({ r, children }) => {
     const { data: loginCurrentUser, isLoading } = useProfileDetailsQuery(undefined, {
         skip: !accessToken,
     });
-
+    console.log(loginCurrentUser);
+    // let isLoading = false;
+    // let loginCurrentUser = {};
     if (isLoading) {
         return <FullPageLoad />;
     }
@@ -24,9 +26,6 @@ const ProtectRoute = ({ r, children }) => {
     if (accessToken && loginCurrentUser) {
         if (r.roles.indexOf('ALL') === -1 && r.roles.indexOf(loginCurrentUser.role) === -1) {
             // role not authorize so go to login page
-            return <Navigate to="/not-access" replace />;
-        } else if (r.routePermission !== 'ALL' && !loginCurrentUser.permissions[r.routePermission]) {
-            // access not authorize so go to not-access page
             return <Navigate to="/not-access" replace />;
         } else {
             return children;

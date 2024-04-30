@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 //Internal Lib Import
 
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
-import MappedComponent from '../../../pages/mappedComponent/MappedComponent';
+import MappedComponent from '../../mappedComponent/MappedComponent';
 import { MobileRegx } from '../../../helpers/FormValidation';
 //api services
 import { useCustomerCreateMutation, useCustomerUpdateMutation } from '../../../redux/services/customerService';

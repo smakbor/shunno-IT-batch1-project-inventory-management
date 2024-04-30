@@ -55,7 +55,7 @@ const MenuItemWithChildren = ({ item, linkClassName, subMenuClassNames, activeMe
                 <ul className={classNames(subMenuClassNames)}>
                     {item.children.map((child, i) => {
                         console.log(child);
-                        if (child?.routePermission !== 'ALL' && loginCurrentUser?.permissions[child?.routePermission]) {
+                        if (child?.routePermission !== 'ALL') {
                             return (
                                 <React.Fragment key={i}>
                                     {child.children ? (

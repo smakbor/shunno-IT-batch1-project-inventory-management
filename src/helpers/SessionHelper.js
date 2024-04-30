@@ -17,14 +17,14 @@ class SessionHelper {
         return localStorage.setItem('i18nextLng', language);
     }
     static getAccessToken() {
-        return localStorage.getItem('hnfeAccessToken');
+        return localStorage.getItem('fe-sardar-inventory');
     }
     static setAccessToken(accessToken) {
         if (!accessToken) return undefined;
-        return localStorage.setItem('hnfeAccessToken', accessToken);
+        return localStorage.setItem('fe-sardar-inventory', JSON.stringify(accessToken));
     }
     static removeTokens() {
-        localStorage.removeItem('hnfeAccessToken');
+        localStorage.removeItem('fe-sardar-inventory');
     }
     static getActiveStore() {
         return JSON.parse(localStorage.getItem('activeStore'));

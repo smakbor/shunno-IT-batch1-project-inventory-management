@@ -4,25 +4,26 @@ export const categoryService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         categoryList: builder.query({
             query: (storeID) => ({
-                url: `categories/${storeID}`,
+                url: `category/allCategory`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         categoryCreate: builder.mutation({
             query: (postBody) => ({
-                url: `categories`,
+                url: `category/create`,
                 method: 'POST',
                 body: postBody,
             }),
             onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 queryFulfilled.then(({ data: { data } }) => {
+                    console.log(data);
                     dispatch(
-                        apiService.util.updateQueryData("categoryList", postBody.store, (draft) => {
-                            draft.unshift(data)
+                        apiService.util.updateQueryData('categoryList', undefined, (draft) => {
+                            draft.unshift(data);
                         })
-                    )
-                })
+                    );
+                });
             },
         }),
 
@@ -35,12 +36,12 @@ export const categoryService = apiService.injectEndpoints({
             onQueryStarted({ id, postBody: { store } }, { dispatch, queryFulfilled }) {
                 queryFulfilled.then(({ data: { data } }) => {
                     dispatch(
-                        apiService.util.updateQueryData("categoryList", store, (draft) => {
-                            const findIndex = draft.findIndex(item => item._id === id);
+                        apiService.util.updateQueryData('categoryList', store, (draft) => {
+                            const findIndex = draft.findIndex((item) => item._id === id);
                             draft[findIndex] = data;
                         })
-                    )
-                })
+                    );
+                });
             },
         }),
         categoryDelete: builder.mutation({

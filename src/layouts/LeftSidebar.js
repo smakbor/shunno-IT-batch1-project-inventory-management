@@ -3,12 +3,9 @@ import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import SimpleBar from 'simplebar-react';
 import classNames from 'classnames';
-
 import { getMenuItems } from '../helpers/menu';
-
 // components
 import AppMenu from './Menu';
-
 // images
 import logoSm from '../assets/images/logo_sm.png';
 import logoDark from '../assets/images/logo-dark.png';
@@ -34,7 +31,6 @@ const SideBarContent = ({ hideUserProfile }: SideBarContentProps) => {
                 </div>
             )}
             <AppMenu menuItems={getMenuItems()} />
-
 
             <div className="clearfix" />
         </>
@@ -77,7 +73,10 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                     <>
                         <Link to="/" className="logo text-center logo-light">
                             <span className="logo-lg">
-                                <img src={isLight ? logoDark : logo} alt="logo" height="16" />
+                                {/* <img src={isLight ? logoDark : logo} alt="logo" height="16" /> */}
+                                <h3 height="16" className="mt-3">
+                                    SARDAR BARI
+                                </h3>
                             </span>
                             <span className="logo-sm">
                                 <img src={isLight ? logoSm : logoDarkSm} alt="logo" height="16" />

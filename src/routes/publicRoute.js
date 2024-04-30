@@ -3,6 +3,7 @@ import { lazy } from 'react';
 
 //Internal Lib Import
 import LazyLoad from '../components/common/LazyLoad';
+import Home from '../pages/test/Home';
 
 // auth
 const Login = lazy(() => import('../pages/account/Login'));
@@ -30,6 +31,10 @@ const publicRoute = [
     {
         path: '/account/confirm',
         element: <LazyLoad component={Confirm} />,
+    },
+    {
+        path: '/home',
+        element: <LazyLoad component={<Home />} />,
     },
     {
         path: '/account/forget-password',

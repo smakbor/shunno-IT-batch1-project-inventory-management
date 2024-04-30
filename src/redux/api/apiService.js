@@ -4,60 +4,54 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 //Internal Lib Import
 import { userLogin, userLogout } from '../features/authReducer';
 import { setLoading } from '../features/settingReducer';
-import { baseURL } from '../../config/config';
+import config from '../../config';
 
 //constant env variable
-const SERVER_URL = baseURL;
-const API_PREFIX_PATH = process.env.REACT_APP_API_PREFIX_PATH;
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: SERVER_URL + API_PREFIX_PATH,
-    prepareHeaders: (headers, { getState }) => {
-        const {
-            setting: { language },
-            auth: { accessToken },
-        } = getState();
-        headers.set('authorization', accessToken ? `Bearer ${accessToken}` : '');
-        headers.set('accept-language', language);
+    baseUrl: `http://localhost:5000/api`,
+    mode: 'cors', // Enable CORS here
+    prepareHeaders(headers, { getState }) {
+        console.log(getState());
+        const token = getState().auth.accessToken;
+        if (token) headers.set('Authorization', 'Bearer ' + token);
         return headers;
     },
-    mode: 'cors',
-    // credentials: 'include',
 });
 
-const baseQueryWithReauth = async (args, api, extraOptions) => {
-    api.dispatch(setLoading(true));
-    let result = await baseQuery(args, api, extraOptions);
-    const { error, data } = result;
+// const baseQueryWithReauth = async (args, api, extraOptions) => {
+//     api.dispatch(setLoading(true));
+//     let result = await baseQuery(args, api, extraOptions);
+//     const { error, data } = result;
 
-    // if (error) {
-    //     api.dispatch(setLoading(false));
+//     // if (error) {
+//     //     api.dispatch(setLoading(false));
 
-    //     if (error.status === 401) {
-    //         // try to get a new token
-    //         const refreshResult = await baseQuery(`/auth/refreshTokens`, api, extraOptions);
+//     //     if (error.status === 401) {
+//     //         // try to get a new token
+//     //         const refreshResult = await baseQuery(`/auth/refreshTokens`, api, extraOptions);
 
-    //         if (refreshResult?.data?.status) {
-    //             // store the new token
-    //             api.dispatch(userLogin(refreshResult?.data?.data?.accessToken));
+//     //         if (refreshResult?.data?.status) {
+//     //             // store the new token
+//     //             api.dispatch(userLogin(refreshResult?.data?.data?.accessToken));
 
-    //             // retry the initial query
-    //             result = await baseQuery(args, api, extraOptions);
-    //         } else {
-    //             api.dispatch(userLogout());
-    //         }
-    //     }
-    // }
+//     //             // retry the initial query
+//     //             result = await baseQuery(args, api, extraOptions);
+//     //         } else {
+//     //             api.dispatch(userLogout());
+//     //         }
+//     //     }
+//     // }
 
-    if (data) {
-        api.dispatch(setLoading(false));
-    }
+//     if (data) {
+//         api.dispatch(setLoading(false));
+//     }
 
-    return result;
-};
+//     return result;
+// };
 
 export const apiService = createApi({
     reducerPath: 'api-v2',
-    baseQuery: baseQueryWithReauth,
+    baseQuery: baseQuery,
     endpoints: () => ({}),
 });
