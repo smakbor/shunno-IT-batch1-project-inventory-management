@@ -9,7 +9,7 @@ import config from '../../config';
 //constant env variable
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: `http://localhost:5000/api`,
+    baseUrl: `http://10.0.0.52:5000/api`,
     mode: 'cors', // Enable CORS here
     prepareHeaders(headers, { getState }) {
         console.log(getState());

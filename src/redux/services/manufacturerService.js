@@ -1,24 +1,24 @@
 //Internal Lib Import
 import { apiService } from '../api/apiService';
-export const categoryService = apiService.injectEndpoints({
+export const manufacturerService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        categoryList: builder.query({
+        manufacturerList: builder.query({
             query: (storeID) => ({
-                url: `category/allCategory`,
+                url: `manufacturer/allManufacturer`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
-        categoryCreate: builder.mutation({
+        manufacturerCreate: builder.mutation({
             query: (postBody) => ({
-                url: `category/create`,
+                url: `manufacturer/create`,
                 method: 'POST',   body: postBody,
             }),
             onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 queryFulfilled.then(({ data: { data } }) => {
                     console.log(data);
                     dispatch(
-                        apiService.util.updateQueryData('categoryList', undefined, (draft) => {
+                        apiService.util.updateQueryData('manufacturerList', undefined, (draft) => {
                             draft.unshift(data);
                         })
                     );
@@ -26,16 +26,16 @@ export const categoryService = apiService.injectEndpoints({
             },
         }),
 
-        categoryUpdate: builder.mutation({
+        manufacturerUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
-                url: `categories/${id}`,
+                url: `manufacturer/${id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
             onQueryStarted({ id, postBody: { store } }, { dispatch, queryFulfilled }) {
                 queryFulfilled.then(({ data: { data } }) => {
                     dispatch(
-                        apiService.util.updateQueryData('categoryList', store, (draft) => {
+                        apiService.util.updateQueryData('manufacturerList', store, (draft) => {
                             const findIndex = draft.findIndex((item) => item._id === id);
                             draft[findIndex] = data;
                         })
@@ -50,7 +50,7 @@ export const categoryService = apiService.injectEndpoints({
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('categoryList', undefined, (draft) => {
+                    apiService.util.updateQueryData('manufacturerList', undefined, (draft) => {
                         draft = draft.filter((item) => item._id !== id);
                     })
                 );
@@ -63,5 +63,5 @@ export const categoryService = apiService.injectEndpoints({
         }),
     }),
 });
-export const { useCategoryListQuery, useCategoryDeleteMutation, useCategoryCreateMutation, useCategoryUpdateMutation } =
-    categoryService;
+export const { useManufacturerListQuery, useManufacturerCreateMutation} =
+    manufacturerService;
