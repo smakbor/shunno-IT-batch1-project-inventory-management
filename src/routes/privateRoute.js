@@ -9,6 +9,10 @@ import UserRolePage from '../pages/Permissions/UserRolePage.jsx';
 import Units from '../pages/products/Units/Units.jsx';
 import Brand from '../pages/products/Brand/Brand.jsx';
 // import Permissions from '../pages/permissions/Permissions.jsx';
+import UserRolePage from '../pages/Permissions/UserRolePage.jsx';
+import Permissions from '../pages/Permissions/Permissions.jsx';
+import Unit from '../pages/products/unit/Unit.jsx';
+import Manufacturer from '../pages/products/manufacturer/Manufacturer.jsx';
 
 // const Media = lazy(() => import('../pages/media/Media.jsx'));
 const Salary = lazy(() => import('../pages/employee/Salary.jsx'));
@@ -23,6 +27,9 @@ const Categories = lazy(() => import('../pages/products/category/Categories'));
 const Customer = lazy(()=> import('../pages/people/Customer.jsx'))
 const Supplier = lazy(()=> import('../pages/people/Supplier.jsx'))
 
+
+
+const Stock = lazy(() => import('../pages/products/stock/index.jsx'));
 const CostSection = lazy(() => import('../pages/expenditure/costSection/CostSection.jsx'));
 const Sent = lazy(() => import('../pages/message/Sent.jsx'));
 const Details = lazy(() => import('../pages/message/Details.jsx'));
@@ -62,7 +69,17 @@ const privateRoutes = [
         path: '/products/units',
         element: <LazyLoad component={Units}/>,
         roles: ['ALL', 'PROPRIETOR']
+    },{
+        path: '/products/units',
+        element: <LazyLoad component={Unit} />,
+        roles: ['ALL', 'PROPRIETOR'],
     },
+    {
+        path: '/products/manufacturer',
+        element: <LazyLoad component={Manufacturer} />,
+        roles: ['ALL', 'PROPRIETOR'],
+    },
+
     {
         path: '/costSections',
         element: <LazyLoad component={CostSection} />,

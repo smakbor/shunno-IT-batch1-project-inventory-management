@@ -33,6 +33,7 @@ const Login = () => {
     const { t } = useTranslation();
 
     const [login, { isLoading, isError, error }] = useLoginMutation();
+    console.log(login)
 
     /*
     form validation schema
