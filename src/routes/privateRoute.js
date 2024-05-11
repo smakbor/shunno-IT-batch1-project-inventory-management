@@ -10,6 +10,8 @@ import Brand from '../pages/products/Brand/Brand.jsx';
 import Permissions from '../pages/Permissions/Permissions.jsx';
 
 import Manufacturer from '../pages/products/manufacturer/Manufacturer.jsx';
+import Subcategory from '../pages/products/subcategory/Subcategory.jsx';
+
 
 // const Media = lazy(() => import('../pages/media/Media.jsx'));
 const Salary = lazy(() => import('../pages/employee/Salary.jsx'));
@@ -52,6 +54,11 @@ const privateRoutes = [
     {
         path: '/products/brand',
         element: <LazyLoad component={Brand} />,
+        roles: ['ALL', 'PROPRIETOR'],
+    },
+    {
+        path: '/products/subcategory',
+        element: <LazyLoad component={Subcategory} />,
         roles: ['ALL', 'PROPRIETOR'],
     },
 
