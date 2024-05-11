@@ -16,7 +16,7 @@ const ProtectRoute = ({ r, children }) => {
     const { data: loginCurrentUser, isLoading } = useProfileDetailsQuery(undefined, {
         skip: !accessToken,
     });
-    console.log(loginCurrentUser);
+
     // let isLoading = false;
     // let loginCurrentUser = {};
     if (isLoading) {

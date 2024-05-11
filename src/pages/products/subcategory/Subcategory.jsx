@@ -10,27 +10,30 @@ import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 
 //api services
-import { useCategoryDeleteMutation, useCategoryListQuery } from '../../../redux/services/categoryService';
 
 import AleartMessage from '../../../utils/AleartMessage';
-import CategoryCreateUpdate from './CategoryCreateUpdate';
-import { useSelector } from 'react-redux';
+import { isError } from 'joi';
+import SubcategoryCreateUpdate from './SubcategoryCreateUpdate';
+import { useSubcategoryListQuery, useSubcategoryDeleteMutation } from '../../../redux/services/subcategoryService';
 
 // main component
-const Categories = () => {
+const Subcategory = () => {
     const { t } = useTranslation();
-    const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
+    const [defaultValues, setDefaultValues] = useState({ category: '', name: '', note: '' });
 
     const [modal, setModal] = useState(false);
 
     const [editData, setEditData] = useState(false);
+    const { data, isLoading, isError } = useSubcategoryListQuery();
 
-    const [categoryDelete] = useCategoryDeleteMutation();
-    const { data, isLoading, isError } = useCategoryListQuery();
+    // const [deleteSubcategory, { isLoading: isLoad, isError: isErr }] = useSubcategoryDeleteMutation;
 
+    /**
+     * Show/hide the modal
+     */
     const addShowModal = () => {
         setEditData(false);
-        setDefaultValues({ name: '', status: 'ACTIVE' });
+        setDefaultValues({ category: '', name: '', note: '' });
         setModal(!modal);
     };
 
@@ -47,11 +50,10 @@ const Categories = () => {
         };
         return (
             <>
-                <button
-                    type="button"
+                <i
                     className="mdi mdi-plus-circle me-2 text-info"
-                    style={{ fontSize: '1.3rem', cursor: 'pointer', border: 'none', backgroundColor: 'transparent' }}
-                    onClick={() => console.log('clicked')}
+                    style={{ fontSize: '1.3rem', cursor: 'pointer' }}
+                    // onClick={}
                     data-toggle="tooltip"
                     data-placement="top"
                     title={t('add subcategory')}
@@ -62,17 +64,17 @@ const Categories = () => {
                     className="action-icon text-warning"
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={t('edit category')}
+                    title={t('edit subcategory')}
                     onClick={edit}>
                     <i className="mdi mdi-square-edit-outline"></i>
                 </span>
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, categoryDelete)}
+                    onClick={() => AleartMessage.Delete(row?.original._id)}
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={t('delete category')}>
+                    title={t('delete subcategory')}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
@@ -89,9 +91,16 @@ const Categories = () => {
                 Cell: ({ row }) => row.index + 1,
                 classes: 'table-user',
             },
+            {
+                Header: 'Category',
+                accessor: 'category',
+                sort: true,
+                Cell: ({ row }) => row.index + 1,
+                classes: 'table-user',
+            },
 
             {
-                Header: t('category name'),
+                Header: t('Subcategory name'),
                 accessor: 'name',
                 sort: true,
                 Cell: ({ row }) => row.original.name,
@@ -105,14 +114,7 @@ const Categories = () => {
                 classes: 'table-user',
             },
             {
-                Header: t('Status'),
-                accessor: 'status',
-                sort: false,
-                Cell: ({ row }) => row.original.status,
-                classes: 'table-user',
-            },
-            {
-                Header: t('action'),
+                Header: t('Action'),
                 accessor: 'action',
                 sort: false,
                 classes: 'table-action',
@@ -142,8 +144,8 @@ const Categories = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('category'), path: '/products/categories', active: true }]}
-                    title={t('category')}
+                    breadCrumbItems={[{ label: t('subcategory'), path: '/products/subcategory', active: true }]}
+                    title={t('Subcategory')}
                 />
                 <Card>
                     <Card.Body>
@@ -156,8 +158,8 @@ const Categories = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('category'), path: '/products/categories', active: true }]}
-                    title={t('category')}
+                    breadCrumbItems={[{ label: t('subcategory'), path: '/products/subcategory', active: true }]}
+                    title={t('Subcategory')}
                 />
                 <Card>
                     <Card.Body>
@@ -170,8 +172,8 @@ const Categories = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('category'), path: '/products/categories', active: true }]}
-                    title={t('category')}
+                    breadCrumbItems={[{ label: t('subcategory'), path: '/products/subcategory', active: true }]}
+                    title={t('Subcategory')}
                 />
                 <Row>
                     <Col xs={12}>
@@ -190,17 +192,16 @@ const Categories = () => {
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
                                     addShowModal={addShowModal}
-                                    tableInfo={{ tableName: 'Category' }}
+                                    tableInfo={{ tableName: 'Subcategory' }}
                                 />
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
-
-                <CategoryCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <SubcategoryCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }
 };
 
-export default Categories;
+export default Subcategory;
