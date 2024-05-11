@@ -23,6 +23,12 @@ const MENU_ITEMS = () => {
                     url: '/products/categories',
                     parentKey: 'products',
                 },
+                {
+                    key: 'unit',
+                    label: t('unit'),
+                    url: '/products/units',
+                    parentKey: 'products',
+                },
 
                 {
                     key: 'stock',
@@ -48,6 +54,14 @@ const MENU_ITEMS = () => {
                     url: '/suppliers',
                     parentKey: 'people',
                 },
+                {
+                    key: 'customer',
+                    label: t('customer'),
+                    isTitle: false,
+                    icon: 'dripicons-user',
+                    url: '/customer',
+                    parentKey: 'people',
+                }
             ],
         },
 
