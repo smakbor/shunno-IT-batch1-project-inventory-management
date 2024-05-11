@@ -207,6 +207,7 @@ const Warranty = () => {
                                     searchBoxClass="mt-2 mb-3"
                                     addShowModal={addShowModal}
                                     tableInfo={{ tableName: 'warranty' }}
+                                    
                                 />
                             </Card.Body>
                         </Card>
