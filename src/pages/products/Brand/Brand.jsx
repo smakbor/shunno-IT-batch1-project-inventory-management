@@ -14,15 +14,17 @@ import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 
 //api services
-import { useCategoryDeleteMutation, useCategoryListQuery } from '../../../redux/services/categoryService';
+// import { useCategoryDeleteMutation, useCategoryListQuery } from '../../../redux/services/categoryService';
 
 import AleartMessage from '../../../utils/AleartMessage';
 
 import { useSelector } from 'react-redux';
-import UnitCreateUpdate from './UnitCreateUpdate';
+import { useBrandDeleteMutation, useBrandListQuery } from '../../../redux/services/brandService';
+import BrandCreateUpdate from './BrandCreateUpdate';
+
 
 // main component
-const Units = () => {
+const Brand = () => {
     const { t } = useTranslation();
     const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
 
@@ -30,8 +32,8 @@ const Units = () => {
 
     const [editData, setEditData] = useState(false);
 
-    const [categoryDelete] = useCategoryDeleteMutation();
-    const { data, isLoading, isError } = useCategoryListQuery();
+    const [brandDelete] = useBrandDeleteMutation();
+    const { data, isLoading, isError } = useBrandListQuery();
     //     storeID, {
     //     skip: !storeID,
     // }
@@ -64,7 +66,7 @@ const Units = () => {
                     // onClick={}
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={t('add Units')}
+                    title={t('add Brand')}
                 />
 
                 <span
@@ -72,17 +74,17 @@ const Units = () => {
                     className="action-icon text-warning"
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={t('edit Units')}
+                    title={t('edit Brand')}
                     onClick={edit}>
                     <i className="mdi mdi-square-edit-outline"></i>
                 </span>
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, categoryDelete)}
+                    onClick={() => AleartMessage.Delete(row?.original._id, brandDelete)}
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={t('delete category')}>
+                    title={t('delete brand')}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
@@ -101,19 +103,21 @@ const Units = () => {
             },
 
             {
-                Header: t('category name'),
+                Header: t('Brand Name'),
                 accessor: 'name',
                 sort: true,
                 Cell: ({ row }) => row.original.name,
                 classes: 'table-user',
             },
             {
-                Header: t('Remarks'),
+                Header: t('Brand'),
                 accessor: 'note',
                 sort: true,
                 Cell: ({ row }) => row.original.note,
                 classes: 'table-user',
             },
+           
+            
             // {
             //     Header: t('status'),
             //     accessor: 'status',
@@ -158,8 +162,8 @@ const Units = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('category'), path: '/products/categories', active: true }]}
-                    title={t('category')}
+                    breadCrumbItems={[{ label: t('brand'), path: '/products/brand', active: true }]}
+                    title={t('brand')}
                 />
                 <Card>
                     <Card.Body>
@@ -172,8 +176,8 @@ const Units = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('category'), path: '/products/categories', active: true }]}
-                    title={t('category')}
+                    breadCrumbItems={[{ label: t('brand'), path: '/products/brand', active: true }]}
+                    title={t('brand')}
                 />
                 <Card>
                     <Card.Body>
@@ -186,8 +190,8 @@ const Units = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('category'), path: '/products/categories', active: true }]}
-                    title={t('category')}
+                    breadCrumbItems={[{ label: t('brand'), path: '/products/brand', active: true }]}
+                    title={t('brand')}
                 />
                 <Row>
                     <Col xs={12}>
@@ -206,16 +210,16 @@ const Units = () => {
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
                                     addShowModal={addShowModal}
-                                    tableInfo={{ tableName: 'Category' }}
+                                    tableInfo={{ tableName: 'brand' }}
                                 />
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
-                <UnitCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <BrandCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }
 };
 
-export default Units;
+export default Brand;
