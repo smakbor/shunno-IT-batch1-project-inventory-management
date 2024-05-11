@@ -6,10 +6,15 @@ import LazyLoad from '../components/common/LazyLoad.jsx';
 import { PermissionEnum } from '../constants/enums/permission.enums.js';
 import Warranty from '../pages/products/warranty/Warranty.jsx';
 import UserRolePage from '../pages/Permissions/UserRolePage.jsx';
+
+// import Permissions from '../pages/permissions/Permissions.jsx';
+// import UserRolePage from '../pages/Permissions/UserRolePage.jsx';
 import Brand from '../pages/products/Brand/Brand.jsx';
 import Permissions from '../pages/Permissions/Permissions.jsx';
 
 import Manufacturer from '../pages/products/manufacturer/Manufacturer.jsx';
+import Subcategory from '../pages/products/subcategory/Subcategory.jsx';
+
 
 // const Media = lazy(() => import('../pages/media/Media.jsx'));
 const Salary = lazy(() => import('../pages/employee/Salary.jsx'));
@@ -17,10 +22,8 @@ const Ui = lazy(() => import('../pages/settings/Ui.jsx'));
 const Trash = lazy(() => import('../pages/message/Trash.jsx'));
 const Inbox = lazy(() => import('../pages/message/Inbox.jsx'));
 const Categories = lazy(() => import('../pages/products/category/Categories'));
-const Customer = lazy(()=> import('../pages/people/Customer.jsx'))
-const Supplier = lazy(()=> import('../pages/people/Supplier.jsx'))
-
-
+const Customer = lazy(() => import('../pages/people/Customer.jsx'));
+const Supplier = lazy(() => import('../pages/people/Supplier.jsx'));
 
 const Stock = lazy(() => import('../pages/products/stock/index.jsx'));
 const CostSection = lazy(() => import('../pages/expenditure/costSection/CostSection.jsx'));
@@ -49,12 +52,26 @@ const privateRoutes = [
         element: <LazyLoad component={Warranty} />,
         roles: ['ALL', 'PROPRIETOR'],
     },
+
+    // {
+    //     path: '/products/units',
+    //     element: <LazyLoad component={Unit} />,
+    //     roles: ['ALL', 'PROPRIETOR'],
+    // },
     {
         path: '/products/brand',
         element: <LazyLoad component={Brand} />,
         roles: ['ALL', 'PROPRIETOR'],
     },
+<<<<<<< HEAD
+=======
+    {
+        path: '/products/subcategory',
+        element: <LazyLoad component={Subcategory} />,
+        roles: ['ALL', 'PROPRIETOR'],
+    },
 
+>>>>>>> 17139209a23c5385fc823b634f00d8d2bda36c13
     {
         path: '/products/manufacturer',
         element: <LazyLoad component={Manufacturer} />,

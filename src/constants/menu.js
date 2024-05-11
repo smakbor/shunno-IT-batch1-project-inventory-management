@@ -24,6 +24,12 @@ const MENU_ITEMS = () => {
                     parentKey: 'products',
                 },
                 {
+                    key: 'subcategory',
+                    label: t('Subcategory'),
+                    url: '/products/subcategory',
+                    parentKey: 'products',
+                },
+                {
                     key: 'warranty',
                     label: t('warranty'),
                     url: '/products/warranty',
@@ -34,13 +40,7 @@ const MENU_ITEMS = () => {
                     label: t('brand'),
                     url: '/products/brand',
                     parentKey: 'products',
-                },{
-                    key: 'unit',
-                    label: t('Unit'),
-                    url: '/products/units',
-                    parentKey: 'products',
                 },
-
                 {
                     key: 'manufacturer',
                     label: t('Manufacturer'),
@@ -72,7 +72,7 @@ const MENU_ITEMS = () => {
                     icon: 'dripicons-user',
                     url: '/customer',
                     parentKey: 'people',
-                }
+                },
             ],
         },
 
