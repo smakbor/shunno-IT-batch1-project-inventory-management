@@ -6,21 +6,22 @@ import LazyLoad from '../components/common/LazyLoad.jsx';
 import { PermissionEnum } from '../constants/enums/permission.enums.js';
 import Warranty from '../pages/products/warranty/Warranty.jsx';
 import UserRolePage from '../pages/Permissions/UserRolePage.jsx';
-import Units from '../pages/products/Units/Units.jsx';
+
 import Brand from '../pages/products/Brand/Brand.jsx';
 // import Permissions from '../pages/permissions/Permissions.jsx';
-import UserRolePage from '../pages/Permissions/UserRolePage.jsx';
+// import UserRolePage from '../pages/Permissions/UserRolePage.jsx';
 import Permissions from '../pages/Permissions/Permissions.jsx';
-import Unit from '../pages/products/unit/Unit.jsx';
+
 import Manufacturer from '../pages/products/manufacturer/Manufacturer.jsx';
+import Units from '../pages/products/Units/Units.jsx';
 
 // const Media = lazy(() => import('../pages/media/Media.jsx'));
 const Salary = lazy(() => import('../pages/employee/Salary.jsx'));
 const Ui = lazy(() => import('../pages/settings/Ui.jsx'));
 const Trash = lazy(() => import('../pages/message/Trash.jsx'));
 const Inbox = lazy(() => import('../pages/message/Inbox.jsx'));
-const UserRolePage = lazy(() => import('../pages/Permissions/UserRolePage.jsx'));
-const Permissions = lazy(() => import('../pages/Permissions/Permissions.jsx'));
+// const UserRolePage = lazy(() => import('../pages/Permissions/UserRolePage.jsx'));
+// const Permissions = lazy(() => import('../pages/Permissions/Permissions.jsx'));
 // const UserRolePage = lazy(() => import('../pages/permissions/UserRolePage.jsx'));
 // const Permissions = lazy(() => import('../pages/permissions/Permissions.jsx'));
 const Categories = lazy(() => import('../pages/products/category/Categories'));
@@ -55,11 +56,15 @@ const privateRoutes = [
         path: '/products/warranty',
         element: <LazyLoad component={Warranty} />,
         roles: ['ALL', 'PROPRIETOR'],
-    },{
-        path: '/products/units',
-        element: <LazyLoad component={Units} />,
-        roles: ['ALL', 'PROPRIETOR'],
     },
+
+    // {
+    //     path: '/products/units',
+    //     element: <LazyLoad component={Unit} />,
+    //     roles: ['ALL', 'PROPRIETOR'],
+    // },
+
+
     {
         path: '/products/brand',
         element: <LazyLoad component={Brand} />,
@@ -69,11 +74,12 @@ const privateRoutes = [
         path: '/products/units',
         element: <LazyLoad component={Units}/>,
         roles: ['ALL', 'PROPRIETOR']
-    },{
-        path: '/products/units',
-        element: <LazyLoad component={Unit} />,
-        roles: ['ALL', 'PROPRIETOR'],
-    },
+},
+    // },{
+    //     path: '/products/unit',
+    //     element: <LazyLoad component={Unit} />,
+    //     roles: ['ALL', 'PROPRIETOR'],
+    // },
     {
         path: '/products/manufacturer',
         element: <LazyLoad component={Manufacturer} />,

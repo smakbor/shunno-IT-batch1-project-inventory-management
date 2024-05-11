@@ -35,8 +35,8 @@ const MENU_ITEMS = () => {
                     url: '/products/brand',
                     parentKey: 'products',
                 },{
-                    key: 'unit',
-                    label: t('Unit'),
+                    key: 'units',
+                    label: t('units'),
                     url: '/products/units',
                     parentKey: 'products',
                 },

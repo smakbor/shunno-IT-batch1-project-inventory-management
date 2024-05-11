@@ -108,7 +108,7 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
                                 </label>
                                 <input
                                     type="text"
-                                    id="name"
+                                    id="note"
                                     className="form-control"
                                     {...register('note', { required: 'Note is not required' })}
                                 />
