@@ -11,30 +11,40 @@ import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 //api services
-import { useCategoryCreateMutation, useCategoryUpdateMutation } from '../../../redux/services/categoryService';
 import { useSelector } from 'react-redux';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import Select from 'react-select';
+import {useBrandCreateMutation, useBrandUpdateMutation } from '../../../redux/services/brandService';
 
 // import handleFileUpload from '../../../helpers/handleFileUpload';
 
-const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
+const BrandCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
     const store = useSelector((state) => state.setting.activeStore);
     // const [file]
-    const [categoryCreate, { isLoading, isSuccess }] = useCategoryCreateMutation();
-    const [categoryUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCategoryUpdateMutation();
+    const [brandCreate, { isLoading, isSuccess }] = useBrandCreateMutation();
+    const [brandUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useBrandUpdateMutation();
 
     /*
      * form validation schema
      */
     // console.log(defaultValues)
+    // const schemaResolver = yupResolver(
+    //     yup.object().shape({
+    //         brand: yup.string().required(t('please enter Brand')).min(3, t('minimum containing 3 letter')),
+    //         note: yup.string(),
+    //         name: yup.string().required(t('please enter Brand name')).min(3, t('minimum containing 2 letter')),
+    //         note: yup.string(),
+    //     })
+    // );
+
     const schemaResolver = yupResolver(
         yup.object().shape({
             name: yup.string().required(t('please enter category name')).min(3, t('minimum containing 3 letter')),
             note: yup.string(),
         })
     );
+
     const methods = useForm({ mode: 'onChange', defaultValues, resolver: schemaResolver });
     const {
         handleSubmit,
@@ -54,8 +64,11 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
      * handle form submission
      */
 
+    // editData ? brandUpdate({ id: editData._id, postBody: formData }) :
+
+
     const onSubmit = async (formData) => {
-        editData ? categoryUpdate({ id: editData._id, postBody: formData }) : categoryCreate(formData);
+        editData ? brandUpdate({ id: editData._id, postBody: formData }) : brandCreate(formData);
     };
 
     useEffect(() => {
@@ -85,14 +98,14 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
             <Card.Body>
                 <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false}>
                     <Modal.Header onHide={toggle} closeButton>
-                        <h4 className="modal-title">{editData ? t('update category') : t('create category')}</h4>
+                        <h4 className="modal-title">{editData ? t('update brand') : t('create brand')}</h4>
                     </Modal.Header>
 
                     <Modal.Body>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="mb-3">
                                 <label htmlFor="name" className="form-label">
-                                    Name
+                                    Brand
                                 </label>
                                 <input
                                     type="text"
@@ -104,20 +117,20 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="note" className="form-label">
-                                    Note
+                                    Brand Name
                                 </label>
                                 <input
                                     type="text"
-                                    id="name"
+                                    id="note"
                                     className="form-control"
                                     {...register('note', { required: 'Note is not required' })}
                                 />
                                 {errors.note && <span className="text-danger">{errors.note.message}</span>}
                             </div>
-                            <div className="mb-3">
+                            {/* <div className="mb-3">
                                 <label htmlFor="status" className="form-label">
                                     Status
-                                </label>   
+                                </label>
                                 <Controller
                                     name="status"
                                     control={control}
@@ -136,7 +149,7 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
                                     rules={{ required: true }}
                                 />
                                 {errors.status && <span className="text-danger">{errors.status.message}</span>}
-                            </div>
+                            </div> */}
                             <button type="submit" disabled={isLoading} className="btn btn-primary">
                                 {isLoading ? t('loading') : t('submit')}
                             </button>
@@ -148,4 +161,4 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
     );
 };
 
-export default CategoryCreateUpdate;
+export default BrandCreateUpdate;

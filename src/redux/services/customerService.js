@@ -6,31 +6,32 @@ export const customerService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         customerList: builder.query({
             query: (store) => ({
-                url: `customers/${store}`,
+                url: `customer/allCustomer`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         customerCreate: builder.mutation({
             query: (postBody) => ({
-                url: `customers`,
+                url: `customer/create`,
                 method: 'POST',
                 body: postBody,
             }),
-            async onQueryStarted(postBody, { dispatch, queryFulfilled }) {
+
+            async onQueryStarted(args, { queryFulfilled, dispatch }) {
                 try {
-                    const {
-                        data: { data },
-                    } = await queryFulfilled;
+                   const {data: createdData} =  await queryFulfilled;
+                    console.log("args:", args)
                     dispatch(
-                        apiService.util.updateQueryData('customerList', data.customer.store, (draft) => {
-                            draft.push(data.customer);
+                        customerService.util.updateQueryData('customerList', undefined, (draft) => {
+                            draft?.push(createdData)                            
+                            console.log(draft)
                         })
-                    );
-                } catch (error) {
-                    console.log(error);
+                )} catch(error) {
+                    console.log(error)
                 }
             },
+            
         }),
         customersImport: builder.mutation({
             query: ({ store, postBody }) => ({
@@ -41,7 +42,7 @@ export const customerService = apiService.injectEndpoints({
             onQueryStarted({ store, postBody }, { dispatch, queryFulfilled }) {
                 queryFulfilled.then(
                     ({ data: { data } }) => dispatch(
-                        apiService.util.updateQueryData("customerList", store, (draft) => draft = data.concat(draft)
+                        apiService.util.updateQueryData("customerList", undefined, (draft) => draft = data.concat(draft)
                         )
                     ))
             },
@@ -50,7 +51,7 @@ export const customerService = apiService.injectEndpoints({
 
         customerUpdate: builder.mutation({
             query: (postBody) => ({
-                url: `customers/${postBody?._id}`,
+                url: `customer/update/${postBody?._id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
@@ -59,7 +60,7 @@ export const customerService = apiService.injectEndpoints({
                     data: { data },
                 } = await queryFulfilled;
                 const response = dispatch(
-                    apiService.util.updateQueryData('customerList', data.store, (draft) => {
+                    apiService.util.updateQueryData('customerList',undefined, (draft) => {
                         const findIndex = draft.findIndex((item) => item._id === data._id);
                         draft[findIndex] = data;
                     })
@@ -73,19 +74,20 @@ export const customerService = apiService.injectEndpoints({
         }),
         customerDelete: builder.mutation({
             query: (id) => ({
-                url: `customers/${id}`,
+                url: `customer/delete/${id}`,
                 method: 'DELETE',
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
-                const response = dispatch(
-                    apiService.util.updateQueryData('customerList', undefined, (draft) => {
-                        draft = draft.filter((item) => item._id !== id);
-                    })
-                );
                 try {
                     await queryFulfilled;
-                } catch {
-                    response.undo();
+                    console.log("args:", id)
+                    dispatch(
+                        apiService.util.updateQueryData('customerList', undefined, (draft) => {
+                            // draft = draft.filter((item) => item._id !== id);
+                            console.log(draft)
+                        })
+                )} catch(error) {
+                    console.log(error)
                 }
             },
         }),
@@ -101,7 +103,7 @@ export const customerService = apiService.injectEndpoints({
             onQueryStarted({ ids, store }, { queryFulfilled, dispatch }) {
                 queryFulfilled.then(
                     ({ data: { data } }) => dispatch(
-                        apiService.util.updateQueryData("customerList", store, (draft) => draft.filter(item => data.find(i => item._id === i) ? false : true)
+                        apiService.util.updateQueryData("customerList", undefined, (draft) => draft.filter(item => data.find(i => item._id === i) ? false : true)
 
                         )
                     )

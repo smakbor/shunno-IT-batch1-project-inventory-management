@@ -6,14 +6,14 @@ export const suppliersService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         supplierList: builder.query({
             query: (store) => ({
-                url: `suppliers/${store}`,
+                url: `supplier/allSupplier`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         supplierCreate: builder.mutation({
             query: (postBody) => ({
-                url: `suppliers`,
+                url: `supplier/create`,
                 method: 'POST',
                 body: postBody,
             }),
@@ -50,7 +50,7 @@ export const suppliersService = apiService.injectEndpoints({
 
         supplierUpdate: builder.mutation({
             query: (postBody) => ({
-                url: `suppliers/${postBody?._id}`,
+                url: `supplier/update/${postBody?._id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
@@ -74,7 +74,7 @@ export const suppliersService = apiService.injectEndpoints({
         }),
         supplierDelete: builder.mutation({
             query: (id) => ({
-                url: `suppliers/${id}`,
+                url: `supplier/delete/${id}`,
                 method: 'DELETE',
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {

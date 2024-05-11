@@ -1,23 +1,25 @@
 //Internal Lib Import
 import { apiService } from '../api/apiService';
-export const categoryService = apiService.injectEndpoints({
+export const brandService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        categoryList: builder.query({
+        brandList: builder.query({
             query: (storeID) => ({
-                url: `category/allCategory`,
+                url: `brand/allBrand`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
-        categoryCreate: builder.mutation({
+        brandCreate: builder.mutation({
             query: (postBody) => ({
-                url: `category/create`,
-                method: 'POST',   body: postBody,
+                url: `brand/create`,
+                method: 'POST',
+                body: postBody,
             }),
             onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 queryFulfilled.then(({ data: { data } }) => {
+                    console.log(data);
                     dispatch(
-                        apiService.util.updateQueryData('categoryList', undefined, (draft) => {
+                        apiService.util.updateQueryData('brandList', undefined, (draft) => {
                             draft.unshift(data);
                         })
                     );
@@ -25,42 +27,47 @@ export const categoryService = apiService.injectEndpoints({
             },
         }),
 
-        categoryUpdate: builder.mutation({
+        brandUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
-                url: `category/update/${id}`,
+                url: `brand/update/${id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
             onQueryStarted({ id, postBody: { store } }, { dispatch, queryFulfilled }) {
                 queryFulfilled.then(({ data: { data } }) => {
                     dispatch(
-                        apiService.util.updateQueryData('categoryList', store, (draft) => {
+                        apiService.util.updateQueryData('brandList', undefined, (draft) => {
                             const findIndex = draft.findIndex((item) => item._id === id);
                             draft[findIndex] = data;
+
+                            return draft
                         })
                     );
                 });
             },
         }),
-        categoryDelete: builder.mutation({
+        brandDelete: builder.mutation({
             query: (id) => ({
-                url: `category/delete/${id}`,
+                url: `brand/delete/${id}`,
                 method: 'DELETE',
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('categoryList', undefined, (draft) => {
+                    apiService.util.updateQueryData('brandList', undefined, (draft) => {
                         draft = draft.filter((item) => item._id !== id);
+
+                        return draft
                     })
                 );
                 try {
                     await queryFulfilled;
                 } catch {
-                    response.undo(); 
+                    response.undo();
                 }
             },
         }),
     }),
 });
-export const { useCategoryListQuery, useCategoryDeleteMutation, useCategoryCreateMutation, useCategoryUpdateMutation } =
-    categoryService;
+
+
+export const {useBrandListQuery, useBrandDeleteMutation, useBrandCreateMutation,useBrandUpdateMutation} = brandService;

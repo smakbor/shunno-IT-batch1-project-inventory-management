@@ -40,7 +40,7 @@ const PageTitle = (props: PageTitleProps): React$Element<any> => {
                             })}
                         </Breadcrumb>
                     </div>
-                    <h4 className="page-title">{props.title}</h4>
+                    <h3 className="ps-2 fw-bold pt-3">{props.title}</h3>
                 </div>
             </Col>
         </Row>
