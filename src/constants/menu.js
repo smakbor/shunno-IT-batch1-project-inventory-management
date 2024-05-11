@@ -32,7 +32,7 @@ const MENU_ITEMS = () => {
 
                 {
                     key: 'manufacturer',
-                    label: t('manufacturer'),
+                    label: t('Manufacturer'),
                     url: '/products/manufacturer',
                     parentKey: 'products',
                 },

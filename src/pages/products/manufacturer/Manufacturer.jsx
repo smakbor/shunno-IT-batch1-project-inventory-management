@@ -3,7 +3,6 @@ import React, { useMemo, useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-
 //Internal Lib Import
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
@@ -12,11 +11,8 @@ import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 
 //api services
 
-
 import AleartMessage from '../../../utils/AleartMessage';
-
-import { useSelector } from 'react-redux';
-import { useManufacturerListQuery } from '../../../redux/services/manufacturerService';
+import { useManufacturerListQuery, useManufactureDeleteMutation } from '../../../redux/services/manufacturerService';
 import ManufacturerCreateUpdate from './ManufacturerCreateUpdate';
 
 // main component
@@ -28,11 +24,9 @@ const Manufacturer = () => {
 
     const [editData, setEditData] = useState(false);
 
-
     const { data, isLoading, isError } = useManufacturerListQuery();
-    //     storeID, {
-    //     skip: !storeID,
-    // }
+    console.log(data);
+    const [deleteManufacturer, { isLoading: isLoad, isError: isErr }] = useManufactureDeleteMutation();
 
     /**
      * Show/hide the modal
@@ -77,7 +71,7 @@ const Manufacturer = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id)}
+                    onClick={() => AleartMessage.Delete(row?.original._id, deleteManufacturer)}
                     data-toggle="tooltip"
                     data-placement="top"
                     title={t('delete manufacturer')}>
@@ -99,7 +93,7 @@ const Manufacturer = () => {
             },
 
             {
-                Header: t('manufacturer name'),
+                Header: t('Manufacturer name'),
                 accessor: 'name',
                 sort: true,
                 Cell: ({ row }) => row.original.name,
@@ -112,21 +106,8 @@ const Manufacturer = () => {
                 Cell: ({ row }) => row.original.note,
                 classes: 'table-user',
             },
-            // {
-            //     Header: t('status'),
-            //     accessor: 'status',
-            //     sort: true,
-            //     Cell: ({ row }) =>
-            //         row.original.status === 'ACTIVE' ? (
-            //             <div className="badge badge-success-lighten">{t('active')}</div>
-            //         ) : (
-            //             <div className="badge badge-danger-lighten">{t('inactive')}</div>
-            //         ),
-            //     classes: 'table-user',
-            // },
-
             {
-                Header: t('action'),
+                Header: t('Action'),
                 accessor: 'action',
                 sort: false,
                 classes: 'table-action',
@@ -157,7 +138,7 @@ const Manufacturer = () => {
             <>
                 <PageTitle
                     breadCrumbItems={[{ label: t('manufacturer'), path: '/products/Manufacturer', active: true }]}
-                    title={t('manufacturer')}
+                    title={t('Manufacturer')}
                 />
                 <Card>
                     <Card.Body>
@@ -171,7 +152,7 @@ const Manufacturer = () => {
             <>
                 <PageTitle
                     breadCrumbItems={[{ label: t('manufacturer'), path: '/products/manufacturer', active: true }]}
-                    title={t('manufacturer')}
+                    title={t('Manufacturer')}
                 />
                 <Card>
                     <Card.Body>
@@ -185,7 +166,7 @@ const Manufacturer = () => {
             <>
                 <PageTitle
                     breadCrumbItems={[{ label: t('manufacturer'), path: '/products/manufacturer', active: true }]}
-                    title={t('manufacturer')}
+                    title={t('Manufacturer')}
                 />
                 <Row>
                     <Col xs={12}>
@@ -204,7 +185,7 @@ const Manufacturer = () => {
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
                                     addShowModal={addShowModal}
-                                    tableInfo={{ tableName: 'manufacturer' }}
+                                    tableInfo={{ tableName: 'Manufacturer' }}
                                 />
                             </Card.Body>
                         </Card>

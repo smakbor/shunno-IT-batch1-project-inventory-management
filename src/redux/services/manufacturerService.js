@@ -12,7 +12,8 @@ export const manufacturerService = apiService.injectEndpoints({
         manufacturerCreate: builder.mutation({
             query: (postBody) => ({
                 url: `manufacturer/create`,
-                method: 'POST',   body: postBody,
+                method: 'POST',
+                body: postBody,
             }),
             onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 queryFulfilled.then(({ data: { data } }) => {
@@ -27,41 +28,49 @@ export const manufacturerService = apiService.injectEndpoints({
         }),
 
         manufacturerUpdate: builder.mutation({
-            query: ({ id, postBody }) => ({
-                url: `manufacturer/${id}`,
+            query: ({ id, formData }) => ({
+                url: `manufacturer/update/${id}`,
                 method: 'PATCH',
-                body: postBody,
+                body: formData,
             }),
-            onQueryStarted({ id, postBody: { store } }, { dispatch, queryFulfilled }) {
+            onQueryStarted({ id, formData: { store } }, { dispatch, queryFulfilled }) {
+                console.log(id);
                 queryFulfilled.then(({ data: { data } }) => {
                     dispatch(
-                        apiService.util.updateQueryData('manufacturerList', store, (draft) => {
+                        apiService.util.updateQueryData('manufacturerList', undefined, (draft) => {
                             const findIndex = draft.findIndex((item) => item._id === id);
                             draft[findIndex] = data;
+                            return draft;
                         })
                     );
                 });
             },
         }),
-        categoryDelete: builder.mutation({
+        manufactureDelete: builder.mutation({
             query: (id) => ({
-                url: `categories/${id}`,
+                url: `manufacturer/delete/${id}`,
                 method: 'DELETE',
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
                     apiService.util.updateQueryData('manufacturerList', undefined, (draft) => {
                         draft = draft.filter((item) => item._id !== id);
+
+                        return draft;
                     })
                 );
                 try {
                     await queryFulfilled;
                 } catch {
-                    response.undo(); 
+                    response.undo();
                 }
             },
         }),
     }),
 });
-export const { useManufacturerListQuery, useManufacturerCreateMutation} =
-    manufacturerService;
+export const {
+    useManufacturerListQuery,
+    useManufacturerCreateMutation,
+    useManufacturerUpdateMutation,
+    useManufactureDeleteMutation,
+} = manufacturerService;

@@ -7,11 +7,15 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
 //Internal Lib Import
+import { FormInput, VerticalForm } from '../../../components';
+import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 //api services
 
-import { useManufacturerCreateMutation } from '../../../redux/services/manufacturerService';
-import {} from '../../../redux/services/manufacturerService'
+import {
+    useManufacturerCreateMutation,
+    useManufacturerUpdateMutation,
+} from '../../../redux/services/manufacturerService';
 import { useSelector } from 'react-redux';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import Select from 'react-select';
@@ -23,8 +27,7 @@ const ManufacturerCreateUpdate = ({ modal, setModal, toggle, editData, defaultVa
     const store = useSelector((state) => state.setting.activeStore);
     // const [file]
     const [manufacturerCreate, { isLoading, isSuccess }] = useManufacturerCreateMutation();
-
-
+    const [manufacturerUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useManufacturerUpdateMutation();
 
     /*
      * form validation schema
@@ -32,7 +35,7 @@ const ManufacturerCreateUpdate = ({ modal, setModal, toggle, editData, defaultVa
     // console.log(defaultValues)
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter manufacturar name')).min(3, t('minimum containing 3 letter')),
+            name: yup.string().required(t('please enter manufacturer name')).min(3, t('minimum containing 3 letter')),
             note: yup.string(),
         })
     );
@@ -43,6 +46,7 @@ const ManufacturerCreateUpdate = ({ modal, setModal, toggle, editData, defaultVa
         control,
         setValue,
         reset,
+        watch,
         formState: { errors },
     } = methods;
 
@@ -55,15 +59,15 @@ const ManufacturerCreateUpdate = ({ modal, setModal, toggle, editData, defaultVa
      * handle form submission
      */
 
-    const onSubmit = async (formData) => {
-        manufacturerCreate(formData);
+    const onSubmit = (formData) => {
+        editData ? manufacturerUpdate({ id: editData?._id, formData }) : manufacturerCreate(formData);
     };
 
     useEffect(() => {
-        if (isSuccess) {
+        if (isSuccess || updateSuccess) {
             setModal(false);
         }
-    }, [isSuccess]);
+    }, [isSuccess, updateSuccess]);
 
     useEffect(() => {
         if (defaultValues) {
@@ -86,7 +90,9 @@ const ManufacturerCreateUpdate = ({ modal, setModal, toggle, editData, defaultVa
             <Card.Body>
                 <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false}>
                     <Modal.Header onHide={toggle} closeButton>
-                        <h4 className="modal-title">{editData ? t('update manufacturar') : t('create manufacturar')}</h4>
+                        <h4 className="modal-title">
+                            {editData ? t('update manufacturer') : t('create manufacturer')}
+                        </h4>
                     </Modal.Header>
 
                     <Modal.Body>
