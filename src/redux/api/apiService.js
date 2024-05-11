@@ -28,24 +28,6 @@ const baseQuery = fetchBaseQuery({
 //     let result = await baseQuery(args, api, extraOptions);
 //     const { error, data } = result;
 
-//     // if (error) {
-//     //     api.dispatch(setLoading(false));
-
-//     //     if (error.status === 401) {
-//     //         // try to get a new token
-//     //         const refreshResult = await baseQuery(`/auth/refreshTokens`, api, extraOptions);
-
-//     //         if (refreshResult?.data?.status) {
-//     //             // store the new token
-//     //             api.dispatch(userLogin(refreshResult?.data?.data?.accessToken));
-
-//     //             // retry the initial query
-//     //             result = await baseQuery(args, api, extraOptions);
-//     //         } else {
-//     //             api.dispatch(userLogout());
-//     //         }
-//     //     }
-//     // }
 
 //     if (data) {
 //         api.dispatch(setLoading(false));
