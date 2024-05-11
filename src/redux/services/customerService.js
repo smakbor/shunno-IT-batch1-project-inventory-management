@@ -6,14 +6,14 @@ export const customerService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         customerList: builder.query({
             query: (store) => ({
-                url: `customers/${store}`,
+                url: `customer/allCustomer`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
         customerCreate: builder.mutation({
             query: (postBody) => ({
-                url: `customers`,
+                url: `customer/create`,
                 method: 'POST',
                 body: postBody,
             }),
@@ -50,7 +50,7 @@ export const customerService = apiService.injectEndpoints({
 
         customerUpdate: builder.mutation({
             query: (postBody) => ({
-                url: `customers/${postBody?._id}`,
+                url: `customer/update/${postBody?._id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
@@ -73,7 +73,7 @@ export const customerService = apiService.injectEndpoints({
         }),
         customerDelete: builder.mutation({
             query: (id) => ({
-                url: `customers/${id}`,
+                url: `customer/delete/${id}`,
                 method: 'DELETE',
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {

@@ -27,6 +27,9 @@ const MENU_ITEMS = () => {
                     key: 'warranty',
                     label: t('warranty'),
                     url: '/products/warranty',
+                    key: 'unit',
+                    label: t('unit'),
+                    url: '/products/units',
                     parentKey: 'products',
                 },
 
@@ -54,6 +57,14 @@ const MENU_ITEMS = () => {
                     url: '/suppliers',
                     parentKey: 'people',
                 },
+                {
+                    key: 'customer',
+                    label: t('customer'),
+                    isTitle: false,
+                    icon: 'dripicons-user',
+                    url: '/customer',
+                    parentKey: 'people',
+                }
             ],
         },
 

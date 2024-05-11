@@ -28,7 +28,7 @@ export const categoryService = apiService.injectEndpoints({
 
         categoryUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
-                url: `categories/${id}`,
+                url: `category/update/${id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
@@ -45,7 +45,7 @@ export const categoryService = apiService.injectEndpoints({
         }),
         categoryDelete: builder.mutation({
             query: (id) => ({
-                url: `categories/${id}`,
+                url: `category/delete/${id}`,
                 method: 'DELETE',
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {

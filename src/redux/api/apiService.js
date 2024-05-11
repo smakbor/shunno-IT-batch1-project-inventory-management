@@ -1,10 +1,12 @@
 //External Lib Import
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
 //Internal Lib Import
 import { userLogin, userLogout } from '../features/authReducer';
 import { setLoading } from '../features/settingReducer';
 import config from '../../config';
+let baseUrlAkbor = `http://10.0.0.52:5000/api`
+let baseUrlShakil = `http://10.0.0.91:5000/api`
+let baseUrlShamiul = `http://10.0.0.43:5000/api`
 
 //constant env variable
 const baseURL = `http://10.0.0.52:5000/api`; // akbor bhai

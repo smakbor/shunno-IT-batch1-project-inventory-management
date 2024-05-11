@@ -14,6 +14,9 @@ const Inbox = lazy(() => import('../pages/message/Inbox.jsx'));
 const UserRolePage = lazy(() => import('../pages/Permissions/UserRolePage.jsx'));
 const Permissions = lazy(() => import('../pages/Permissions/Permissions.jsx'));
 const Categories = lazy(() => import('../pages/products/category/Categories'));
+const Customer = lazy(()=> import('../pages/people/Customer.jsx'))
+const Supplier = lazy(()=> import('../pages/people/Supplier.jsx'))
+const Units = lazy(()=> import('../pages/products/units/Units.jsx'));
 const CostSection = lazy(() => import('../pages/expenditure/costSection/CostSection.jsx'));
 const Sent = lazy(() => import('../pages/message/Sent.jsx'));
 const Details = lazy(() => import('../pages/message/Details.jsx'));
@@ -39,8 +42,12 @@ const privateRoutes = [
         path: '/products/warranty',
         element: <LazyLoad component={Warranty} />,
         roles: ['ALL', 'PROPRIETOR'],
-    },
+    },{
 
+        path: '/products/units',
+        element: <LazyLoad component={Units}/>,
+        roles: ['ALL', 'PROPRIETOR']
+    },
     {
         path: '/costSections',
         element: <LazyLoad component={CostSection} />,
@@ -117,6 +124,16 @@ const privateRoutes = [
     {
         path: '/salary/:employeeID',
         element: <LazyLoad component={Salary} />,
+        roles: ['ALL', 'PROPRIETOR'],
+    },
+    {
+        path: '/customer',
+        element: <LazyLoad component={Customer} />,
+        roles: ['ALL', 'PROPRIETOR'],
+    },
+    {
+        path: '/suppliers',
+        element: <LazyLoad component={Supplier} />,
         roles: ['ALL', 'PROPRIETOR'],
     },
     // {

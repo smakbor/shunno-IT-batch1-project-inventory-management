@@ -18,7 +18,7 @@ import Select from 'react-select';
 
 // import handleFileUpload from '../../../helpers/handleFileUpload';
 
-const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
+const UnitsCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
     const store = useSelector((state) => state.setting.activeStore);
     // const [file]
@@ -31,7 +31,7 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
     // console.log(defaultValues)
     const schemaResolver = yupResolver(
         yup.object().shape({
-            name: yup.string().required(t('please enter category name')).min(3, t('minimum containing 3 letter')),
+            name: yup.string().required(t('please enter product units')).min(3, t('minimum containing 3 letter')),
             note: yup.string(),
         })
     );
@@ -85,7 +85,7 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
             <Card.Body>
                 <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false}>
                     <Modal.Header onHide={toggle} closeButton>
-                        <h4 className="modal-title">{editData ? t('update category') : t('create category')}</h4>
+                        <h4 className="modal-title">{editData ? t('update unit') : t('create unit')}</h4>
                     </Modal.Header>
 
                     <Modal.Body>
@@ -114,10 +114,10 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
                                 />
                                 {errors.note && <span className="text-danger">{errors.note.message}</span>}
                             </div>
-                            <div className="mb-3">
+                            {/* <div className="mb-3">
                                 <label htmlFor="status" className="form-label">
                                     Status
-                                </label>   
+                                </label>
                                 <Controller
                                     name="status"
                                     control={control}
@@ -136,7 +136,7 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
                                     rules={{ required: true }}
                                 />
                                 {errors.status && <span className="text-danger">{errors.status.message}</span>}
-                            </div>
+                            </div> */}
                             <button type="submit" disabled={isLoading} className="btn btn-primary">
                                 {isLoading ? t('loading') : t('submit')}
                             </button>
@@ -148,4 +148,4 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
     );
 };
 
-export default CategoryCreateUpdate;
+export default UnitsCreateUpdate;
