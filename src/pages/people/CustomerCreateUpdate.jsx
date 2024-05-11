@@ -40,6 +40,7 @@ const CustomerCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
 
     const onSubmit = async (formData) => {
         editData ? customerUpdate(formData) : customerCreate(formData);
+        reset()
     };
 
     useEffect(() => {

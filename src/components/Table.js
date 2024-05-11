@@ -1,5 +1,6 @@
 //External Lib Import
 import React, { useRef, useEffect, forwardRef, useState } from 'react';
+import DatePicker from 'react-datepicker';
 import {
     useTable,
     useSortBy,
@@ -30,7 +31,7 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, se
     const onChange = useAsyncDebounce((value) => {
         setGlobalFilter(value || undefined);
     }, 200);
-
+    const [startDate, setStartDate] = useState(new Date())
     return (
         <div className={classNames(searchBoxClass)}>
             <span className="d-flex align-items-center">
@@ -44,6 +45,7 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, se
                     placeholder={`${count} ${t('records...')}`}
                     className="form-control w-auto ms-1"
                 />
+            <div className='ms-4 d-flex gap-2'><span className='my-auto'>Filter by date: </span><DatePicker className='form-control' selected={startDate} toggleCalendarOnIconClick isClearable placeholderText='provide date!'  onChange={(date)=> setStartDate(date)} closeOnScroll={true}/></div>
             </span>
         </div>
     );

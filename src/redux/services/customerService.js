@@ -1,5 +1,6 @@
 //Internal Lib Import
 
+import { json } from 'react-router-dom';
 import { apiService } from '../api/apiService';
 
 export const customerService = apiService.injectEndpoints({
@@ -21,11 +22,10 @@ export const customerService = apiService.injectEndpoints({
             async onQueryStarted(args, { queryFulfilled, dispatch }) {
                 try {
                    const {data: createdData} =  await queryFulfilled;
-                    console.log("args:", args)
                     dispatch(
                         customerService.util.updateQueryData('customerList', undefined, (draft) => {
-                            draft?.push(createdData)                            
-                            console.log(draft)
+                            draft?.push(createdData.data)
+                            console.log(JSON.stringify(draft))
                         })
                 )} catch(error) {
                     console.log(error)
@@ -56,19 +56,18 @@ export const customerService = apiService.injectEndpoints({
                 body: postBody,
             }),
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-                const {
-                    data: { data },
-                } = await queryFulfilled;
-                const response = dispatch(
-                    apiService.util.updateQueryData('customerList',undefined, (draft) => {
-                        const findIndex = draft.findIndex((item) => item._id === data._id);
-                        draft[findIndex] = data;
-                    })
-                );
                 try {
-                    await queryFulfilled;
-                } catch {
-                    response.undo();
+                    const {
+                        data: {data},
+                    } = await queryFulfilled;
+                    dispatch(
+                        customerService.util.updateQueryData('customerList',undefined, (draft) => {
+                            const findIndex = draft.findIndex((item) => item._id === data._id);
+                            draft[findIndex] = data;
+                        })
+                    );
+                } catch (error){
+                    console.log(error)
                 }
             },
         }),
@@ -80,11 +79,9 @@ export const customerService = apiService.injectEndpoints({
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 try {
                     await queryFulfilled;
-                    console.log("args:", id)
                     dispatch(
-                        apiService.util.updateQueryData('customerList', undefined, (draft) => {
-                            // draft = draft.filter((item) => item._id !== id);
-                            console.log(draft)
+                        customerService.util.updateQueryData('customerList', undefined, (draft) => {
+                            return draft.filter((item) => item._id !== id);
                         })
                 )} catch(error) {
                     console.log(error)

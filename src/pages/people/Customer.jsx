@@ -32,6 +32,7 @@ function Customer() {
 
     const [categoryDelete] = useCustomerDeleteMutation();
     const { data, isLoading, isError } = useCustomerListQuery();
+    console.log(data?.map(item=> item?.createdAt))
 
     const addShowModal = () => {
         setEditData(false);
