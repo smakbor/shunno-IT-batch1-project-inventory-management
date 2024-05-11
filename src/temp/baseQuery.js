@@ -8,7 +8,7 @@ import { setLoading } from '../features/settingReducer';
 
 const basefetchBaseQuery = () => {
     const baseQuery = fetchBaseQuery({
-        baseUrl: `http://localhost:8080/api/v1/`,
+        baseUrl: `http://10.0.0.91:5000/api/v1/`,
         prepareHeaders: (headers, { getState }) => {
             const {
                 setting: { language },

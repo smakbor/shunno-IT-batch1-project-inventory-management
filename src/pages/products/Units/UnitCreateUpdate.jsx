@@ -18,7 +18,7 @@ import Select from 'react-select';
 
 // import handleFileUpload from '../../../helpers/handleFileUpload';
 
-const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
+const UnitCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
     const store = useSelector((state) => state.setting.activeStore);
     // const [file]
@@ -114,10 +114,10 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
                                 />
                                 {errors.note && <span className="text-danger">{errors.note.message}</span>}
                             </div>
-                            <div className="mb-3">
+                            {/* <div className="mb-3">
                                 <label htmlFor="status" className="form-label">
                                     Status
-                                </label>   
+                                </label>
                                 <Controller
                                     name="status"
                                     control={control}
@@ -136,7 +136,7 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
                                     rules={{ required: true }}
                                 />
                                 {errors.status && <span className="text-danger">{errors.status.message}</span>}
-                            </div>
+                            </div> */}
                             <button type="submit" disabled={isLoading} className="btn btn-primary">
                                 {isLoading ? t('loading') : t('submit')}
                             </button>
@@ -148,4 +148,4 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
     );
 };
 
-export default CategoryCreateUpdate;
+export default UnitCreateUpdate;

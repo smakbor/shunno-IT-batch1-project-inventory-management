@@ -2,27 +2,21 @@
 import React, { useMemo, useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { GrDocumentCsv } from 'react-icons/gr';
-import { SiMicrosoftexcel } from 'react-icons/si';
-import { BiImport } from 'react-icons/bi';
 
 //Internal Lib Import
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
-import exportFromJson from '../../../utils/exportFromJson';
 import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 
 //api services
-import { useCategoryDeleteMutation, useCategoryListQuery } from '../../../redux/services/categoryService';
 
 import AleartMessage from '../../../utils/AleartMessage';
-
-import { useSelector } from 'react-redux';
-import UnitCreateUpdate from './UnitCreateUpdate';
+import { useManufacturerListQuery, useManufactureDeleteMutation } from '../../../redux/services/manufacturerService';
+import ManufacturerCreateUpdate from './ManufacturerCreateUpdate';
 
 // main component
-const Units = () => {
+const Manufacturer = () => {
     const { t } = useTranslation();
     const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
 
@@ -30,11 +24,9 @@ const Units = () => {
 
     const [editData, setEditData] = useState(false);
 
-    const [categoryDelete] = useCategoryDeleteMutation();
-    const { data, isLoading, isError } = useCategoryListQuery();
-    //     storeID, {
-    //     skip: !storeID,
-    // }
+    const { data, isLoading, isError } = useManufacturerListQuery();
+    console.log(data);
+    const [deleteManufacturer, { isLoading: isLoad, isError: isErr }] = useManufactureDeleteMutation();
 
     /**
      * Show/hide the modal
@@ -64,7 +56,7 @@ const Units = () => {
                     // onClick={}
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={t('add Units')}
+                    title={t('add submanufacturer')}
                 />
 
                 <span
@@ -72,17 +64,17 @@ const Units = () => {
                     className="action-icon text-warning"
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={t('edit Units')}
+                    title={t('edit manufacturer')}
                     onClick={edit}>
                     <i className="mdi mdi-square-edit-outline"></i>
                 </span>
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, categoryDelete)}
+                    onClick={() => AleartMessage.Delete(row?.original._id, deleteManufacturer)}
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={t('delete category')}>
+                    title={t('delete manufacturer')}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
@@ -101,7 +93,7 @@ const Units = () => {
             },
 
             {
-                Header: t('category name'),
+                Header: t('Manufacturer name'),
                 accessor: 'name',
                 sort: true,
                 Cell: ({ row }) => row.original.name,
@@ -114,21 +106,8 @@ const Units = () => {
                 Cell: ({ row }) => row.original.note,
                 classes: 'table-user',
             },
-            // {
-            //     Header: t('status'),
-            //     accessor: 'status',
-            //     sort: true,
-            //     Cell: ({ row }) =>
-            //         row.original.status === 'ACTIVE' ? (
-            //             <div className="badge badge-success-lighten">{t('active')}</div>
-            //         ) : (
-            //             <div className="badge badge-danger-lighten">{t('inactive')}</div>
-            //         ),
-            //     classes: 'table-user',
-            // },
-
             {
-                Header: t('action'),
+                Header: t('Action'),
                 accessor: 'action',
                 sort: false,
                 classes: 'table-action',
@@ -158,8 +137,8 @@ const Units = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('category'), path: '/products/categories', active: true }]}
-                    title={t('category')}
+                    breadCrumbItems={[{ label: t('manufacturer'), path: '/products/Manufacturer', active: true }]}
+                    title={t('Manufacturer')}
                 />
                 <Card>
                     <Card.Body>
@@ -172,8 +151,8 @@ const Units = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('category'), path: '/products/categories', active: true }]}
-                    title={t('category')}
+                    breadCrumbItems={[{ label: t('manufacturer'), path: '/products/manufacturer', active: true }]}
+                    title={t('Manufacturer')}
                 />
                 <Card>
                     <Card.Body>
@@ -186,8 +165,8 @@ const Units = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('category'), path: '/products/categories', active: true }]}
-                    title={t('category')}
+                    breadCrumbItems={[{ label: t('manufacturer'), path: '/products/manufacturer', active: true }]}
+                    title={t('Manufacturer')}
                 />
                 <Row>
                     <Col xs={12}>
@@ -206,16 +185,16 @@ const Units = () => {
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
                                     addShowModal={addShowModal}
-                                    tableInfo={{ tableName: 'Category' }}
+                                    tableInfo={{ tableName: 'Manufacturer' }}
                                 />
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
-                <UnitCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <ManufacturerCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }
 };
 
-export default Units;
+export default Manufacturer;

@@ -1,5 +1,5 @@
-//External Lib Import
-import React, { useMemo, useState } from 'react';
+import React from 'react';
+import { useMemo, useState } from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { GrDocumentCsv } from 'react-icons/gr';
@@ -14,15 +14,14 @@ import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 
 //api services
-import { useCategoryDeleteMutation, useCategoryListQuery } from '../../../redux/services/categoryService';
 
 import AleartMessage from '../../../utils/AleartMessage';
 
 import { useSelector } from 'react-redux';
-import UnitCreateUpdate from './UnitCreateUpdate';
+import WarrantyCreateUpdate from './WarrantyCreateUpdate';
+import { useWarrantyDeleteMutation, useWarrantyListQuery } from '../../../redux/services/warrantyService';
 
-// main component
-const Units = () => {
+const Warranty = () => {
     const { t } = useTranslation();
     const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
 
@@ -30,8 +29,10 @@ const Units = () => {
 
     const [editData, setEditData] = useState(false);
 
-    const [categoryDelete] = useCategoryDeleteMutation();
-    const { data, isLoading, isError } = useCategoryListQuery();
+    const { data, isLoading } = useWarrantyListQuery();
+
+    const [warrantyDelete] = useWarrantyDeleteMutation();
+
     //     storeID, {
     //     skip: !storeID,
     // }
@@ -39,6 +40,7 @@ const Units = () => {
     /**
      * Show/hide the modal
      */
+
     const addShowModal = () => {
         setEditData(false);
         setDefaultValues({ name: '', status: 'ACTIVE' });
@@ -47,9 +49,7 @@ const Units = () => {
 
     const toggle = (e) => {
         setModal(!modal);
-    };
-
-    /* action column render */
+    }; /* action column render */
     const ActionColumn = ({ row }) => {
         const edit = () => {
             setEditData(row?.original);
@@ -64,7 +64,7 @@ const Units = () => {
                     // onClick={}
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={t('add Units')}
+                    title={t('add warranty')}
                 />
 
                 <span
@@ -72,17 +72,17 @@ const Units = () => {
                     className="action-icon text-warning"
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={t('edit Units')}
+                    title={t('edit warranty')}
                     onClick={edit}>
                     <i className="mdi mdi-square-edit-outline"></i>
                 </span>
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id, categoryDelete)}
+                    onClick={() => AleartMessage.Delete(row?.original._id, warrantyDelete)}
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={t('delete category')}>
+                    title={t('delete warranty')}>
                     <i className="mdi mdi-delete"></i>
                 </span>
             </>
@@ -101,7 +101,7 @@ const Units = () => {
             },
 
             {
-                Header: t('category name'),
+                Header: t('warranty name'),
                 accessor: 'name',
                 sort: true,
                 Cell: ({ row }) => row.original.name,
@@ -158,8 +158,8 @@ const Units = () => {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('category'), path: '/products/categories', active: true }]}
-                    title={t('category')}
+                    breadCrumbItems={[{ label: t('warranty'), path: '/products/warranty', active: true }]}
+                    title={t('warranty')}
                 />
                 <Card>
                     <Card.Body>
@@ -168,12 +168,12 @@ const Units = () => {
                 </Card>
             </>
         );
-    } else if (isError) {
+    } else if (false) {
         return (
             <>
                 <PageTitle
-                    breadCrumbItems={[{ label: t('category'), path: '/products/categories', active: true }]}
-                    title={t('category')}
+                    breadCrumbItems={[{ label: t('warranty'), path: '/products/warranty', active: true }]}
+                    title={t('warranty')}
                 />
                 <Card>
                     <Card.Body>
@@ -206,16 +206,16 @@ const Units = () => {
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
                                     addShowModal={addShowModal}
-                                    tableInfo={{ tableName: 'Category' }}
+                                    tableInfo={{ tableName: 'warranty' }}
                                 />
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
-                <UnitCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
+                <WarrantyCreateUpdate {...{ modal, setModal, toggle, editData, defaultValues }} />
             </>
         );
     }
 };
 
-export default Units;
+export default Warranty;

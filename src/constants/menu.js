@@ -24,16 +24,27 @@ const MENU_ITEMS = () => {
                     parentKey: 'products',
                 },
                 {
+                    key: 'warranty',
+                    label: t('warranty'),
+                    url: '/products/warranty',
+                    parentKey: 'products',
+                },
+                {
+                    key: 'brand',
+                    label: t('brand'),
+                    url: '/products/brand',
+                    parentKey: 'products',
+                },{
                     key: 'unit',
-                    label: t('unit'),
+                    label: t('Unit'),
                     url: '/products/units',
                     parentKey: 'products',
                 },
 
                 {
-                    key: 'stock',
-                    label: t('stock'),
-                    url: '/stock',
+                    key: 'manufacturer',
+                    label: t('Manufacturer'),
+                    url: '/products/manufacturer',
                     parentKey: 'products',
                 },
             ],

@@ -11,19 +11,21 @@ import { FormInput, VerticalForm } from '../../../components';
 import removeEmptyObj from '../../../helpers/removeEmptyObj';
 
 //api services
-import { useCategoryCreateMutation, useCategoryUpdateMutation } from '../../../redux/services/categoryService';
+
 import { useSelector } from 'react-redux';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import Select from 'react-select';
+import { useUnitCreateMutation } from '../../../redux/services/unit.service';
 
 // import handleFileUpload from '../../../helpers/handleFileUpload';
 
-const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
+const UnitCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues }) => {
     const { t } = useTranslation();
     const store = useSelector((state) => state.setting.activeStore);
     // const [file]
-    const [categoryCreate, { isLoading, isSuccess }] = useCategoryCreateMutation();
-    const [categoryUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCategoryUpdateMutation();
+    // const [categoryCreate, { isLoading, isSuccess }] = useCategoryCreateMutation();
+    const [unitCreate, { isLoading, isSuccess }] = useUnitCreateMutation();
+    // const [categoryUpdate, { isLoading: updateLoad, isSuccess: updateSuccess }] = useCategoryUpdateMutation();
 
     /*
      * form validation schema
@@ -55,14 +57,18 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
      */
 
     const onSubmit = async (formData) => {
-        editData ? categoryUpdate({ id: editData._id, postBody: formData }) : categoryCreate(formData);
+        // editData ? categoryUpdate({ id: editData._id, postBody: formData }) : unitCreate(formData);
+        unitCreate(formData);
     };
 
     useEffect(() => {
-        if (isSuccess || updateSuccess) {
+        if (isSuccess) {
             setModal(false);
         }
-    }, [isSuccess, updateSuccess]);
+    }, [
+        isSuccess,
+        //  updateSuccess
+    ]);
 
     useEffect(() => {
         if (defaultValues) {
@@ -85,7 +91,7 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
             <Card.Body>
                 <Modal show={modal} onHide={toggle} backdrop="statica" keyboard={false}>
                     <Modal.Header onHide={toggle} closeButton>
-                        <h4 className="modal-title">{editData ? t('update category') : t('create category')}</h4>
+                        <h4 className="modal-title">{editData ? t('update Unit') : t('create unit')}</h4>
                     </Modal.Header>
 
                     <Modal.Body>
@@ -114,10 +120,10 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
                                 />
                                 {errors.note && <span className="text-danger">{errors.note.message}</span>}
                             </div>
-                            <div className="mb-3">
+                            {/* <div className="mb-3">
                                 <label htmlFor="status" className="form-label">
                                     Status
-                                </label>   
+                                </label>
                                 <Controller
                                     name="status"
                                     control={control}
@@ -136,7 +142,7 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
                                     rules={{ required: true }}
                                 />
                                 {errors.status && <span className="text-danger">{errors.status.message}</span>}
-                            </div>
+                            </div> */}
                             <button type="submit" disabled={isLoading} className="btn btn-primary">
                                 {isLoading ? t('loading') : t('submit')}
                             </button>
@@ -148,4 +154,4 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
     );
 };
 
-export default CategoryCreateUpdate;
+export default UnitCreateUpdate;

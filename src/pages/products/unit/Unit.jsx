@@ -14,15 +14,16 @@ import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
 
 //api services
-import { useCategoryDeleteMutation, useCategoryListQuery } from '../../../redux/services/categoryService';
+import { useCategoryDeleteMutation } from '../../../redux/services/categoryService';
 
 import AleartMessage from '../../../utils/AleartMessage';
-
+// import CategoryCreateUpdate from './CategoryCreateUpdate';
 import { useSelector } from 'react-redux';
+import { useUnitListQuery } from '../../../redux/services/unit.service';
 import UnitCreateUpdate from './UnitCreateUpdate';
 
 // main component
-const Units = () => {
+const Unit = () => {
     const { t } = useTranslation();
     const [defaultValues, setDefaultValues] = useState({ name: '', status: 'ACTIVE' });
 
@@ -31,7 +32,7 @@ const Units = () => {
     const [editData, setEditData] = useState(false);
 
     const [categoryDelete] = useCategoryDeleteMutation();
-    const { data, isLoading, isError } = useCategoryListQuery();
+    const { data, isLoading, isError } = useUnitListQuery();
     //     storeID, {
     //     skip: !storeID,
     // }
@@ -64,7 +65,7 @@ const Units = () => {
                     // onClick={}
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={t('add Units')}
+                    title={t('add subcategory')}
                 />
 
                 <span
@@ -72,7 +73,7 @@ const Units = () => {
                     className="action-icon text-warning"
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={t('edit Units')}
+                    title={t('edit category')}
                     onClick={edit}>
                     <i className="mdi mdi-square-edit-outline"></i>
                 </span>
@@ -206,7 +207,7 @@ const Units = () => {
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
                                     addShowModal={addShowModal}
-                                    tableInfo={{ tableName: 'Category' }}
+                                    tableInfo={{ tableName: 'Unit' }}
                                 />
                             </Card.Body>
                         </Card>
@@ -218,4 +219,4 @@ const Units = () => {
     }
 };
 
-export default Units;
+export default Unit;
