@@ -23,6 +23,18 @@ const MENU_ITEMS = () => {
                     url: '/products/categories',
                     parentKey: 'products',
                 },
+                {
+                    key: 'units',
+                    label: t('units'),
+                    url: '/products/units',
+                    parentKey: 'products',
+                },
+                {
+                    key: 'brand',
+                    label: t('brand'),
+                    url: '/products/brand',
+                    parentKey: 'products',
+                },
 
                 {
                     key: 'stock',

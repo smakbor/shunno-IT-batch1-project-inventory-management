@@ -4,14 +4,18 @@ import { lazy } from 'react';
 //Internal Lib Import
 import LazyLoad from '../components/common/LazyLoad.jsx';
 import { PermissionEnum } from '../constants/enums/permission.enums.js';
+import UserRolePage from '../pages/Permissions/UserRolePage.jsx';
+import Units from '../pages/products/Units/Units.jsx';
+import Brand from '../pages/products/Brand/Brand.jsx';
+// import Permissions from '../pages/permissions/Permissions.jsx';
 
 // const Media = lazy(() => import('../pages/media/Media.jsx'));
 const Salary = lazy(() => import('../pages/employee/Salary.jsx'));
 const Ui = lazy(() => import('../pages/settings/Ui.jsx'));
 const Trash = lazy(() => import('../pages/message/Trash.jsx'));
 const Inbox = lazy(() => import('../pages/message/Inbox.jsx'));
-const UserRolePage = lazy(() => import('../pages/permissions/UserRolePage.jsx'));
-const Permissions = lazy(() => import('../pages/permissions/Permissions.jsx'));
+// const UserRolePage = lazy(() => import('../pages/permissions/UserRolePage.jsx'));
+// const Permissions = lazy(() => import('../pages/permissions/Permissions.jsx'));
 const Categories = lazy(() => import('../pages/products/category/Categories'));
 const CostSection = lazy(() => import('../pages/expenditure/costSection/CostSection.jsx'));
 const Sent = lazy(() => import('../pages/message/Sent.jsx'));
@@ -32,6 +36,16 @@ const privateRoutes = [
     {
         path: '/products/categories',
         element: <LazyLoad component={Categories} />,
+        roles: ['ALL', 'PROPRIETOR'],
+    },
+    {
+        path: '/products/units',
+        element: <LazyLoad component={Units} />,
+        roles: ['ALL', 'PROPRIETOR'],
+    },
+    {
+        path: '/products/brand',
+        element: <LazyLoad component={Brand} />,
         roles: ['ALL', 'PROPRIETOR'],
     },
 
