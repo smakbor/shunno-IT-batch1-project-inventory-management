@@ -1,5 +1,9 @@
 //External Lib Import
 import React, { useRef, useEffect, forwardRef, useState } from 'react';
+// date Piocker
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 import {
     useTable,
     useSortBy,
@@ -31,6 +35,8 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, se
         setGlobalFilter(value || undefined);
     }, 200);
 
+    const [startDate, setStartDate] = useState(new Date());
+
     return (
         <div className={classNames(searchBoxClass)}>
             <span className="d-flex align-items-center">
@@ -44,6 +50,15 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, se
                     placeholder={`${count} ${t('records...')}`}
                     className="form-control w-auto ms-1"
                 />
+                <div className="ms-4 d-flex gap-2">
+                    <span className="my-auto w-75">Search By Date : </span>
+                    <DatePicker
+                        showIcon
+                        className="form-control"
+                        selected={startDate}
+                        onChange={(date) => setStartDate(date)}
+                    />
+                </div>
             </span>
         </div>
     );
@@ -240,7 +255,7 @@ const Table = (props) => {
                     searchBoxClass={props['searchBoxClass']}
                 />
             )}
-
+            {/* <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} /> */}
             <div className="table-responsive">
                 <table
                     {...dataTable.getTableProps()}
