@@ -54,7 +54,6 @@ const MenuItemWithChildren = ({ item, linkClassName, subMenuClassNames, activeMe
             <Collapse in={open}>
                 <ul className={classNames(subMenuClassNames)}>
                     {item.children.map((child, i) => {
-                        console.log(child);
                         if (child?.routePermission !== 'ALL') {
                             return (
                                 <React.Fragment key={i}>

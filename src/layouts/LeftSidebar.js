@@ -75,7 +75,7 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                             <span className="logo-lg">
                                 {/* <img src={isLight ? logoDark : logo} alt="logo" height="16" /> */}
                                 <h3 height="16" className="mt-3">
-                                    SARDAR BARI
+                                    SHUNNO IT
                                 </h3>
                             </span>
                             <span className="logo-sm">
