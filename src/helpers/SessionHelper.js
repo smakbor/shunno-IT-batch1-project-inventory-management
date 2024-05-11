@@ -21,7 +21,7 @@ class SessionHelper {
     }
     static setAccessToken(accessToken) {
         if (!accessToken) return undefined;
-        return localStorage.setItem('fe-sardar-inventory', JSON.stringify(accessToken));
+        return localStorage.setItem('fe-sardar-inventory', accessToken);
     }
     static removeTokens() {
         localStorage.removeItem('fe-sardar-inventory');

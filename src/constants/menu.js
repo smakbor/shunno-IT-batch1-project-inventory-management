@@ -23,6 +23,12 @@ const MENU_ITEMS = () => {
                     url: '/products/categories',
                     parentKey: 'products',
                 },
+                {
+                    key: 'warranty',
+                    label: t('warranty'),
+                    url: '/products/warranty',
+                    parentKey: 'products',
+                },
 
                 {
                     key: 'stock',

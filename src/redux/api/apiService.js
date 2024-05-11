@@ -7,9 +7,11 @@ import { setLoading } from '../features/settingReducer';
 import config from '../../config';
 
 //constant env variable
+const baseURL = `http://10.0.0.52:5000/api`; // akbor bhai
+// const baseURL = `http://10.0.0.52:5000/api`// shakil bhai
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: `http://localhost:5000/api`,
+    baseUrl: baseURL,
     mode: 'cors', // Enable CORS here
     prepareHeaders(headers, { getState }) {
         console.log(getState());

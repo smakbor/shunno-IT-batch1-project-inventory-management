@@ -1,57 +1,62 @@
-//Internal Lib Import
+import { date } from 'joi';
 import { apiService } from '../api/apiService';
-export const categoryService = apiService.injectEndpoints({
+import Warranty from './../../pages/products/warranty/Warranty';
+
+export const WarrantyService = apiService.injectEndpoints({
     endpoints: (builder) => ({
-        categoryList: builder.query({
-            query: (storeID) => ({
-                url: `category/allCategory`,
+        warrantyList: builder.query({
+            query: (storeId) => ({
+                url: `warranty/allWarranty`,
                 method: 'GET',
             }),
             transformResponse: ({ data }) => data || [],
         }),
-        categoryCreate: builder.mutation({
-            query: (postBody) => ({
-                url: `category/create`,
-                method: 'POST',
-                body: postBody,
-            }),
+        warrantyCreate: builder.mutation({
+            query: (postBody) => {
+                return {
+                    url: `warranty/create`,
+                    method: 'POST',
+                    body: postBody,
+                };
+            },
             onQueryStarted(postBody, { dispatch, queryFulfilled }) {
                 queryFulfilled.then(({ data: { data } }) => {
                     dispatch(
-                        apiService.util.updateQueryData('categoryList', undefined, (draft) => {
+                        apiService.util.updateQueryData('warrantyList', undefined, (draft) => {
                             draft.unshift(data);
                         })
                     );
                 });
             },
         }),
-
-        categoryUpdate: builder.mutation({
+        warrantyUpdate: builder.mutation({
             query: ({ id, postBody }) => ({
-                url: `categories/${id}`,
+                url: `warranty/update/${id}`,
                 method: 'PATCH',
                 body: postBody,
             }),
             onQueryStarted({ id, postBody: { store } }, { dispatch, queryFulfilled }) {
                 queryFulfilled.then(({ data: { data } }) => {
                     dispatch(
-                        apiService.util.updateQueryData('categoryList', store, (draft) => {
+                        apiService.util.updateQueryData('warrantyList', undefined, (draft) => {
                             const findIndex = draft.findIndex((item) => item._id === id);
                             draft[findIndex] = data;
+                            return draft;
                         })
                     );
                 });
             },
         }),
-        categoryDelete: builder.mutation({
+        warrantyDelete: builder.mutation({
             query: (id) => ({
-                url: `categories/${id}`,
+                url: `warranty/delete/${id}`,
                 method: 'DELETE',
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
                 const response = dispatch(
-                    apiService.util.updateQueryData('categoryList', undefined, (draft) => {
+                    apiService.util.updateQueryData('warrantyList', undefined, (draft) => {
                         draft = draft.filter((item) => item._id !== id);
+                        return draft;
                     })
                 );
                 try {
@@ -63,5 +68,6 @@ export const categoryService = apiService.injectEndpoints({
         }),
     }),
 });
-export const { useCategoryListQuery, useCategoryDeleteMutation, useCategoryCreateMutation, useCategoryUpdateMutation } =
-    categoryService;
+
+export const { useWarrantyListQuery, useWarrantyCreateMutation, useWarrantyUpdateMutation, useWarrantyDeleteMutation } =
+    WarrantyService;

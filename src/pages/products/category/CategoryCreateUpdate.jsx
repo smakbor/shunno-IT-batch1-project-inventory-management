@@ -117,7 +117,7 @@ const CategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultValues
                             {/* <div className="mb-3">
                                 <label htmlFor="status" className="form-label">
                                     Status
-                                </label>
+                                </label>   
                                 <Controller
                                     name="status"
                                     control={control}
