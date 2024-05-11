@@ -10,7 +10,7 @@ let baseUrlShamiul = `http://10.0.0.43:5000/api`
 
 //constant env variable
 const baseQuery = fetchBaseQuery({
-    baseUrl: baseUrlShamiul,
+    baseUrl: baseUrlAkbor,
     mode: 'cors', // Enable CORS here 
     prepareHeaders(headers, { getState }) {
         console.log(getState());
