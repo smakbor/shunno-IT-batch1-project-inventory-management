@@ -146,6 +146,7 @@ const Table = (props) => {
                     ...columns,
                 ]);
             isExpandable &&
+            
                 hooks.visibleColumns.push((columns) => [
                     // Let's make a column for selection
                     {

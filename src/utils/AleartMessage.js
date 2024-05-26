@@ -5,8 +5,8 @@ import Swal from 'sweetalert2';
 class AleartMessage {
     static DeleteFile(arg, request) {
         return Swal.fire({
-            title: t("are you sure"),
-            text: t("you wont be able to revert this"),
+            title: t('are you sure'),
+            text: t('you wont be able to revert this'),
             icon: 'warning',
             input: 'checkbox',
             inputPlaceholder: t('delete permanently'),
@@ -19,25 +19,20 @@ class AleartMessage {
         }).then(function (result) {
             if (result.value === 1) {
                 if (Array.isArray(arg?.mediaIds)) {
-                    return request({ mediaIds: arg.mediaIds, store: arg.store, permanent: true })
-                }
-                else {
-                    return request({ ...arg, permanent: true })
-
+                    return request({ mediaIds: arg.mediaIds, store: arg.store, permanent: true });
+                } else {
+                    return request({ ...arg, permanent: true });
                 }
             } else if (result.value === 0) {
                 if (Array.isArray(arg?.mediaIds)) {
-                    return request({ mediaIds: arg.mediaIds, store: arg.store, permanent: false })
-                }
-                else {
-                    return request({ ...arg, permanent: false })
+                    return request({ mediaIds: arg.mediaIds, store: arg.store, permanent: false });
+                } else {
+                    return request({ ...arg, permanent: false });
                 }
             }
         });
-
     }
     static Delete(id, request) {
-        console.log(id)
         return Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -74,7 +69,7 @@ class AleartMessage {
             icon: 'success',
             title: message,
             showConfirmButton: false,
-            timer: 3000
+            timer: 3000,
         });
     }
 }

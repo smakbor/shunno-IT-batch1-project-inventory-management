@@ -1,36 +1,32 @@
-//External Lib Import
 import React, { useMemo, useState } from 'react';
-import { Row, Col, Card, Button } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-//Internal Lib Import
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
 import LoadingData from '../../../components/common/LoadingData';
 import ErrorDataLoad from '../../../components/common/ErrorDataLoad';
-
-//api services
-
 import AleartMessage from '../../../utils/AleartMessage';
-import { isError } from 'joi';
 import SubcategoryCreateUpdate from './SubcategoryCreateUpdate';
 import { useSubcategoryListQuery, useSubcategoryDeleteMutation } from '../../../redux/services/subcategoryService';
+import { useCategoryListQuery } from '../../../redux/services/categoryService';
 
-// main component
 const Subcategory = () => {
     const { t } = useTranslation();
     const [defaultValues, setDefaultValues] = useState({ category: '', name: '', note: '' });
-
     const [modal, setModal] = useState(false);
-
     const [editData, setEditData] = useState(false);
-    const { data, isLoading, isError } = useSubcategoryListQuery();
 
-    // const [deleteSubcategory, { isLoading: isLoad, isError: isErr }] = useSubcategoryDeleteMutation;
+    const {
+        data: subcategoryData,
+        isLoading: isSubcategoryLoading,
+        isError: isSubcategoryError,
+        refetch: refetchSubcategories,
+    } = useSubcategoryListQuery();
+    const { data: categoryData, isLoading: isCategoryLoading, isError: isCategoryError } = useCategoryListQuery();
+    const [deleteSubcategory] = useSubcategoryDeleteMutation();
 
-    /**
-     * Show/hide the modal
-     */
+    // Show/hide the modal
     const addShowModal = () => {
         setEditData(false);
         setDefaultValues({ category: '', name: '', note: '' });
@@ -41,7 +37,17 @@ const Subcategory = () => {
         setModal(!modal);
     };
 
-    /* action column render */
+    const handleDelete = async (id) => {
+        try {
+            await deleteSubcategory(id).unwrap();
+            refetchSubcategories(); // Refetch to get the updated list
+            AleartMessage.Success(t('Subcategory deleted successfully'));
+        } catch (error) {
+            AleartMessage.Error(t('Error deleting subcategory'));
+        }
+    };
+
+    // Action column render
     const ActionColumn = ({ row }) => {
         const edit = () => {
             setEditData(row?.original);
@@ -53,12 +59,10 @@ const Subcategory = () => {
                 <i
                     className="mdi mdi-plus-circle me-2 text-info"
                     style={{ fontSize: '1.3rem', cursor: 'pointer' }}
-                    // onClick={}
                     data-toggle="tooltip"
                     data-placement="top"
                     title={t('add subcategory')}
                 />
-
                 <span
                     role="button"
                     className="action-icon text-warning"
@@ -71,7 +75,7 @@ const Subcategory = () => {
                 <span
                     role="button"
                     className="action-icon text-danger"
-                    onClick={() => AleartMessage.Delete(row?.original._id)}
+                    onClick={() => AleartMessage.Delete(row?.original._id, handleDelete)}
                     data-toggle="tooltip"
                     data-placement="top"
                     title={t('delete subcategory')}>
@@ -81,7 +85,7 @@ const Subcategory = () => {
         );
     };
 
-    // get all columns
+    // Get all columns
     const columns = useMemo(
         () => [
             {
@@ -92,13 +96,16 @@ const Subcategory = () => {
                 classes: 'table-user',
             },
             {
-                Header: 'Category',
+                Header: 'Category Name',
                 accessor: 'category',
                 sort: true,
-                Cell: ({ row }) => row.index + 1,
+                Cell: ({ row }) => {
+                    if (!categoryData) return '';
+                    const category = categoryData.find((cat) => cat._id === row.original.category);
+                    return category ? category.name : '';
+                },
                 classes: 'table-user',
             },
-
             {
                 Header: t('Subcategory name'),
                 accessor: 'name',
@@ -121,10 +128,10 @@ const Subcategory = () => {
                 Cell: ActionColumn,
             },
         ],
-        []
+        [categoryData, t]
     );
 
-    // get pagelist to display
+    // Get pagelist to display
     const sizePerPageList = [
         {
             text: t('5'),
@@ -140,7 +147,7 @@ const Subcategory = () => {
         },
     ];
 
-    if (isLoading) {
+    if (isSubcategoryLoading || isCategoryLoading) {
         return (
             <>
                 <PageTitle
@@ -154,7 +161,7 @@ const Subcategory = () => {
                 </Card>
             </>
         );
-    } else if (isError) {
+    } else if (isSubcategoryError || isCategoryError) {
         return (
             <>
                 <PageTitle
@@ -181,7 +188,7 @@ const Subcategory = () => {
                             <Card.Body>
                                 <Table
                                     columns={columns}
-                                    data={data || []}
+                                    data={subcategoryData || []}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}

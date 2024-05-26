@@ -33,11 +33,9 @@ const Categories = () => {
         setDefaultValues({ name: '', status: 'ACTIVE' });
         setModal(!modal);
     };
-
     const toggle = (e) => {
         setModal(!modal);
     };
-
     /* action column render */
     const ActionColumn = ({ row }) => {
         const edit = () => {
@@ -56,7 +54,6 @@ const Categories = () => {
                     data-placement="top"
                     title={t('add subcategory')}
                 />
-
                 <span
                     role="button"
                     className="action-icon text-warning"
@@ -78,7 +75,6 @@ const Categories = () => {
             </>
         );
     };
-
     // get all columns
     const columns = useMemo(
         () => [
@@ -89,7 +85,6 @@ const Categories = () => {
                 Cell: ({ row }) => row.index + 1,
                 classes: 'table-user',
             },
-
             {
                 Header: t('category name'),
                 accessor: 'name',

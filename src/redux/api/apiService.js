@@ -9,8 +9,8 @@ let baseUrlShakil = `http://10.0.0.91:5000/api`;
 let baseUrlShamiul = `http://10.0.0.43:5000/api`;
 
 //constant env variable
-const baseURL = `http://10.0.0.52:5000/api`; // akbor bhai
-// const baseURL = `http://10.0.0.52:5000/api`// shakil bhai
+const baseURL = `http://10.0.0.44:5000/api`; 
+// const baseURL = `http://10.0.0.52:5000/api`
 
 const baseQuery = fetchBaseQuery({
     baseUrl: baseURL,

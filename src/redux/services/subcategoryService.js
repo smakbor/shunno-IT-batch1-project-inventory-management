@@ -1,5 +1,5 @@
-//Internal Lib Import
 import { apiService } from '../api/apiService';
+
 export const subcategoryService = apiService.injectEndpoints({
     endpoints: (builder) => ({
         subcategoryList: builder.query({
@@ -16,17 +16,19 @@ export const subcategoryService = apiService.injectEndpoints({
                 body: postBody,
             }),
             onQueryStarted(postBody, { dispatch, queryFulfilled }) {
-                queryFulfilled.then(({ data: { data } }) => {
-                    console.log(data);
-                    dispatch(
-                        apiService.util.updateQueryData('subcategoryList', undefined, (draft) => {
-                            draft.unshift(data);
-                        })
-                    );
-                });
+                queryFulfilled
+                    .then(({ data: { data } }) => {
+                        dispatch(
+                            apiService.util.updateQueryData('subcategoryList', undefined, (draft) => {
+                                draft.unshift(data);
+                            })
+                        );
+                    })
+                    .catch((error) => {
+                        console.error('Create mutation failed:', error);
+                    });
             },
         }),
-
         subcategoryUpdate: builder.mutation({
             query: ({ id, formData }) => ({
                 url: `subCategory/update/${id}`,
@@ -34,16 +36,20 @@ export const subcategoryService = apiService.injectEndpoints({
                 body: formData,
             }),
             onQueryStarted({ id, formData: { store } }, { dispatch, queryFulfilled }) {
-                console.log(id);
-                queryFulfilled.then(({ data: { data } }) => {
-                    dispatch(
-                        apiService.util.updateQueryData('manufacturerList', undefined, (draft) => {
-                            const findIndex = draft.findIndex((item) => item._id === id);
-                            draft[findIndex] = data;
-                            return draft;
-                        })
-                    );
-                });
+                queryFulfilled
+                    .then(({ data: { data } }) => {
+                        dispatch(
+                            apiService.util.updateQueryData('subcategoryList', undefined, (draft) => {
+                                const findIndex = draft.findIndex((item) => item._id === id);
+                                if (findIndex !== -1) {
+                                    draft[findIndex] = data;
+                                }
+                            })
+                        );
+                    })
+                    .catch((error) => {
+                        console.error('Update mutation failed:', error);
+                    });
             },
         }),
         subcategoryDelete: builder.mutation({
@@ -52,8 +58,9 @@ export const subcategoryService = apiService.injectEndpoints({
                 method: 'DELETE',
             }),
             async onQueryStarted(id, { queryFulfilled, dispatch }) {
+                console.log(id )
                 const response = dispatch(
-                    apiService.util.updateQueryData('manufacturerList', undefined, (draft) => {
+                    apiService.util.updateQueryData('subcategoryList', undefined, (draft) => {
                         draft = draft.filter((item) => item._id !== id);
 
                         return draft;
@@ -68,6 +75,7 @@ export const subcategoryService = apiService.injectEndpoints({
         }),
     }),
 });
+
 export const {
     useSubcategoryListQuery,
     useSubcategoryCreateMutation,

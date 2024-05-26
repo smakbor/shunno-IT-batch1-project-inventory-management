@@ -42,7 +42,7 @@ export const manufacturerService = apiService.injectEndpoints({
                             draft[findIndex] = data;
                             return draft;
                         })
-                    );
+                    ); 
                 });
             },
         }),

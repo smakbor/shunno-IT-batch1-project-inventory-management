@@ -51,7 +51,7 @@ const SubcategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultVal
         watch,
         formState: { errors },
     } = methods;
-    console.log(errors);
+
     /*
      * handle form submission
      */
@@ -90,15 +90,18 @@ const SubcategoryCreateUpdate = ({ modal, setModal, toggle, editData, defaultVal
                                 <Controller
                                     control={control}
                                     name="category"
-                                    render={({ field, value, fieldState: { errors }, ref }) => (
-                                        <Select
-                                            inputRef={ref}
-                                            classNamePrefix="addl-class"
-                                            options={options}
-                                            value={options.find((c) => c.value === value)}
-                                            onChange={(val) => field.onChange(val.value)}
-                                        />
-                                    )}
+                                    render={({ field, fieldState: { errors }, ref }) => {
+                                        console.log(field.value);
+                                        return (
+                                            <Select
+                                                inputRef={ref}
+                                                classNamePrefix="addl-class"
+                                                options={options}
+                                                value={options.find((c) => c.value === field.value)}
+                                                onChange={(val) => field.onChange(val.value)}
+                                            />
+                                        );
+                                    }}
                                 />
                                 {errors?.category && <span className="text-danger">{errors?.category?.message}</span>}
                             </div>
