@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Row, Col, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-
+import './customer.css';
 //Internal Lib Import
 import PageTitle from '../../components/PageTitle';
 import Table from '../../components/Table';
@@ -32,8 +32,7 @@ function Customer() {
 
     const [categoryDelete] = useCustomerDeleteMutation();
     const { data, isLoading, isError } = useCustomerListQuery();
-    const dateItem = data?.map(item=> item?.createdAt)
-    // console.log(dateItem[0].toDate())
+    const [filteredData, setFilteredData] = useState(data && data);
 
     const addShowModal = () => {
         setEditData(false);
@@ -195,13 +194,14 @@ function Customer() {
                     breadCrumbItems={[{ label: t('customer'), path: '/customer', active: true }]}
                     title={t('customer')}
                 />
+                
                 <Row>
                     <Col xs={12}>
                         <Card>
                             <Card.Body>
                                 <Table
                                     columns={columns}
-                                    data={data || []}
+                                    data={!filteredData ? data : filteredData}
                                     pageSize={5}
                                     sizePerPageList={sizePerPageList}
                                     isSortable={true}
@@ -212,6 +212,8 @@ function Customer() {
                                     theadClass="table-light"
                                     searchBoxClass="mt-2 mb-3"
                                     addShowModal={addShowModal}
+                                    setFilteredData = {setFilteredData}
+                                    isFilter = {true}
                                     tableInfo={{ tableName: 'Customer' }}
                                 />
                             </Card.Body>

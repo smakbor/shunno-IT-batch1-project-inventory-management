@@ -1,8 +1,5 @@
 //External Lib Import
 import React, { useRef, useEffect, forwardRef, useState } from 'react';
-import DatePicker from 'react-datepicker';
-
-import 'react-datepicker/dist/react-datepicker.css';
 
 import {
     useTable,
@@ -24,6 +21,7 @@ import ExportData from './ExportData';
 import CsvImportModal from '../pages/modals/CsvImportModal';
 import { useSelector } from 'react-redux';
 import AleartMessage from '../utils/AleartMessage';
+import FilterByDate from '../pages/people/FilterByDate';
 
 // Define a default UI for filtering
 const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, searchBoxClass }) => {
@@ -34,13 +32,12 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, se
     const onChange = useAsyncDebounce((value) => {
         setGlobalFilter(value || undefined);
     }, 200);
-    const [startDate, setStartDate] = useState(new Date())
 
 
     return (
         <div className={classNames(searchBoxClass)}>
             <span className="d-flex align-items-center">
-                {t('search')} :{' '}
+                {t('Search')} :{' '}
                 <input
                     value={value || ''}
                     onChange={(e) => {
@@ -50,16 +47,6 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter, se
                     placeholder={`${count} ${t('records...')}`}
                     className="form-control w-auto ms-1"
                 />
-            <div className='ms-4 d-flex gap-2'><span className='my-auto'>Filter by date: </span><DatePicker className='form-control' selected={startDate} toggleCalendarOnIconClick isClearable placeholderText='provide date!'  onChange={(date)=> setStartDate(date)} closeOnScroll={true}/></div>
-                <div className="ms-4 d-flex gap-2">
-                    <span className="my-auto w-75">Search By Date : </span>
-                    <DatePicker
-                        showIcon
-                        className="form-control"
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
-                    />
-                </div>
             </span>
         </div>
     );
@@ -89,6 +76,9 @@ const Table = (props) => {
     const [showModal, setShowModal] = useState(false);
     const [exportData, setExportData] = useState({});
     const [showToggle, setShowToggle] = useState(false);
+    const [showFilter, setShowFilter] = useState(false);
+    const setFilteredData = props["setFilteredData"] || false;
+    const isFilter = props['isFilter'] || false;
     const isSearchable = props['isSearchable'] || false;
     const isSortable = props['isSortable'] || false;
     const pagination = props['pagination'] || false;
@@ -100,6 +90,7 @@ const Table = (props) => {
     const { tableName, columnOrder, demoFile, visibility } = tableInfo || '';
     const deleteMulti = props['deleteMulti'];
     const store = useSelector((state) => state.setting?.activeStore?._id);
+
     let hiddenColumns = [];
     for (const key in visibility) {
         if (visibility[key] === false) {
@@ -107,10 +98,14 @@ const Table = (props) => {
         }
     }
 
+    const showDateFilter = () => {
+        setShowFilter(!showFilter)
+    }
+
     const dataTable = useTable(
         {
             columns: props['columns'],
-            data: props['data'],
+            data: props["data"],
             initialState: {
                 pageSize: props['pageSize'] || 10,
                 hiddenColumns,
@@ -122,6 +117,7 @@ const Table = (props) => {
         isExpandable && useExpanded,
         pagination && usePagination,
         isSelectable && useRowSelect,
+
         (hooks) => {
             isSelectable &&
                 hooks.visibleColumns.push((columns) => [
@@ -231,6 +227,8 @@ const Table = (props) => {
                         showToggle={showToggle}
                         setShowToggle={setShowToggle}
                         toggleImportModal={toggleImportModal}
+                        isFilter={isFilter}
+                        showDateFilter={showDateFilter}
                     />
                 )}
             </Row>
@@ -249,14 +247,19 @@ const Table = (props) => {
                 </div>
             )}
             {isSearchable && (
-                <GlobalFilter
-                    preGlobalFilteredRows={dataTable.preGlobalFilteredRows}
-                    globalFilter={dataTable.state.globalFilter}
-                    setGlobalFilter={dataTable.setGlobalFilter}
-                    searchBoxClass={props['searchBoxClass']}
-                />
+                <div className='d-flex pb-2'>
+                    <GlobalFilter
+                        preGlobalFilteredRows={dataTable.preGlobalFilteredRows}
+                        globalFilter={dataTable.state.globalFilter}
+                        setGlobalFilter={dataTable.setGlobalFilter}
+                        searchBoxClass={props['searchBoxClass']}
+                    />
+                    {
+                        showFilter ? <FilterByDate setFilteredData={setFilteredData}/> : ""
+                    }
+                    
+                </div>
             )}
-            {/* <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} /> */}
             <div className="table-responsive">
                 <table
                     {...dataTable.getTableProps()}

@@ -7,9 +7,10 @@ import config from '../../config';
 let baseUrlAkbor = `http://10.0.0.52:5000/api`;
 let baseUrlShakil = `http://10.0.0.91:5000/api`;
 let baseUrlShamiul = `http://10.0.0.43:5000/api`;
+let baseUrlNayem = `http://10.0.0.10:5000/api`;
 
 //constant env variable
-const baseURL = `http://10.0.0.52:5000/api`; // akbor bhai
+const baseURL = `http://10.0.0.55:5000/api`; // akbor bhai
 // const baseURL = `http://10.0.0.52:5000/api`// shakil bhai
 
 const baseQuery = fetchBaseQuery({
